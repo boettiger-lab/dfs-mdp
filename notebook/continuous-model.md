@@ -1,0 +1,133 @@
+
+``` r
+library(tidyverse)
+library(MDPtoolbox)
+library(mdplearning)
+source("../R/continuous-model.R")
+set.seed(123456)
+```
+
+This example uses an alternative formulation where transition
+probability is distributed as a (truncated) normal distribution around a
+mean given by a linear relationship in the contrast between diversified
+practice and ecosystem state
+
+``` r
+actions <- seq(0, 1, length = 100)
+# Using max(state) > max(actions) avoids creating a hard boundary on ecosystem state
+states <- seq(0, 1.5, length = 100) 
+
+params <- list(benefit = 1.57, cost = 1, sigma = 0.1, r = .1)
+discount <- 0.97
+
+f <- function(s, a, params) s + params$r * (a - s)
+utility_fn <- function(s,a, params) params$benefit * s - params$cost * a
+model <- continuous_model(states, actions, params, f, utility_fn)
+
+soln <- MDPtoolbox::mdp_value_iteration(model$P, model$U, discount)
+```
+
+``` r
+policy_plot <- function(soln)
+  tibble(state = states,
+       action = actions[soln$policy]) %>%
+  ggplot(aes(state,action)) + geom_point() +
+  coord_cartesian(xlim = c(0,1))
+
+policy_plot(soln)
+```
+
+![](continuous-model_files/figure-gfm/unnamed-chunk-2-1.png)<!-- -->
+
+``` r
+reps <- 500
+init <- truncnorm::rtruncnorm(reps, 0, 1, 0.5, 0.2) %>% 
+                  map_int(function(x) which.min(abs(x - states)))
+
+sim <- function(soln, 
+                Tmax = 10,
+                x0 =  init){
+  map_dfr(1:length(x0), function(i)
+                   mdp_planning(model$P, model$U, discount, 
+                   policy = soln$policy,
+                   x0 = x0[i], Tmax = Tmax), .id = "reps")
+}
+
+sims <- sim(soln)
+```
+
+``` r
+sim_plot <- function(sims){
+  
+   df <- sims %>% 
+    select(-obs,-value) %>% # tidy
+    mutate(state = states[state], action = actions[action]) # rescale
+  
+   panelA <- df %>% 
+    ggplot(aes(time, state, group = reps, col=time)) + 
+    geom_path(alpha=0.1, show.legend = FALSE)
+   
+   Tmax <- max(sims$time)
+   panelB <- df %>% filter(time %in% c(1, Tmax))  %>%
+     ggplot() + geom_density(aes(state, group = time, fill = time), alpha=0.8) + 
+     scale_fill_continuous(breaks=c(1,10)) +
+     coord_flip()
+   
+  panelA + panelB + plot_layout(widths = c(3, 1))
+}
+
+fig1 <- sim_plot(sims)
+fig1
+```
+
+![](continuous-model_files/figure-gfm/unnamed-chunk-4-1.png)<!-- -->
+
+``` r
+tenure_2 <- MDPtoolbox::mdp_finite_horizon(model$P, model$U, discount, N = 2)
+sims_short_tenure <- sim(tenure_2)
+sim_plot(sims_short_tenure) 
+```
+
+![](continuous-model_files/figure-gfm/unnamed-chunk-5-1.png)<!-- -->
+
+## Figure 3: Impact of policy subsidies which temporarily reduce adoption costs
+
+A sustained subsidy reducing the costs of adoption can make a bigger
+difference than a short burst. This makes sense as it takes time to
+build up the ecosystem
+services
+
+``` r
+params_subsidy_burst <- list(benefit = 1.57, cost = 0, sigma = 0.1, r = .1)
+params_subsidy_sustained <- list(benefit = 1.57, cost = .9, sigma = 0.1, r = .1)
+
+modelA <- continuous_model(states, actions, params_subsidy_burst, f, utility_fn)
+solnA <- MDPtoolbox::mdp_value_iteration(modelA$P, modelA$U, discount)
+  
+## Do 2 years with large subsidy (no cost to adoption)
+start <- sim(solnA, Tmax = 3, x0 = init)
+x1 <- start %>% filter(time == 3) %>% pull(state)
+## Go another 18 years with decision rule under no subsidy
+rest <- sim(soln, Tmax = 18, x0 = x1) %>% filter(time!=1) %>% mutate(time = time+2)
+simA <- bind_rows(start, rest)
+
+## Do 10 years with minor subsidy (subsidize 10% of unit cost over first 10 years)
+modelB <- continuous_model(states, actions, params_subsidy_sustained, f, utility_fn)
+solnB <- MDPtoolbox::mdp_value_iteration(modelB$P, modelB$U, discount)
+start <- sim(solnB, Tmax=10, x0 = init)  
+x10 <- start %>% filter(time == 10) %>% pull(state)
+## Go another 10 years with decision rule under no subsidy
+rest <- sim(soln, Tmax = 10, x0 = x10) %>% filter(time!=1) %>% mutate(time = time+10)
+simB <- bind_rows(start, rest)
+```
+
+``` r
+sim_plot(simA) / sim_plot(simB)
+```
+
+![](continuous-model_files/figure-gfm/unnamed-chunk-7-1.png)<!-- -->
+
+We could consider summarizing by mean ecosysem state here instead
+of/inaddition to the above plots. We could also alter this scenario so
+that we consider initial condition to have only farms in the poor
+ecosystem state.
