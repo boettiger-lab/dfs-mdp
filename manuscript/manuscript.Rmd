@@ -35,15 +35,21 @@ header-includes:
 
 ---
 
-
+{>> Also see early draft intro google doc, which has more text from social science team which develops the bistable narrative and ramifications more: <https://docs.google.com/document/d/1SNpXR4EgvceOeEBvqkhWxJIhTd_P-CJl/edit#heading=h.gjdgxs> <<}
 
 
 # Introduction
 
+{>>Currently intro seeks to justify an interest in agriecology.  Consider a pitch for coupled-natural human systems more broadly that uses agriculture as an focal case?<<}
+
 Reacting largely to agricultural catastrophes like the Dust Bowl, over the last century, United States policymakers have increasingly attempted to drive more sustainable production practices on farms by offering incentives and support.  With the growing preponderance of evidence that climate change both affects agricultural production, and is in-part driven by it---as well as the increasing recognition that some mainstream agricultural practices have deleterious effects on the long-term productive capacity of our soil---interest in agriecology has blossomed both in the United States and globally, and agrienvironmental policies have been enacted across multiple levels of government and within private sector supply chains.  
+
+{>> This next para raises the "how do we transition to sustainability" question. good, but gets technical quickly (direct market diverse farms vs global market mono-culture).  That leaps over broader questions and assumes a more narrow audience.  We want to underscore that "how do we transition" is a CNH question which requires understanding/thinking about both human decisions and ecological dynamics.<<}
 
 While transitioning towards sustainable food systems is existentially critical---particularly as we face more frequent extreme weather events, soil degradation, and biodiversity loss---understanding how to effectively realize transitions to resilient management practices, while also maintaining an adequate food supply, remains an open question.  A common observation is that farms tend to fall into two general categories: those small-to-medium operations that sell into local, direct markets, and take a longer view on sustainability; and those large monocropping operations that sell into the global commodities market and focus on short-term efficiency \cite{lyson2004commodity}.  Several scholars have suggested that bolstering an ``agriculture of the middle'' may represent a possible path forward \cite{lyson2008food}.  
 
+
+{>> next two paragraphs we seem to be already assuming a result of bistable adoption and no middle ground.  It's a bit unclear if we're suggesting this is a pattern that is already universally recognized, but just not fully understood where it comes from, or if it is more of a prediction.  <<}
 Critical to designing effective incentives is an understanding of the decision processes that lead farmers down the rabbit holes of these two radically-different management styles.  Specifically, it is important to understand where thresholds which render a given management practice economically-viable and/or socially-acceptable to one farmer while nonviable or unacceptable to another lie. Understanding the decision factors that give rise to these thresholds is the only way for policymakers to develop effective levers to nudge management choices toward a model that is both financially and environmentally sustainable.  
 
 Attempts to understand the mechanisms behind both transitions from industrial commodity farming to diversified ``civic'' agriculture, as well as the path-dependency that leads to the observed systemic bifurcation, are not new. The International Panel of Experts on Sustainable Food Systems (IPBS) recently published a document outlining numerous case studies detailing agriecological transitions across the globe in an attempt to synthesize what we know about potential levers of change \cite{ipbsfood}. These case studies spanned decades, continents, and agricultural products; and found numerous mechanisms that have spurred transitions in various contexts, emphasizing the complexity of the problem.
