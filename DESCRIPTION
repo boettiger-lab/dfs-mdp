@@ -1,0 +1,18 @@
+Package: compendium
+Project: 
+Version: 0.1.0
+Depends: tidyverse, mdplearning, truncnorm, MDPtoolbox
+Suggests: rmarkdown, hrbrthemes, Cairo, rticles, patchwork, ggthemes, ggtext
+License: CC0
+Title: Compendium Package
+Description: A generic description file for dependency management of this research
+  compendium.  See <https://doi.org/10.1080/00031305.2017.1375986> for a description
+  of the compendium approach to organizing a reproducible research project. 
+Authors@R: c(person("Carl", "Boettiger", 
+                    email = "cboettig@gmail.com", 
+                    role = c("aut", "cre", "cph"),
+                    comment=c(ORCID = "0000-0002-1642-628X")))
+RoxygenNote: 6.1.1
+Encoding: UTF-8
+VignetteBuilder: knitr
+Remotes: boettiger-lab/mdplearning, thomasp85/patchwork, clauswilke/ggtext

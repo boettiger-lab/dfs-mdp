@@ -2,3 +2,11 @@
 .Rhistory
 .RData
 .Ruserdata
+*_cache
+__packages
+*.rdb
+*.rdx
+*.spl
+*.log
+*.tex
+*.pdf
