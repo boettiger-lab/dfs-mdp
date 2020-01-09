@@ -1,5 +1,7 @@
+name: render
+'on': [push, pull-request]
 jobs:
-  build:
+  render:
     runs-on: ubuntu-18.04
     steps:
       - name: Checkout Repository
