@@ -2,3 +2,4 @@
 ^\.Rproj\.user$
 ^manuscript$
 ^notebook$
+^\.github/workflows$
