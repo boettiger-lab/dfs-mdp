@@ -1,5 +1,5 @@
-name: render
-'on': [push, pull-request]
+name: Render manuscript
+on: [push, pull_request]
 jobs:
   render:
     runs-on: ubuntu-18.04
