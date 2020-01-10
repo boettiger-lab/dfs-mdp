@@ -1,7 +1,14 @@
-name: Docker Actions
-on: [push]
+name: Knit mansucript
+on:
+  push:
+    paths:
+      - manuscript/*.Rmd
+  pull_request:
+    paths:
+      - manuscript/*.Rmd
+
 jobs:
-  my_job: 
+  manuscript:
     runs-on: ubuntu-latest
     container: rocker/verse
     steps:
