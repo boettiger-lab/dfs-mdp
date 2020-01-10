@@ -65,7 +65,7 @@ ggplot2::theme_set(hrbrthemes::theme_ipsum_rc())
 
 
 library(ggthemes)
-library(patchwork) # devtools::install_github("/ggtext")
+library(patchwork) # devtools::install_github("thomasp85/patchwork")
 library(ggtext) # devtools::install_github("clauswilke/ggtext")
 pal <- solarized_pal()(7)
 scale_colour_discrete <- function(...) scale_colour_solarized()
@@ -87,7 +87,7 @@ knitr::opts_chunk$set(dev = "cairo_pdf")
 
 # Model setup
 
-
+  
 
 # Results
 
