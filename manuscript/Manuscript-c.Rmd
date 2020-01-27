@@ -251,13 +251,11 @@ To establish the general parameters of our MDP model, our interdisciplinary rese
 
 \subsubsection{Original interviews}
 
-Members of our team conducted interviews and on-farm observational studies of 20 organic lettuce growers and 8 technical assistance providers based in the California central coast region.  The sample was stratified to include growers across the spectrum of scale and market outlet.  Based on these studies, several important trends emerge.  Echoing previous research in this area, we find that adoption of DEPs tends to be bimodal; that is, growers are likely to either intensively-adopt many DEPs, or to adopt these practices minimally or not-at-all.  
-
-Several possible reasons for this behavioral bifurcation emerge from the coding and analysis of interview transcripts.  Farm scale appears to play a role, with the smallest and largest farms adopting fewer DEPs, and mid-scale farms adopting at higher rates.  This may be explained by factors including limited capital availability of smaller growers to implement those DEPs with high up-front costs, food safety stipulations based on market outlet, risk attitude, and myopic discounting.  Also, as discussed above, land tenure---in terms of both length of time on the land, and whether land is leased versus owned---also appears to be a salient decision factor.  
+Members of our team conducted interviews and on-farm observational studies of 20 organic lettuce growers and 8 technical assistance providers based in the California central coast region.  The sample was stratified to include growers across the spectrum of scale and market outlet.  Based on these studies, several important trends emerge.  Echoing previous research in this area, we find that adoption of DEPs tends to be bimodal; that is, growers are likely to either intensively-adopt many DEPs, or to adopt these practices minimally or not-at-all.  This may be explained by factors including limited capital availability to implement those DEPs with high up-front costs, food safety stipulations based on market outlet, risk attitude, and myopic discounting.  Land tenure---in terms of both length of time on the land, and whether land is leased versus owned---also appears to be a salient decision factor.  
 
 \subsubsection{Survey dataset}
 
-To evaluate the extent to which these observed adoption distributions hold quantitatively, we leverage a dataset of survey responses from 295 vegetable growers in Washington, Oregon, and California (!!CITE DATA SOURCE!!).  Table \ref{tab:deps_in_survey} shows the set of DEPs queried in the survey, with their adoption rates across the entire sample.  A histogram plotting the number of diversified practices used by each grower (Fig \ref{fig:dep_dist}) confirms a bimodal distribution, with growers generally tending to either adopt zero DEPs---the most likely case---or else to adopt many, with six practices being the next-most-likely.
+To evaluate the extent to which these observed adoption distributions hold quantitatively, we leverage a dataset of survey responses from 295 vegetable growers in Washington, Oregon, and California (!!CITE DATA SOURCE!!).  Table \ref{tab:deps_in_survey} shows the set of DEPs queried in the survey, with their adoption rates across the entire sample.  A histogram plotting the number of diversified practices used by each grower (Fig \ref{fig:dep_dist}A) confirms a bimodal distribution, with growers generally tending to either adopt zero DEPs---the most likely case---or else to adopt many, with six practices being the next-most-likely.
 
 \begin{table}
 	\centering
@@ -281,34 +279,13 @@ To evaluate the extent to which these observed adoption distributions hold quant
 
 \begin{figure}
 	\centering
-	\includegraphics[width=.5\textwidth]{methods_dep_dist.pdf}
-	\caption{Distribution of DEP adoption in the sample}
+	\includegraphics[width=.75\textwidth]{fig_dep_data.pdf}
+	\caption{A. Bimodal distribution of DEP adoption in the sample.  B. Impact of land tenure on the probability of adopting at least one DEP.  }
 	\label{fig:dep_dist}
 \end{figure}
 
-To dig deeper into the causes of this bimodality, we first partition the data by farm size (in total acreage), as our observational study suggested that size---with its corresponding opportunities and limitations resulting from market outlet---may play a role in the DEP adoption decision.  Figure \ref{fig:svy_size}A plots the density of growers at each adoption level, with the sample divided into three size quantiles.  This confirms that farmers at each scale exhibit a bimodal adoption distribution, but also complicates the picture.  Small farms appear to be most heavily bimodally-distributed, with peaks at zero and six DEPs.  Large farms adopt zero DEPs at approximately the same rate as small farms, but, among those large growers who do adopt, they tend to adopt less heavily, perhaps only three or four DEPs.  Finally, medium farms in our sample were both less likely to adopt zero DEPs, and also the most likely to adopt heavily, with seven DEPs being most common.  Average adoption for each size class, shown as vertical lines on the plot, confirm that, overall, small and large growers are less likely to adopt than their mid-sized counterparts.   
+As discussed above, land tenure has often been shown to be a decision factor that impinges upon agricultural management practice adoption \cite{soule2000land, fraser2004land, richardson2015land, long2017hedgerow}.  Growers who have a long-term personal stake in the productive quality of their soil ecology are more likely to take the long view and invest in practices that will benefit them years down the line.  On the other hand, growers who are uncertain whether they will personally be farming a given parcel of land in future seasons may be less likely to adopt practices whose positive effects will not come to fruition in the short term.  To investigate the effect of land tenure on DEP adoption, we partition the dataset into growers who primarily own their land versus those who primarily lease it.  Figure \ref{fig:dep_dist}B shows that owners are about 20\% more likely than leasers to invest in at least one DEP.  
 
-To investigate the high mid-size adoption dynamic further, we increase the partition granularity to six size quantiles, with the average size for each being $[2.5, 11, 26, 70, 312, 4165]$ acres.  Figure \ref{fig:svy_size} B plots the average adoption rate across all eight DEPs for each acreage quantile.  Here we see that growers in the third quantile---around 30 acres---are most likely to adopt heavily.  Growers in the largest two groups are the least likely to adopt, with the smallest growers only slightly more likely.  
-
-
-\begin{figure}
-	\centering
-	\includegraphics[width=\textwidth]{methods_svy_size.pdf}
-	\caption{Impact of farm size on DEP adoption in the survey data.  (A) shows the density of number of DEPs adopted by the smallest, middle, and largest third of growers.  Dashed vertical lines show the average number of DEPs adopted for each size quantile.  (B) shows the overall average adoption rate---across all DEPs---for growers classified into six size quantiles.}
-	\label{fig:svy_size}
-\end{figure}
-
-
-As discussed above, land tenure has often been shown to be a decision factor that impinges upon agricultural management practice adoption \cite{soule2000land, fraser2004land, richardson2015land, long2017hedgerow}.  Growers who have a long-term personal stake in the productive quality of their soil ecology are more likely to take the long view and invest in practices that will benefit them years down the line.  On the other hand, growers who are uncertain whether they will personally be farming a given parcel of land in future seasons may be less likely to adopt practices whose positive effects will not come to fruition in the short term.  
-
-To investigate the effect of land tenure on DEP adoption, we partition the dataset into growers who primarily own their land versus those who primarily lease it.  Figure \ref{fig:svy_tenure}A shows that owners are more likely than leasers to invest in DEPs at all, and also that the average number of DEPs in use is somewhat greater for owners than leasers.  Plot B confirms the effect of land tenure on DEP adoption, with owners being 20\% more likely to adopt at least one DEP than their leasing counterparts.  
-
-\begin{figure}
-	\centering
-	\includegraphics[width=\textwidth]{methods_svy_tenure.pdf}
-	\caption{Impact of land tenure on DEP adoption in the survey data.  (A) shows the density of the number of DEPs adopted by growers who primarily own their land (blue) vs. those who primarily lease (red).  Dashed vertical lines show the average number of DEPs adopted for each land tenure classification.  (B) gives the probability of a farmer in each group adopting at least one DEP.}
-	\label{fig:svy_tenure}
-\end{figure}
 
 \subsubsection{Model parameters}
 
