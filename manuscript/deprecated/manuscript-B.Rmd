@@ -47,7 +47,7 @@ knitr::opts_chunk$set(echo = FALSE,
 library(tidyverse)
 library(MDPtoolbox)
 library(mdplearning)
-source("../R/continuous-model.R")
+source("../../R/continuous-model.R")
 set.seed(123456)
 ```
 
