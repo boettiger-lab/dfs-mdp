@@ -41,39 +41,65 @@ header-includes:
 
 ```{r setup, message=FALSE, echo=FALSE}
 rm(list = ls(all.names = TRUE))
-knitr::opts_chunk$set(echo = FALSE,
-                      cache = FALSE,
-                      message = FALSE,
-                      warning = FALSE,
-                      fig.align = "center")
 library(tidyverse)
+library(dplyr)
 library(MDPtoolbox)
 library(mdplearning)
-source("../R/continuous-model.R")
-set.seed(4)
-```
 
-
-```{r figure_setup, include = FALSE}
+library(corrplot)
+library(Hmisc)
+library(RColorBrewer)
+library(ggthemes)
+library(ggpubr)
 library(ggplot2)
 library(hrbrthemes)
 library(Cairo)
 library(extrafont)
 extrafont::loadfonts()
 ggplot2::theme_set(hrbrthemes::theme_ipsum_rc())
-
-library(ggthemes)
-library(ggpubr)
 library(patchwork) # devtools::install_github("thomasp85/patchwork")
 library(ggtext) # install cli, gh, devtools::install_github("clauswilke/ggtext")
 pal <- solarized_pal()(7)
 scale_colour_discrete <- function(...) scale_colour_solarized()
 scale_fill_discrete <- function(...) scale_fill_solarized()
 
-## hrbrthemes needs cairo_pdf device
-knitr::opts_chunk$set(dev = "cairo_pdf")
+knitr::opts_chunk$set(echo = FALSE,
+                      cache = FALSE,
+                      message = FALSE,
+                      warning = FALSE,
+                      fig.align = "center",
+                      dev = "cairo_pdf")
 
+source("../R/continuous-model.R")
+set.seed(4)
 ```
+
+```{r load_ca_wa_or_data, message=FALSE, echo=FALSE}
+
+all_data <- read.csv("../external-data/ADAPT_CA-OR-WA_only_sw.csv")
+
+dp_varnames <- c("CR1_binomial",
+                 "CC1_binomial",
+                 "IC1_binomial",
+                 "IP1_binomial",
+                 "RB1_binomial",
+                 "BP1_binomial",
+                 "CM1_binomial",
+                 "RT1_binomial")
+
+dp_labs <- c(CR1_binomial = "Crop Rotation",
+            CC1_binomial = "Cover Cropping",
+            IC1_binomial = "Intercropping",
+            IP1_binomial = "Insectary Plantings",
+            RB1_binomial = "Riparian Buffers",
+            BP1_binomial = "Border Plantings",
+            CM1_binomial = "Compost Or Manure",
+            RT1_binomial = "Reduced Tillage")
+
+dps_only <- all_data[,dp_varnames]
+dps_only <- Hmisc::upData(dps_only, labels = dp_labs)
+```
+
 
 ```{r model_def, include = FALSE}
 actions <- seq(0, 1, length = 100)
@@ -96,7 +122,7 @@ soln_df <- tibble(state = states,
 
 ```{r sim_plot_fxn, include = FALSE}
 
-sim_plot <- function(sims, panelA_title = ggtitle(NULL), panelB_title = ggtitle(NULL), lab_lo_peak = FALSE, lab_hi_peak = FALSE, dnmarmod = 0, upmarmod = 0){
+sim_plot <- function(sims, panelA_title = ggtitle(NULL), panelB_title = ggtitle(NULL), lab_lo_peak = FALSE, lab_hi_peak = FALSE, dnmarmod = 0, upmarmod = 0, lmarmod = 0, rmarmod = 0, cmarmod = 0){
 
    df <- sims %>% 
     select(-obs,-value) %>% # tidy
@@ -117,7 +143,7 @@ sim_plot <- function(sims, panelA_title = ggtitle(NULL), panelB_title = ggtitle(
             axis.title.y=element_text(size=10),
             plot.title = element_text(size = 10, face = "bold"),
             panel.grid.minor = element_blank(),
-            plot.margin=grid::unit(c(5+upmarmod,2,5+dnmarmod,5), "mm"))
+            plot.margin=grid::unit(c(5+upmarmod,2+.5*cmarmod,5+dnmarmod,5+lmarmod), "mm"))
    
    panelB <- df %>% filter(time %in% c(1, Tmax))  %>%
       ggplot() + geom_density(aes(state, group = time, fill = time), alpha=0.8) +
@@ -126,6 +152,7 @@ sim_plot <- function(sims, panelA_title = ggtitle(NULL), panelB_title = ggtitle(
       panelB_title +
       labs(x="", y="Density", fill="Time") +
       scale_x_continuous(limits = c(0,1.5), expand = c(.02,.02)) +
+     scale_y_continuous(breaks = scales::pretty_breaks(n = 2)) +
       theme(axis.text.x=element_text(size=10),
             axis.text.y=element_blank(),
             axis.title.x=element_text(size=10),
@@ -134,7 +161,7 @@ sim_plot <- function(sims, panelA_title = ggtitle(NULL), panelB_title = ggtitle(
             legend.title = element_text(size=10),
             plot.title = element_text(size = 10, face = "bold"),
             panel.grid.minor = element_blank(),
-            plot.margin=grid::unit(c(5+upmarmod,5,5+dnmarmod,2), "mm"))
+            plot.margin=grid::unit(c(5+upmarmod,5+rmarmod,5+dnmarmod,2+.5*cmarmod), "mm"))
    
    if(lab_lo_peak) {
       ymax <- ggplot_build(panelB)$layout$panel_scales_y[[1]]$range$range[2]
@@ -152,11 +179,11 @@ sim_plot <- function(sims, panelA_title = ggtitle(NULL), panelB_title = ggtitle(
       # text annotation (decide whether to place left or right of line)
       if(peak_lo$y > .7 * ymax) {
          panelB <- panelB +
-            annotate('label', x = peak_lo$x, y = peak_lo$y - .26 * ymax, label = sprintf('%.2f', peak_lo$x), hjust = .5, vjust = .5, 
+            annotate('label', x = peak_lo$x, y = peak_lo$y - .32 * ymax, label = sprintf('%.2f', peak_lo$x), hjust = .5, vjust = .5, 
                        family = "Roboto Condensed", size = 3, label.padding = unit(.15, "lines"), label.size = 0, alpha = .8) 
       } else {
          panelB <- panelB +
-            annotate('label', x = peak_lo$x, y = peak_lo$y + .2 * ymax, label = sprintf('%.2f', peak_lo$x), hjust = .5, vjust = .5, 
+            annotate('label', x = peak_lo$x, y = peak_lo$y + .26 * ymax, label = sprintf('%.2f', peak_lo$x), hjust = .5, vjust = .5, 
                        family = "Roboto Condensed", size = 3, label.padding = unit(.15, "lines"), label.size = 0, alpha = .8) 
       }
    }
@@ -177,11 +204,11 @@ sim_plot <- function(sims, panelA_title = ggtitle(NULL), panelB_title = ggtitle(
       # text annotation (decide whether to place left or right of line)
       if(peak_hi$y > .7 * ymax) {
          panelB <- panelB +
-            annotate('label', x = peak_hi$x, y = peak_hi$y - .26 * ymax, label = sprintf('%.2f', peak_hi$x), hjust = .5, vjust = .5, 
+            annotate('label', x = peak_hi$x, y = peak_hi$y - .32 * ymax, label = sprintf('%.2f', peak_hi$x), hjust = .5, vjust = .5, 
                        family = "Roboto Condensed", size = 3, label.padding = unit(.15, "lines"), label.size = 0, alpha = .8) 
       } else {
          panelB <- panelB +
-            annotate('label', x = peak_hi$x, y = peak_hi$y + .2 * ymax, label = sprintf('%.2f', peak_hi$x), hjust = .5, vjust = .5, 
+            annotate('label', x = peak_hi$x, y = peak_hi$y + .26 * ymax, label = sprintf('%.2f', peak_hi$x), hjust = .5, vjust = .5, 
                        family = "Roboto Condensed", size = 3, label.padding = unit(.15, "lines"), label.size = 0, alpha = .8) 
       }
    }
@@ -196,24 +223,24 @@ sim_plot <- function(sims, panelA_title = ggtitle(NULL), panelB_title = ggtitle(
 ```{r p_inc_dec, include = FALSE}
 # Prop decreasing or increasing ES over the run
 p_up_dn <- function(sims){
-i_state <- sims %>%
-   filter(time == 1) %>%
-   select(state) %>%
-   mutate(state = states[state])
-
-f_state <- sims %>%
-   filter(time == 10) %>%
-   select(state) %>%
-   mutate(state = states[state])
-
-state <- data.frame(i = i_state$state, f = f_state$state)
-
-state$up <- state$i < .5 & state$f > .5
-state$dn <- state$i > .5 & state$f < .5
-
-# c(mean(state$up), mean(state$dn))
-print(sprintf('prop high final = %.2f, prop low final = %.2f', mean(state$f > .5), mean(state$f < .5)))
-print(sprintf('prop increasing = %.2f, prop decreasing = %.2f', mean(state$up), mean(state$dn)))
+  i_state <- sims %>%
+    filter(time == 1) %>%
+    select(state) %>%
+    mutate(state = states[state])
+  
+  f_state <- sims %>%
+    filter(time == 10) %>%
+    select(state) %>%
+    mutate(state = states[state])
+  
+  state <- data.frame(i = i_state$state, f = f_state$state)
+  
+  state$up <- state$i < .5 & state$f > .5
+  state$dn <- state$i > .5 & state$f < .5
+  
+  # c(mean(state$up), mean(state$dn))
+  print(sprintf('prop high final = %.2f, prop low final = %.2f', mean(state$f > .5), mean(state$f < .5)))
+  print(sprintf('prop increasing = %.2f, prop decreasing = %.2f', mean(state$up), mean(state$dn)))
 }
 ```
 
@@ -300,8 +327,44 @@ sims <- sim(soln)
 #write_csv(sims, "../data/sims.csv.gz")
 ```
 
-```{r res_bimodal, fig.cap = "Simulations of 500 model agents over ten farming seasons.  Initial ES states follow a truncated normal distribution (mean = 0.5; S.D. = 0.2; truncated at [0,1]).  Agents utilize decision policy $\\pi$ as shown in Fig \\ref{fig:res_policy} for nine timesteps.  Right plot shows initial distribution (dark blue) and bimodal density distribution at $t = 10$ (light blue), with peaks annotated.", fig.width = 6, fig.asp = .5}
-sim_plot(sims, lab_lo_peak = TRUE, lab_hi_peak = TRUE)
+
+```{r ca_wa_or_hist, message=FALSE, echo=FALSE}
+# histogram of num dps used by a given farm
+dp_counts <- rowSums(dps_only, na.rm = T)
+
+dp_counts_df <- as.data.frame(dp_counts, row.names = NULL, optional = FALSE)
+plot_data <- as.data.frame(table(dp_counts))
+
+hst <- ggplot(plot_data, aes(x=dp_counts)) +
+  geom_bar(aes(y=Freq), color=NA, fill="black", alpha = .7, stat = "identity") +
+  geom_text(aes(y = Freq, label=Freq), hjust=1.6, color="white", position = position_dodge(0.9), size=3, family = "Roboto Condensed") +
+  coord_flip() +
+  xlab("Num. DPs adopted") +
+  ylab("Frequency") +
+  scale_x_discrete(expand = c(.08,.08)) +
+  scale_y_continuous(expand = c(.015,.015)) +
+  theme(axis.text.x=element_text(size=10),
+        axis.text.y=element_text(size=10),
+        axis.title.x=element_text(size=10),
+        axis.title.y=element_text(size=10),
+        plot.title = element_text(size = 10, face = "bold"),
+        axis.ticks.x=element_blank(),
+        panel.grid.major.y = element_blank(),
+        panel.grid.minor.y = element_blank(),
+        panel.grid.minor.x = element_blank(),
+        plot.margin=grid::unit(c(9,5,5,5), "mm"))
+
+```
+
+
+
+
+```{r res_bimodal, fig.cap = "(A) Simulations of 500 model agents over ten farming seasons.  Initial ES states follow a truncated normal distribution (mean = 0.5; S.D. = 0.2; truncated at [0,1]).  Agents utilize decision policy $\\pi$ as shown in Fig \\ref{fig:res_policy} for nine timesteps.  Right plot shows initial distribution (dark blue) and bimodal density distribution at $t = 10$ (light blue), with peaks annotated. (B) Observed bimodal DP adoption distribution in our empirical data.", fig.width = 6, fig.asp = .5}
+
+ggarrange(
+     sim_plot(sims, lab_lo_peak = TRUE, lab_hi_peak = TRUE, upmarmod = 4, rmarmod = -5, cmarmod = -5), hst, labels = c("A. Model results", "B. Empirical distrib."), font.label = list(size = 10, face = "bold", family = "Roboto Condensed"), hjust = -.25, vjust = 2, widths = c(3, 1.1), nrow = 1, ncol = 2
+   )
+
 # p_up_dn(sims)
 ```
 
@@ -311,14 +374,70 @@ Many agrienvironmental practices require upfront investment, but can pay for the
 
 Using the same simulation parameters as outlined in the previous section, we solve the MDP on a finite, two-year time horizon, representing the shorter window within which many tenant farmers may make decisions.  Comparing Fig \ref{fig:res_tenure} to Fig \ref{fig:res_bimodal} above shows that, as length of land tenure and/or stability of lease agreements decline---and thus optimal decisions are calculated more myopically---farmers are incentivized to severely limit investment into DEPs.  This results in a degredation of ecosystem state even among those plots with an initially high value, with 92\% of farmers ending up in the simplified state.  
 
+
+
+
+```{r ca_wa_or_tenure_plot, message=FALSE, echo=FALSE}
+ten_plot <- function(plot_data, ylabel) {
+  ggplot(plot_data, aes(x = cats, y = vals)) +
+    geom_bar(width = .75, position=position_dodge(width=.84), stat="identity", color=NA, fill="black", alpha = .7,) +
+    geom_text(aes(label=sprintf("%.2f", round(vals,2))), vjust=1.6, color="white", position = position_dodge(0.9), size=3, family = "Roboto Condensed") +
+    xlab("") +
+    ylab(ylabel) +
+    scale_x_discrete(expand = c(0,0), labels = c("Mostly\nleased", "Mostly\nowned")) +
+    scale_y_continuous(expand = c(0,0)) +
+    theme(axis.text.x=element_text(size=10, color = "black", family = "Roboto Condensed"),
+          axis.text.y=element_text(size=10),
+          axis.title.x=element_text(size=10),
+          axis.title.y=element_text(size=10),
+          plot.title = element_text(size = 10, face = "bold"),
+          axis.ticks.x=element_blank(),
+          panel.grid.major.x = element_blank(),
+          panel.grid.minor.x = element_blank(),
+          plot.margin=grid::unit(c(9,5,2,5), "mm"))
+}
+
+# differences in n dps based on owned/leased land tenure
+prop_owned <- all_data[,"FC1_Owned.ac"] / all_data[,"FC1_Total.ac"]
+ownrshp <- data.frame(prop_owned)
+ownrshp <- ownrshp %>%
+    mutate(mo_ml = case_when(prop_owned >= .5 ~ 'Mostly Owned',
+                                  TRUE ~ 'Mostly Leased'))
+mo_ml <- ownrshp$mo_ml
+moml_n_dps <- data.frame(mo_ml, dp_counts)
+plot_data <- group_by(moml_n_dps, mo_ml) %>%
+  summarize_all(mean, na.rm = TRUE)
+names(plot_data)[1] <- "cats"
+names(plot_data)[2] <- "vals"
+p1 <- ten_plot(plot_data, "Mean Num. DPs")
+
+# differences in prob. of using 1 or more dps based on owned/leased land tenure
+dp_count_cum_probs <- data.frame(dp_counts) %>%
+  mutate(one = case_when(dp_counts >= 1 ~ 1, TRUE ~ 0))
+p_one_plus_dps <- dp_count_cum_probs$one
+moml_p_one_plus_dps <- data.frame(mo_ml, p_one_plus_dps)
+plot_data <- group_by(moml_p_one_plus_dps, mo_ml) %>%
+  summarize_all(mean, na.rm = TRUE)
+names(plot_data)[1] <- "cats"
+names(plot_data)[2] <- "vals"
+p2 <- ten_plot(plot_data, expression("Prob.">="1 DP"))
+
+```
+
+
+
 ```{r short_tenure_sim, results="hide"}
 tenure_2 <- MDPtoolbox::mdp_finite_horizon(model$P, model$U, discount, N = 2)
 sims_short_tenure <- sim(tenure_2)
 #write_csv(sims_short_tenure, "../data/sims_short_tenure.csv.gz")
 ```
 
-```{r res_tenure, fig.cap = "Result of short land tenure on DEP adoption.  The simulation is identical to that in Fig \\ref{fig:res_bimodal}, but the MDP is solved under a finite, two-year time horizon.", fig.width = 6, fig.asp = .5}
-sim_plot(sims_short_tenure, lab_lo_peak = TRUE) 
+```{r res_tenure, fig.cap = "(A) Result of short land tenure on DEP adoption.  The simulation is identical to that in Fig \\ref{fig:res_bimodal}, but the MDP is solved under a finite, two-year time horizon. (B) Impact of land tenure on the probability of a farmer in our survey dataset adopting at least one DP.", fig.width = 6, fig.asp = .5}
+# sim_plot(sims_short_tenure, lab_lo_peak = TRUE) 
+ggarrange(
+     sim_plot(sims_short_tenure, lab_lo_peak = TRUE, upmarmod = 4, rmarmod = -5, cmarmod = -5), p2, labels = c("A. Short-tenure model results", "B. Empirical data"), font.label = list(size = 10, face = "bold", family = "Roboto Condensed"), hjust = -.25, vjust = 2, widths = c(3, 1.1), nrow = 1, ncol = 2
+   )
+
 # p_up_dn(sims_short_tenure)
 ```
 
@@ -464,14 +583,14 @@ Members of our team conducted interviews and on-farm observational studies of 20
 
 \subsubsection{Survey dataset}
 
-To evaluate the extent to which these observed adoption distributions hold quantitatively, we leverage a dataset of survey responses from 295 vegetable growers in Washington, Oregon, and California (!!CITE DATA SOURCE!!).  Table \ref{tab:deps_in_survey} shows the set of DEPs queried in the survey, with their adoption rates across the entire sample.  A histogram plotting the number of diversified practices used by each grower (Fig \ref{fig:dep_dist}A) confirms a bimodal distribution, with growers generally tending to either adopt zero DEPs---the most likely case---or else to adopt many, with six practices being the next-most-likely.
+To evaluate the extent to which these observed adoption distributions hold quantitatively, we leverage a dataset of survey responses from 295 vegetable growers in Washington, Oregon, and California (!!CITE DATA SOURCE!!).  Table \ref{tab:dps_in_survey} shows the set of DPs queried in the survey, with their adoption rates across the entire sample.  A histogram plotting the number of diversification practices used by each grower (Fig \ref{fig:res_bimodal}B) shows a bimodal distribution, with growers generally tending to either adopt zero DPs---the most likely case---or else to adopt many, with six practices being the next-most-likely.
 
 \begin{table}
 	\centering
-	\caption{Diversification-enhancing practices in the survey data}
+	\caption{Diversification practices in the survey data}
 	\begin{tabular}{lc}
 		\hline
-		\textbf{DEP Name}			& \textbf{Adoption rate} \\
+		\textbf{DP Name}			& \textbf{Adoption rate} \\
 		\hline
 		Crop Rotation (3 or more)	& 63\% \\
 		Cover Cropping				& 68\% \\
@@ -483,17 +602,11 @@ To evaluate the extent to which these observed adoption distributions hold quant
 		Reduced Tillage				& 69\% \\
 		\hline
 	\end{tabular}
-	\label{tab:deps_in_survey}
+	\label{tab:dps_in_survey}
 \end{table}
 
-\begin{figure}
-	\centering
-	\includegraphics[width=.85\textwidth]{fig_dep_data.pdf}
-	\caption{A. Bimodal distribution of DEP adoption in the sample.  B. Impact of land tenure on the probability of adopting at least one DEP.  }
-	\label{fig:dep_dist}
-\end{figure}
 
-As discussed above, land tenure has often been shown to be a decision factor that impinges upon agricultural management practice adoption \cite{soule2000land, fraser2004land, richardson2015land, long2017hedgerow}.  Growers who have a long-term personal stake in the productive quality of their soil ecology are more likely to take the long view and invest in practices that will benefit them years down the line.  On the other hand, growers who are uncertain whether they will personally be farming a given parcel of land in future seasons may be less likely to adopt practices whose positive effects will not come to fruition in the short term.  To investigate the effect of land tenure on DEP adoption, we partition the dataset into growers who primarily own their land versus those who primarily lease it.  Figure \ref{fig:dep_dist}B shows that owners are about 20\% more likely than leasers to invest in at least one DEP.  
+As discussed above, land tenure has often been shown to be a decision factor that impinges upon agricultural management practice adoption \cite{soule2000land, fraser2004land, richardson2015land, long2017hedgerow}.  Growers who have a long-term personal stake in the productive quality of their soil ecology are more likely to take the long view and invest in practices that will benefit them years down the line.  On the other hand, growers who are uncertain whether they will personally be farming a given parcel of land in future seasons may be less likely to adopt practices whose positive effects will not come to fruition in the short term.  To investigate the effect of land tenure on DEP adoption, we partition the dataset into growers who primarily own their land versus those who primarily lease it.  Figure \ref{fig:res_tenure}B shows that owners in our sample are about 20\% more likely than leasers to invest in at least one diversification practice.  
 
 
 \subsubsection{Model parameters}
