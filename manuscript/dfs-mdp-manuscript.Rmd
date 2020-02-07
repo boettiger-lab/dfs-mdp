@@ -60,8 +60,6 @@ ggplot2::theme_set(hrbrthemes::theme_ipsum_rc())
 library(patchwork) # devtools::install_github("thomasp85/patchwork")
 library(ggtext) # install cli, gh, devtools::install_github("clauswilke/ggtext")
 pal <- solarized_pal()(7)
-scale_colour_discrete <- function(...) scale_colour_solarized()
-scale_fill_discrete <- function(...) scale_fill_solarized()
 
 knitr::opts_chunk$set(echo = FALSE,
                       cache = FALSE,
@@ -74,9 +72,9 @@ source("../R/continuous-model.R")
 set.seed(4)
 ```
 
-```{r load_ca_wa_or_data, message=FALSE, echo=FALSE}
+```{r load_ca_wa_or_data, include = FALSE}
 
-caorwa_data <- read.csv("../external-data/ADAPT_CA-OR-WA_only_sw.csv")
+caorwa_data <- read.csv("../external-data/ADAPT_CA-OR-WA_2_2020.csv")
 
 dp_varnames <- c("CR1_binomial",
                  "CC1_binomial",
@@ -123,118 +121,118 @@ soln_df <- tibble(state = states,
 
 ```{r sim_plot_fxns, include = FALSE}
 sim_plot_ts <- function(sims, title = ggtitle(NULL), ytxtoff = FALSE, endcol = pal[1], dnmarmod = 0, upmarmod = 0, lmarmod = 0, rmarmod = 0){
-
-   df <- sims %>% 
+  
+  df <- sims %>% 
     select(-obs,-value) %>% # tidy
     mutate(state = states[state], action = actions[action]) # rescale
-   Tmax <- max(sims$time)
-
-   stcol <- col2rgb(endcol)
+  Tmax <- max(sims$time)
+  
+  stcol <- col2rgb(endcol)
   stcol <- stcol/5
-    stcol <- rgb(t(stcol), maxColorValue=255)
-
-    ytxtc <- "black"
-    if (ytxtoff) {ytxtc <- NA}
-    
-   df %>% 
-     ggplot(aes(time, state, group = reps, col = time)) + 
-     geom_path(alpha = 0.1, show.legend = FALSE) + 
-      title +
-      labs(x="Time", y="ES state") +
-      scale_x_continuous(breaks = seq(1, Tmax, by=round(Tmax/5)), expand = c(.01,.01)) +
-      scale_y_continuous(limits = c(0,1.5), expand = c(.02,.02)) +
-     scale_color_gradient(low=stcol, high=endcol) +
-     theme(axis.text.x=element_text(size=10),
-            axis.text.y=element_text(size=10, color = ytxtc),
-            axis.title.x=element_text(size=10),
-            axis.title.y=element_text(size=10, color = ytxtc),
-            plot.title = element_text(size = 10, face = "bold"),
-            panel.grid.minor = element_blank(),
-            plot.margin=grid::unit(c(5+upmarmod,5+rmarmod,5+dnmarmod,5+lmarmod), "mm"))
-
+  stcol <- rgb(t(stcol), maxColorValue=255)
+  
+  ytxtc <- "black"
+  if (ytxtoff) {ytxtc <- NA}
+  
+  df %>% 
+    ggplot(aes(time, state, group = reps, col = time)) + 
+    geom_path(alpha = 0.1, show.legend = FALSE) + 
+    title +
+    labs(x="Time", y="ES state") +
+    scale_x_continuous(breaks = seq(1, Tmax, by=round(Tmax/5)), expand = c(.01,.01)) +
+    scale_y_continuous(limits = c(0,1.5), expand = c(.02,.02)) +
+    scale_color_gradient(low=stcol, high=endcol) +
+    theme(axis.text.x=element_text(size=10),
+          axis.text.y=element_text(size=10, color = ytxtc),
+          axis.title.x=element_text(size=10),
+          axis.title.y=element_text(size=10, color = ytxtc),
+          plot.title = element_text(size = 10, face = "bold"),
+          panel.grid.minor = element_blank(),
+          plot.margin=grid::unit(c(5+upmarmod,5+rmarmod,5+dnmarmod,5+lmarmod), "mm"))
+  
 }
 
 
 sim_plot_dens <- function(sims, title = ggtitle(NULL), endcol = pal[1], lab_lo_peak = FALSE, lab_hi_peak = FALSE, dnmarmod = 0, upmarmod = 0, lmarmod = 0, rmarmod = 0){
-     
-   df <- sims %>% 
+  
+  df <- sims %>% 
     mutate(state = states[state]) %>% # rescale
-     select(state, time)
-   Tmax <- max(sims$time)
-   
+    select(state, time)
+  Tmax <- max(sims$time)
+  
   stcol <- col2rgb(endcol)
   stcol <- stcol/5
   stcol <- rgb(t(stcol), maxColorValue=255)
-   
+  
   p <- df %>% filter(time %in% c(1, Tmax))  %>%
-      ggplot() + geom_density(aes(state, group = time, fill = time, color = time), alpha=0.8) +
-      coord_flip() +
-      title +
-      labs(x="", y="Density", fill="Time") +
-      scale_x_continuous(limits = c(0,1.5), expand = c(.02,.02)) +
-     scale_y_continuous(breaks = scales::pretty_breaks(n = 2)) +
+    ggplot() + geom_density(aes(state, group = time, fill = time, color = time), alpha=0.8) +
+    coord_flip() +
+    title +
+    labs(x="", y="Density", fill="Time") +
+    scale_x_continuous(limits = c(0,1.5), expand = c(.02,.02)) +
+    scale_y_continuous(breaks = scales::pretty_breaks(n = 2)) +
     scale_fill_gradient(low=stcol, high=endcol, guide = guide_colorbar(barwidth = .5), breaks=c(1, Tmax)) +
     scale_color_gradient(low=stcol, high=endcol, guide = NULL) +
-      theme(axis.text.x=element_text(size=10),
-            axis.text.y=element_blank(),
-            axis.title.x=element_text(size=10),
-            axis.title.y=element_text(size=10),
-            legend.text = element_text(size=10),
-            legend.title = element_text(size=10),
-            legend.box.margin=margin(0,0,0,-5),
-            plot.title = element_text(size = 10, face = "bold"),
-            panel.grid.minor = element_blank(),
-            plot.margin=grid::unit(c(5+upmarmod,5+rmarmod,5+dnmarmod,5+lmarmod), "mm"))
-   
-if(lab_lo_peak) {
-   ymax <- ggplot_build(p)$layout$panel_scales_y[[1]]$range$range[2]
-   
-   peak_lo <- ggplot_build(p)$data[[1]] %>%
+    theme(axis.text.x=element_text(size=10),
+          axis.text.y=element_blank(),
+          axis.title.x=element_text(size=10),
+          axis.title.y=element_text(size=10),
+          legend.text = element_text(size=10),
+          legend.title = element_text(size=10),
+          legend.box.margin=margin(0,0,0,-5),
+          plot.title = element_text(size = 10, face = "bold"),
+          panel.grid.minor = element_blank(),
+          plot.margin=grid::unit(c(5+upmarmod,5+rmarmod,5+dnmarmod,5+lmarmod), "mm"))
+  
+  if(lab_lo_peak) {
+    ymax <- ggplot_build(p)$layout$panel_scales_y[[1]]$range$range[2]
+    
+    peak_lo <- ggplot_build(p)$data[[1]] %>%
       filter(group == 2, x < .4) %>%
       arrange(desc(y)) %>%
       select(x,y) %>%
       filter(row_number()==1)
-   
-   # dotted line
-   p <- p +
+    
+    # dotted line
+    p <- p +
       annotate('segment', x = peak_lo$x, xend = peak_lo$x, y = peak_lo$y - .1 * ymax, yend = peak_lo$y + .1 * ymax, linetype="dotted")
-   
-   # text annotation (decide whether to place left or right of line)
-   if(peak_lo$y > .7 * ymax) {
+    
+    # text annotation (decide whether to place left or right of line)
+    if(peak_lo$y > .7 * ymax) {
       p <- p +
-         annotate('label', x = peak_lo$x, y = peak_lo$y - .32 * ymax, label = sprintf('%.2f', peak_lo$x), hjust = .5, vjust = .5, 
-                    family = "Roboto Condensed", size = 3, label.padding = unit(.15, "lines"), label.size = 0, alpha = .8) 
-   } else {
+        annotate('label', x = peak_lo$x, y = peak_lo$y - .32 * ymax, label = sprintf('%.2f', peak_lo$x), hjust = .5, vjust = .5, 
+                 family = "Roboto Condensed", size = 3, label.padding = unit(.15, "lines"), label.size = 0, alpha = .8) 
+    } else {
       p <- p +
-         annotate('label', x = peak_lo$x, y = peak_lo$y + .26 * ymax, label = sprintf('%.2f', peak_lo$x), hjust = .5, vjust = .5, 
-                    family = "Roboto Condensed", size = 3, label.padding = unit(.15, "lines"), label.size = 0, alpha = .8) 
-   }
-}
-
-if(lab_hi_peak){
-   ymax <- ggplot_build(p)$layout$panel_scales_y[[1]]$range$range[2]
-   
-   peak_hi <- ggplot_build(p)$data[[1]] %>%
+        annotate('label', x = peak_lo$x, y = peak_lo$y + .26 * ymax, label = sprintf('%.2f', peak_lo$x), hjust = .5, vjust = .5, 
+                 family = "Roboto Condensed", size = 3, label.padding = unit(.15, "lines"), label.size = 0, alpha = .8) 
+    }
+  }
+  
+  if(lab_hi_peak){
+    ymax <- ggplot_build(p)$layout$panel_scales_y[[1]]$range$range[2]
+    
+    peak_hi <- ggplot_build(p)$data[[1]] %>%
       filter(group == 2, x > .6) %>%
       arrange(desc(y)) %>%
       select(x,y) %>%
       filter(row_number()==1)
-   
-   # dotted line
-   p <- p +
+    
+    # dotted line
+    p <- p +
       annotate('segment', x = peak_hi$x, xend = peak_hi$x, y = peak_hi$y - .1 * ymax, yend = peak_hi$y + .1 * ymax, linetype="dotted")
-   
-   # text annotation (decide whether to place left or right of line)
-   if(peak_hi$y > .7 * ymax) {
+    
+    # text annotation (decide whether to place left or right of line)
+    if(peak_hi$y > .7 * ymax) {
       p <- p +
-         annotate('label', x = peak_hi$x, y = peak_hi$y - .32 * ymax, label = sprintf('%.2f', peak_hi$x), hjust = .5, vjust = .5, 
-                    family = "Roboto Condensed", size = 3, label.padding = unit(.15, "lines"), label.size = 0, alpha = .8) 
-   } else {
+        annotate('label', x = peak_hi$x, y = peak_hi$y - .32 * ymax, label = sprintf('%.2f', peak_hi$x), hjust = .5, vjust = .5, 
+                 family = "Roboto Condensed", size = 3, label.padding = unit(.15, "lines"), label.size = 0, alpha = .8) 
+    } else {
       p <- p +
-         annotate('label', x = peak_hi$x, y = peak_hi$y + .26 * ymax, label = sprintf('%.2f', peak_hi$x), hjust = .5, vjust = .5, 
-                    family = "Roboto Condensed", size = 3, label.padding = unit(.15, "lines"), label.size = 0, alpha = .8) 
-   }
-}
+        annotate('label', x = peak_hi$x, y = peak_hi$y + .26 * ymax, label = sprintf('%.2f', peak_hi$x), hjust = .5, vjust = .5, 
+                 family = "Roboto Condensed", size = 3, label.padding = unit(.15, "lines"), label.size = 0, alpha = .8) 
+    }
+  }
   p
 }
 
@@ -243,7 +241,7 @@ if(lab_hi_peak){
 # @clauswilke
 draw_key_polygon3 <- function(data, params, size) {
   lwd <- min(data$size, min(size) / 4)
-
+  
   grid::rectGrob(
     width = grid::unit(0.3, "npc"),
     height = grid::unit(0.8, "npc"),
@@ -262,7 +260,7 @@ GeomDensity$draw_key = draw_key_polygon3
 
 
 sim_plot_dens_comp <- function(sims1, sims2, label1 = "Gp. A Final", label2 = "Gp. B Final", title = ggtitle(NULL), cvec = c(pal[2], pal[1], pal[3]), dnmarmod = 0, upmarmod = 0, lmarmod = 0, rmarmod = 0){
-     
+  
   Tmax1 <- max(sims1$time) 
   
   df_i <- sims1 %>% 
@@ -283,33 +281,29 @@ sim_plot_dens_comp <- function(sims1, sims2, label1 = "Gp. A Final", label2 = "G
     filter(time %in% Tmax1) %>%
     select(state) %>%
     add_column(id = label2)
-
+  
   rbind(df_i, df1, df2) %>% mutate(id = factor(id, unique(id))) %>%
-      ggplot() + geom_density(aes(state, group = id, fill = id, color = id), alpha=0.5) +
-      coord_flip() +
-      title +
-      labs(x="", y="Density") +
-      scale_x_continuous(limits = c(0,1.5), expand = c(.02,.02)) +
+    ggplot() + geom_density(aes(state, group = id, fill = id, color = id), alpha=0.5) +
+    coord_flip() +
+    title +
+    labs(x="", y="Density") +
+    scale_x_continuous(limits = c(0,1.5), expand = c(.02,.02)) +
     scale_y_continuous(breaks = scales::pretty_breaks(n = 2)) +
-      scale_fill_manual(values = cvec) +
-      scale_color_manual(values = cvec) +
-      theme(axis.text.x=element_text(size=10),
-            axis.text.y=element_blank(),
-            axis.title.x=element_text(size=10),
-            axis.title.y=element_text(size=10),
-            legend.text=element_text(size=9),
-            legend.title = element_blank(),
-            legend.key.size = unit(12, "mm"),
-            legend.spacing.x = unit(-3, 'mm'),
-            # legend.margin=margin(0,0,0,0),
-            legend.box.margin=margin(0,0,0,-18),
-            plot.title = element_text(size = 10, face = "bold"),
-            panel.grid.minor = element_blank(),
-            plot.margin=grid::unit(c(5+upmarmod,5+rmarmod,5+dnmarmod,5+lmarmod), "mm"))
- 
+    scale_fill_manual(values = cvec) +
+    scale_color_manual(values = cvec) +
+    theme(axis.text.x=element_text(size=10),
+          axis.text.y=element_blank(),
+          axis.title.x=element_text(size=10),
+          axis.title.y=element_text(size=10),
+          legend.text=element_text(size=9),
+          legend.title = element_blank(),
+          legend.key.size = unit(12, "mm"),
+          legend.spacing.x = unit(-3, 'mm'),
+          legend.box.margin=margin(0,0,0,-18),
+          plot.title = element_text(size = 10, face = "bold"),
+          panel.grid.minor = element_blank(),
+          plot.margin=grid::unit(c(5+upmarmod,5+rmarmod,5+dnmarmod,5+lmarmod), "mm"))
 }
-
-# sim_plot_dens_comp(sims, sims_short_tenure, label1 = "Long\ntenure\nfinal", label2 = "Short\ntenure\nfinal", title = ggtitle("B. Model run\ncomparison"), lmarmod = -5)
 
 ```
 
@@ -411,16 +405,16 @@ Fig \ref{fig:res_bimodal} shows the simulation results from 500 model repetition
 ```{r base_case_sim, results="hide"}
 reps <- 500
 init <- truncnorm::rtruncnorm(reps, 0, 1, 0.5, 0.2) %>% 
-                  map_int(function(x) which.min(abs(x - states)))
+  map_int(function(x) which.min(abs(x - states)))
 
 sim <- function(soln, 
                 Tmax = 10,
                 x0 =  init){
   map_dfr(1:length(x0), 
           function(i)
-                   mdp_planning(model$P, model$U, discount, 
-                   policy = soln$policy,
-                   x0 = x0[i], Tmax = Tmax), .id = "reps")
+            mdp_planning(model$P, model$U, discount, 
+                         policy = soln$policy,
+                         x0 = x0[i], Tmax = Tmax), .id = "reps")
 }
 
 sims <- sim(soln)
@@ -436,7 +430,7 @@ hst <- as.data.frame(table(caorwa_dp_counts)) %>% ggplot(aes(x=caorwa_dp_counts)
   coord_flip() +
   xlab("Num. DPs adopted") +
   ylab("Frequency") +
-  ggtitle("B. Empirical distrib.") +
+  ggtitle("C. Empirical distrib.") +
   scale_x_discrete(expand = c(.08,.08)) +
   scale_y_continuous(expand = c(.015,.015)) +
   theme(axis.text.x=element_text(size=10),
@@ -455,11 +449,11 @@ hst <- as.data.frame(table(caorwa_dp_counts)) %>% ggplot(aes(x=caorwa_dp_counts)
 
 
 
-```{r res_bimodal, fig.cap = "(A) Simulations of 500 model agents over ten farming seasons.  Initial ES states follow a truncated normal distribution (mean = 0.5; S.D. = 0.2; truncated at [0,1]).  Agents utilize decision policy $\\pi$ as shown in Fig \\ref{fig:res_policy} for nine timesteps.  Center plot shows initial distribution (dark blue) and bimodal density distribution at $t = 10$ (light blue), with peaks annotated. (B) Shows the observed bimodal DP adoption distribution in our survey data.", fig.width = 6, fig.asp = .5}
+```{r res_bimodal, fig.cap = "Simulations of 500 model agents over ten farming seasons.  Initial ES states follow a truncated normal distribution (mean = 0.5; S.D. = 0.2; truncated at [0,1]).  Agents utilize decision policy $\\pi$ as shown in Fig \\ref{fig:res_policy} for nine timesteps.  (A) shows the state of each agent throughout each run.  (B) shows the initial ES distribution (dark blue) and bimodal density distribution at $t = 10$ (light blue), with peaks annotated. (C) shows the observed bimodal DP adoption distribution in our survey data.", fig.width = 6, fig.asp = .5}
 
 ggarrange(
-     sim_plot_ts(sims, title = ggtitle("A. Model results"), rmarmod = -5), sim_plot_dens(sims, title = ggtitle(""), lab_lo_peak = TRUE, lab_hi_peak = TRUE, lmarmod = -5), hst, widths = c(3, 2, 1.75), nrow = 1, ncol = 3
-   )
+  sim_plot_ts(sims, title = ggtitle("A. ES state over time"), rmarmod = -5), sim_plot_dens(sims, title = ggtitle("B. State distribution"), lab_lo_peak = TRUE, lab_hi_peak = TRUE, lmarmod = -5), hst, widths = c(3, 2, 1.75), nrow = 1, ncol = 3
+)
 
 # p_up_dn(sims)
 ```
@@ -471,22 +465,13 @@ Many agrienvironmental practices require upfront investment, but can pay for the
 Using the same simulation parameters as outlined in the previous section, we solve the MDP on a finite, two-year time horizon, representing the shorter window within which many tenant farmers may make decisions.  Comparing Fig \ref{fig:res_tenure} to Fig \ref{fig:res_bimodal} above shows that, as length of land tenure and/or stability of lease agreements decline---and thus optimal decisions are calculated more myopically---farmers are incentivized to severely limit investment into DEPs.  This results in a degredation of ecosystem state even among those plots with an initially high value, with 92\% of farmers ending up in the simplified state.  
 
 
-
-
-
-
-
-
 ```{r short_tenure_sim, results="hide"}
 tenure_2 <- MDPtoolbox::mdp_finite_horizon(model$P, model$U, discount, N = 2)
 sims_short_tenure <- sim(tenure_2)
 #write_csv(sims_short_tenure, "../data/sims_short_tenure.csv.gz")
 ```
 
-
-
-
-```{r model_tenure_barplot, results="hide"}
+```{r model_tenure_barplot, message=FALSE, echo=FALSE}
 thresh <- .15
 lt_p_over <- sims %>% filter(time == 10) %>% mutate(state = states[state]) %>% select(state) %>% dplyr::summarize(p_over_thresh = sum(state > thresh) / n())
 st_p_over <- sims_short_tenure %>% filter(time == 10) %>% mutate(state = states[state]) %>% select(state) %>% dplyr::summarize(p_over_thresh = sum(state > thresh) / n())
@@ -494,24 +479,25 @@ plot_data <- tibble(cats = c("st", "lt"), vals = c(st_p_over[1,1], lt_p_over[1,1
 plot_data$cats <- factor(plot_data$cats, levels = plot_data$cats)
 
 p_mod_ten <- plot_data %>% ggplot(aes(x = cats, y = vals, fill=cats)) +
-    geom_bar(width = .75, position=position_dodge(width=.84), stat="identity", color=NA, alpha = .8,) +
-    geom_text(aes(label=sprintf("%.2f", round(vals,2))), vjust=1.6, color="white", position = position_dodge(0.9), size=3, family = "Roboto Condensed") +
-    xlab("") +
-    ylab(expression("p. ES">="0.15")) +
-    ggtitle("C. Simulations") +
-    scale_x_discrete(expand = c(0,0), labels = c("Short\ntenure", "Long\ntenure")) +
-    scale_y_continuous(expand = c(0,0)) +
-    scale_fill_manual(values = c(pal[3], pal[1])) +
-    theme(axis.text.x=element_text(size=10, color = "black", family = "Roboto Condensed"),
-          axis.text.y=element_text(size=10),
-          axis.title.x=element_text(size=10),
-          axis.title.y=element_text(size=10),
-          plot.title = element_text(size = 10, face = "bold"),
-          axis.ticks.x=element_blank(),
-          panel.grid.major.x = element_blank(),
-          panel.grid.minor.x = element_blank(),
-          legend.position = "none",
-          plot.margin=grid::unit(c(5,5,0,2.5), "mm"))
+  geom_bar(width = .75, position=position_dodge(width=.84), stat="identity", color=NA, alpha = .8,) +
+  geom_text(aes(label=sprintf("%.2f", round(vals,2))), vjust=1.6, color="white", position = position_dodge(0.9), size=3, family = "Roboto Condensed") +
+  xlab("") +
+  ylab(expression("p. ES">="0.15")) +
+  ggtitle("C. Simulation data") +
+  scale_x_discrete(expand = c(0,0), labels = c("Short\ntenure", "Long\ntenure")) +
+  scale_y_continuous(expand = c(0,0)) +
+  scale_fill_manual(values = c(pal[3], pal[1])) +
+  theme(axis.text.x=element_text(size=10, color = "black", family = "Roboto Condensed"),
+        axis.text.y=element_text(size=10),
+        axis.title.x=element_text(size=10),
+        axis.title.y=element_text(size=10),
+        plot.title = element_text(size = 10, face = "bold"),
+        plot.title.position = "plot",
+        axis.ticks.x=element_blank(),
+        panel.grid.major.x = element_blank(),
+        panel.grid.minor.x = element_blank(),
+        legend.position = "none",
+        plot.margin=grid::unit(c(5,5,0,2.5), "mm"))
 
 ```
 
@@ -520,8 +506,8 @@ p_mod_ten <- plot_data %>% ggplot(aes(x = cats, y = vals, fill=cats)) +
 # differences in prob. of using 1 or more dps based on owned/leased land tenure
 prop_owned <- caorwa_data[,"FC1_Owned.ac"] / caorwa_data[,"FC1_Total.ac"]
 ownrshp <- data.frame(prop_owned) %>%
-    mutate(mo_ml = case_when(prop_owned >= .5 ~ 'Mostly Owned',
-                                  TRUE ~ 'Mostly Leased'))
+  mutate(mo_ml = case_when(prop_owned >= .5 ~ 'Mostly Owned',
+                           TRUE ~ 'Mostly Leased'))
 mo_ml <- ownrshp$mo_ml
 dp_count_cum_probs <- data.frame(caorwa_dp_counts) %>%
   mutate(one = case_when(caorwa_dp_counts >= 1 ~ 1, TRUE ~ 0))
@@ -531,34 +517,36 @@ plot_data <- group_by(moml_p_one_plus_dps, mo_ml) %>%
 
 p_caorwa_ten <- plot_data %>%
   ggplot(aes(x = mo_ml, y = dp_count_cum_probs.one, fill = mo_ml)) +
-    geom_bar(width = .75, position=position_dodge(width=.84), stat="identity", color=NA, alpha = .8,) +
-    geom_text(aes(label=sprintf("%.2f", round(dp_count_cum_probs.one,2))), vjust=1.6, color="white", position = position_dodge(0.9), size=3, family = "Roboto Condensed") +
-    xlab("") +
-    ylab(expression("p.">="1 DP")) +
-    ggtitle("D. Empirical data") +
-    scale_x_discrete(expand = c(0,0), labels = c("Mostly\nleased", "Mostly\nowned")) +
-    scale_y_continuous(expand = c(0,0)) +
-    scale_fill_manual(values = c(pal[3], pal[1])) +
-    theme(axis.text.x=element_text(size=10, color = "black", family = "Roboto Condensed"),
-          axis.text.y=element_text(size=10),
-          axis.title.x=element_text(size=10),
-          axis.title.y=element_text(size=10),
-          plot.title = element_text(size = 10, face = "bold"),
-          axis.ticks.x=element_blank(),
-          panel.grid.major.x = element_blank(),
-          panel.grid.minor.x = element_blank(),
-          legend.position = "none",
-          plot.margin=grid::unit(c(2.5,5,2.5,2.5), "mm"))
+  geom_bar(width = .75, position=position_dodge(width=.84), stat="identity", color=NA, alpha = .8,) +
+  geom_text(aes(label=sprintf("%.2f", round(dp_count_cum_probs.one,2))), vjust=1.6, color="white", position = position_dodge(0.9), size=3, family = "Roboto Condensed") +
+  xlab("") +
+  ylab(expression("p.">="1 DP")) +
+  ggtitle("D. Empirical data") +
+  scale_x_discrete(expand = c(0,0), labels = c("Mostly\nleased", "Mostly\nowned")) +
+  scale_y_continuous(expand = c(0,0)) +
+  scale_fill_manual(values = c(pal[3], pal[1])) +
+  theme(axis.text.x=element_text(size=10, color = "black", family = "Roboto Condensed"),
+        axis.text.y=element_text(size=10),
+        axis.title.x=element_text(size=10),
+        axis.title.y=element_text(size=10),
+        plot.title = element_text(size = 10, face = "bold"),
+        plot.title.position = "plot",
+        axis.ticks.x=element_blank(),
+        panel.grid.major.x = element_blank(),
+        panel.grid.minor.x = element_blank(),
+        legend.position = "none",
+        plot.margin=grid::unit(c(2.5,5,2.5,2.5), "mm"))
+
 ```
 
 
-```{r res_tenure, fig.cap = "(A) Result of short land tenure on DEP adoption.  The simulation is identical to that in Fig \\ref{fig:res_bimodal}, but the MDP is solved under a finite, two-year time horizon. (B) Comparison between final density distribution of short- vs. long-tenure model runs.  (C) Probability of ecosystem services state being $\\geq 0.15$ at $t=10$ for the short-tenure simulation vs. the base-case, long-tenure simulation in Fig \\ref{fig:res_bimodal}. (D) Impact of land tenure on the probability of a farmer in our survey dataset adopting at least one DP.", fig.width = 6, fig.asp = .5}
+```{r res_tenure, fig.cap = "(A) Result of short land tenure on DEP adoption.  The simulation is identical to that in Fig \\ref{fig:res_bimodal}, but the MDP is solved under a finite, two-year time horizon. (B) Comparison between final state distribution of short- vs. long-tenure model runs.  (C) Probability of ecosystem services state being $\\geq 0.15$ at $t=10$ for the short-tenure simulation vs. the base-case, long-tenure simulation in Fig \\ref{fig:res_bimodal}. (D) Impact of land tenure on the probability of a farmer in our survey dataset adopting at least one DP.", fig.width = 6, fig.asp = .5}
 
 ggarrange(
   sim_plot_ts(sims_short_tenure, title = ggtitle("A. Short-tenure timeseries"), endcol = pal[3], rmarmod = -5),
-  sim_plot_dens_comp(sims, sims_short_tenure, label1 = "Long\ntenure\nfinal", label2 = "Short\ntenure\nfinal", title = ggtitle("B. Final state comparison"), lmarmod = -5, rmarmod = -5),
+  sim_plot_dens_comp(sims, sims_short_tenure, label1 = "Long\ntenure\nfinal", label2 = "Short\ntenure\nfinal", title = ggtitle("B. ES state distribution"), lmarmod = -5, rmarmod = -5),
   ggarrange(p_mod_ten, p_caorwa_ten, nrow = 2, ncol = 1),
-  widths = c(2.5, 2.5, 1.75), nrow = 1, ncol = 3
+  widths = c(2.5, 2.5, 1.65), nrow = 1, ncol = 3
 )
 
 # p_up_dn(sims_short_tenure)
@@ -607,11 +595,11 @@ simB <- bind_rows(start, rest)
 ```{r res_subsidy, fig.cap = "Replicate simulations from 500 normally-distributed starting states (mean = 0.5; S.D. = 0.2; truncated at [0,1]) over 20 timesteps.  (A) shows the effects of a large, abrupt subsidy (no direct cost to adoption during the initial two years).  (B) simulates a smaller, yet more sustained subsidy (adoption cost = 0.8 during the first 10 years).  Ingoring discounting, subsidies have the same total cost to the issuing organization.  After subsidy is removed, agents adjust their decision rule to that of the base case (i.e. no subsidy) for the remainder of the run.  (C) shows that the sustained subsidy drove more adoption at $t = 20$.", fig.width = 6, fig.asp = .5}
 
 ggarrange(
-     sim_plot_ts(simA, title = ggtitle("A. Abrupt subsidy"), rmarmod = -10, endcol = pal[1]),
-     sim_plot_ts(simB, title = ggtitle("B. Sustained subsidy"), ytxtoff = T, endcol = pal[3], rmarmod = -5, lmarmod = -5),
-     sim_plot_dens_comp(simA, simB, label1 = "Abrupt\nsubsidy\nfinal", label2 = "Sustained\nsubsidy\nfinal", title = ggtitle("C. Final state comparison"), lmarmod = -5, rmarmod = -5),
-     nrow = 1, ncol = 3, widths = c(1,1,1)
-     )
+  sim_plot_ts(simA, title = ggtitle("A. Abrupt subsidy"), rmarmod = -10, endcol = pal[1]),
+  sim_plot_ts(simB, title = ggtitle("B. Sustained subsidy"), ytxtoff = T, endcol = pal[3], rmarmod = -5, lmarmod = -5),
+  sim_plot_dens_comp(simA, simB, label1 = "Abrupt\nsubsidy\nfinal", label2 = "Sustained\nsubsidy\nfinal", title = ggtitle("C. ES state distribution"), lmarmod = -5, rmarmod = -5),
+  nrow = 1, ncol = 3, widths = c(1,1,1)
+)
 
 # print("abrupt: ")
 # p_up_dn(simA)
