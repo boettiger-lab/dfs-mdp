@@ -350,11 +350,9 @@ However, empiracally exploring coupled dynamic processes presents numerous chall
 We present a stylized coupled human and natural systems model, focusing on adoption of diversified farming practices. (Keep working on this paragraph...)
 
 \section{Results}
+<<<<<<< HEAD
 
 We explore the transition to and from DFS using a Markov Decision Process (MDP), in which an agent (farmer) makes a series of choices about their interactions with the environment. We formulate a 'system state' to represent the degree of ecological services derived from an ecological state, which provide immediate benefits to the agent.  At each time step the agent chooses an action from a set of available actions, described by a spectrum from 0\% to 100\% investment in adopting or maintaining diversified farming practices.  More investment corresponds to a greater probability of transitioning to a higher (more beneficial) ecological state.  Given the current state and action the environment moves to a higher or lower ecological state with some probability (*reference conceptutal figure*), providing the agent a reward.  However, actions have some associated cost, which is subtracted from the benefit received from the ecological state.  The agent calculates optimal actions based on their future cumulative discounted rewards over a defined time horizon. The discount factor informs how much the agent values current rewards relative to future rewards.
-
-
-\subsection{Bimodal DEP adoption distribution}
 
 Fig \ref{fig:res_policy} shows the policy $\pi$, or optimal course of action, for an agent. We find a critical bifurcation, or tipping point, at an specific ecosystem state, below which the highest expected value is derived by investing virtually-nothing into diversified farming systems.  Above the threshold, the optimum action becomes near-full investment into diversified farming systems. Over time, this results in a bimodal distribution of ecosystem states, as the result of transition probabilities. 
 
@@ -438,6 +436,7 @@ ggarrange(
 ```
 
 
+<<<<<<< HEAD
 \subsection{Land tenure}
 
 Many agrienvironmental practices require upfront investment, but can pay for themselves over time through accrued ecosystem services.  For example, in California's Sacramento Valley, researchers calculated that an average farmer would recoup the investment of planting a hedgerow in seven years due to increased pollination services \cite{long2017hedgerow}.  However, such an investment is only wise if the grower is confident they will continue farming at their present location, for example if they own the land or have a sufficiently long-term lease.  With 39\% of U.S. farmland under lease (USDA NASS 2016 find citation), and with widely-varying rental agreements, the impact of land tenure on best-managment-practice adoption has been increasingly examined.  For example, a study of U.S. corn producers found that cash renters were less likely than land owners to implement grassed waterways, strip cropping, contour farming, or conservation tillage \cite{soule2000land}.  A study conducted in British Columbia found that tenant farmers planted fewer perennial crops than land owners \cite{fraser2004land}.  Our own ongoing research with lettuce farmers in California's Salinas Valley suggests that land tenure is an important factor in decisions about cover cropping and crop rotation.  In addition, investments in diversified farming practices may require access to credit, which often also hinges on secure land tenure as a form of collateral \cite{richardson2015land}.
