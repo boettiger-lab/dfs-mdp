@@ -132,8 +132,12 @@ sim_plot_ts <- function(sims, title = ggtitle(NULL), ytxtoff = FALSE, endcol = p
   stcol <- stcol/5
   stcol <- rgb(t(stcol), maxColorValue=255)
   
-  ytxtc <- "black"
-  if (ytxtoff) {ytxtc <- NA}
+  ytitc <- "black"
+  ytxtc = "gray30"
+  if (ytxtoff) {
+    ytitc <- NA
+    ytxtc <- NA
+  }
   
   df %>% 
     ggplot(aes(time, state, group = reps, col = time)) + 
@@ -146,7 +150,7 @@ sim_plot_ts <- function(sims, title = ggtitle(NULL), ytxtoff = FALSE, endcol = p
     theme(axis.text.x=element_text(size=10),
           axis.text.y=element_text(size=10, color = ytxtc),
           axis.title.x=element_text(size=10),
-          axis.title.y=element_text(size=10, color = ytxtc),
+          axis.title.y=element_text(size=10, color = ytitc),
           plot.title = element_text(size = 10, face = "bold"),
           panel.grid.minor = element_blank(),
           plot.margin=grid::unit(c(5+upmarmod,5+rmarmod,5+dnmarmod,5+lmarmod), "mm"))
@@ -352,9 +356,6 @@ We present a stylized coupled human and natural systems model, focusing on adopt
 \section{Results}
 
 We explore the transition to and from DFS using a Markov Decision Process (MDP), in which an agent (farmer) makes a series of choices about their interactions with the environment. We formulate a 'system state' to represent the degree of ecological services derived from an ecological state, which provide immediate benefits to the agent.  At each time step the agent chooses an action from a set of available actions, described by a spectrum from 0\% to 100\% investment in adopting or maintaining diversified farming practices.  More investment corresponds to a greater probability of transitioning to a higher (more beneficial) ecological state.  Given the current state and action the environment moves to a higher or lower ecological state with some probability (*reference conceptutal figure*), providing the agent a reward.  However, actions have some associated cost, which is subtracted from the benefit received from the ecological state.  The agent calculates optimal actions based on their future cumulative discounted rewards over a defined time horizon. The discount factor informs how much the agent values current rewards relative to future rewards.
-
-
-\subsection{Bimodal DEP adoption distribution}
 
 Fig \ref{fig:res_policy} shows the policy $\pi$, or optimal course of action, for an agent. We find a critical bifurcation, or tipping point, at an specific ecosystem state, below which the highest expected value is derived by investing virtually-nothing into diversified farming systems.  Above the threshold, the optimum action becomes near-full investment into diversified farming systems. Over time, this results in a bimodal distribution of ecosystem states, as the result of transition probabilities. 
 
