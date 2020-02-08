@@ -39,28 +39,16 @@ header-includes:
 
 ---
 
+```{r setup, include = FALSE}
+rm(list = ls(all.names = TRUE)) # clean environment
 
-```{r setup, message=FALSE, echo=FALSE}
-rm(list = ls(all.names = TRUE))
-library(tidyverse)
-library(Hmisc)
-library(dplyr)
-library(MDPtoolbox)
-library(mdplearning)
-
-library(corrplot)
-library(RColorBrewer)
-library(ggthemes)
-library(ggpubr)
-library(ggplot2)
-library(hrbrthemes)
-library(Cairo)
-library(extrafont)
-extrafont::loadfonts()
-ggplot2::theme_set(hrbrthemes::theme_ipsum_rc())
-library(patchwork) # devtools::install_github("thomasp85/patchwork")
-library(ggtext) # install cli, gh, devtools::install_github("clauswilke/ggtext")
-pal <- solarized_pal()(7)
+# load external scripts
+source("../R/load-libraries.R")
+source("../R/continuous-model.R")
+source("../R/sim-plot-fxns.R")
+source("../R/caorwa-plot-fxns.R")
+# load CA_OR_WA farmer survey dataset
+caorwa_data <- read.csv("../external-data/ADAPT_CA-OR-WA_2_2020.csv")
 
 knitr::opts_chunk$set(echo = FALSE,
                       cache = FALSE,
@@ -69,274 +57,34 @@ knitr::opts_chunk$set(echo = FALSE,
                       fig.align = "center",
                       dev = "cairo_pdf")
 
-source("../R/continuous-model.R")
-set.seed(4)
+pal <- solarized_pal()(7) # global color pallette
+set.seed(4) # random seed
 ```
-
-```{r load_ca_wa_or_data, include = FALSE}
-
-caorwa_data <- read.csv("../external-data/ADAPT_CA-OR-WA_2_2020.csv")
-
-dp_varnames <- c("CR1_binomial",
-                 "CC1_binomial",
-                 "IC1_binomial",
-                 "IP1_binomial",
-                 "RB1_binomial",
-                 "BP1_binomial",
-                 "CM1_binomial",
-                 "RT1_binomial")
-
-dp_labs <- c(CR1_binomial = "Crop Rotation",
-            CC1_binomial = "Cover Cropping",
-            IC1_binomial = "Intercropping",
-            IP1_binomial = "Insectary Plantings",
-            RB1_binomial = "Riparian Buffers",
-            BP1_binomial = "Border Plantings",
-            CM1_binomial = "Compost Or Manure",
-            RT1_binomial = "Reduced Tillage")
-
-caorwa_dp_data <- caorwa_data[,dp_varnames]
-caorwa_dp_data <- Hmisc::upData(caorwa_dp_data, labels = dp_labs)
-caorwa_dp_counts <- rowSums(caorwa_dp_data, na.rm = T)
-```
-
 
 ```{r model_def, include = FALSE}
+# set up the MDP
 actions <- seq(0, 1, length = 100)
 # Allow max(state) > max(actions) to avoid creating a hard boundary on ecosystem state
 states <- seq(0, 1.5, length = 100)
-params <- list(benefit = 1.57, cost = 1, sigma = 0.1, r = .1)
+params <- list(benefit = 1.57, cost = 1, sigma = 0.1, r = 0.1)
 discount <- 0.97
 transition_fn <- function(s, a, params) s + params$r * (a - s)
-utility_fn <- function(s,a, params) params$benefit * s - params$cost * a
+utility_fn <- function(s, a, params) params$benefit * s - params$cost * a
 model <- continuous_model(states, actions, params, transition_fn, utility_fn)
+
+# solve the MDP
+base_soln <- MDPtoolbox::mdp_value_iteration(model$P, model$U, discount)
+base_soln_df <- tibble(state = states,
+                       action = actions[base_soln$policy])
+#write_csv(base_soln_df, "../model-data/base_soln_df.csv.gz")
 ```
 
-```{r model_run, include = FALSE}
-soln <- MDPtoolbox::mdp_value_iteration(model$P, model$U, discount)
-soln_df <- tibble(state = states,
-                  action = actions[soln$policy])
-#write_csv(soln_df, "../data/soln_df.csv.gz")
-```
-
-
-```{r sim_plot_fxns, include = FALSE}
-sim_plot_ts <- function(sims, title = ggtitle(NULL), ytxtoff = FALSE, endcol = pal[1], dnmarmod = 0, upmarmod = 0, lmarmod = 0, rmarmod = 0){
-  
-  df <- sims %>% 
-    select(-obs,-value) %>% # tidy
-    mutate(state = states[state], action = actions[action]) # rescale
-  Tmax <- max(sims$time)
-  
-  stcol <- col2rgb(endcol)
-  stcol <- stcol/5
-  stcol <- rgb(t(stcol), maxColorValue=255)
-  
-  ytitc <- "black"
-  ytxtc = "gray30"
-  if (ytxtoff) {
-    ytitc <- NA
-    ytxtc <- NA
-  }
-  
-  df %>% 
-    ggplot(aes(time, state, group = reps, col = time)) + 
-    geom_path(alpha = 0.1, show.legend = FALSE) + 
-    title +
-    labs(x="Time", y="ES state") +
-    scale_x_continuous(breaks = seq(1, Tmax, by=round(Tmax/5)), expand = c(.01,.01)) +
-    scale_y_continuous(limits = c(0,1.5), expand = c(.02,.02)) +
-    scale_color_gradient(low=stcol, high=endcol) +
-    theme(axis.text.x=element_text(size=10),
-          axis.text.y=element_text(size=10, color = ytxtc),
-          axis.title.x=element_text(size=10),
-          axis.title.y=element_text(size=10, color = ytitc),
-          plot.title = element_text(size = 10, face = "bold"),
-          panel.grid.minor = element_blank(),
-          plot.margin=grid::unit(c(5+upmarmod,5+rmarmod,5+dnmarmod,5+lmarmod), "mm"))
-}
-
-
-sim_plot_dens <- function(sims, title = ggtitle(NULL), endcol = pal[1], lab_lo_peak = FALSE, lab_hi_peak = FALSE, dnmarmod = 0, upmarmod = 0, lmarmod = 0, rmarmod = 0){
-  
-  df <- sims %>% 
-    mutate(state = states[state]) %>% # rescale
-    select(state, time)
-  Tmax <- max(sims$time)
-  
-  stcol <- col2rgb(endcol)
-  stcol <- stcol/5
-  stcol <- rgb(t(stcol), maxColorValue=255)
-  
-  p <- df %>% filter(time %in% c(1, Tmax))  %>%
-    ggplot() + geom_density(aes(state, group = time, fill = time, color = time), alpha=0.8) +
-    coord_flip() +
-    title +
-    labs(x="", y="Density", fill="Time") +
-    scale_x_continuous(limits = c(0,1.5), expand = c(.02,.02)) +
-    scale_y_continuous(breaks = scales::pretty_breaks(n = 2)) +
-    scale_fill_gradient(low=stcol, high=endcol, guide = guide_colorbar(barwidth = .5), breaks=c(1, Tmax)) +
-    scale_color_gradient(low=stcol, high=endcol, guide = NULL) +
-    theme(axis.text.x=element_text(size=10),
-          axis.text.y=element_blank(),
-          axis.title.x=element_text(size=10),
-          axis.title.y=element_text(size=10),
-          legend.text = element_text(size=10),
-          legend.title = element_text(size=10),
-          legend.box.margin=margin(0,0,0,-5),
-          plot.title = element_text(size = 10, face = "bold"),
-          panel.grid.minor = element_blank(),
-          plot.margin=grid::unit(c(5+upmarmod,5+rmarmod,5+dnmarmod,5+lmarmod), "mm"))
-  
-  if(lab_lo_peak) {
-    ymax <- ggplot_build(p)$layout$panel_scales_y[[1]]$range$range[2]
-    
-    peak_lo <- ggplot_build(p)$data[[1]] %>%
-      filter(group == 2, x < .4) %>%
-      arrange(desc(y)) %>%
-      select(x,y) %>%
-      filter(row_number()==1)
-    
-    # dotted line
-    p <- p +
-      annotate('segment', x = peak_lo$x, xend = peak_lo$x, y = peak_lo$y - .1 * ymax, yend = peak_lo$y + .1 * ymax, linetype="dotted")
-    
-    # text annotation (decide whether to place left or right of line)
-    if(peak_lo$y > .7 * ymax) {
-      p <- p +
-        annotate('label', x = peak_lo$x, y = peak_lo$y - .32 * ymax, label = sprintf('%.2f', peak_lo$x), hjust = .5, vjust = .5, 
-                 family = "Roboto Condensed", size = 3, label.padding = unit(.15, "lines"), label.size = 0, alpha = .8) 
-    } else {
-      p <- p +
-        annotate('label', x = peak_lo$x, y = peak_lo$y + .26 * ymax, label = sprintf('%.2f', peak_lo$x), hjust = .5, vjust = .5, 
-                 family = "Roboto Condensed", size = 3, label.padding = unit(.15, "lines"), label.size = 0, alpha = .8) 
-    }
-  }
-  
-  if(lab_hi_peak){
-    ymax <- ggplot_build(p)$layout$panel_scales_y[[1]]$range$range[2]
-    
-    peak_hi <- ggplot_build(p)$data[[1]] %>%
-      filter(group == 2, x > .6) %>%
-      arrange(desc(y)) %>%
-      select(x,y) %>%
-      filter(row_number()==1)
-    
-    # dotted line
-    p <- p +
-      annotate('segment', x = peak_hi$x, xend = peak_hi$x, y = peak_hi$y - .1 * ymax, yend = peak_hi$y + .1 * ymax, linetype="dotted")
-    
-    # text annotation (decide whether to place left or right of line)
-    if(peak_hi$y > .7 * ymax) {
-      p <- p +
-        annotate('label', x = peak_hi$x, y = peak_hi$y - .32 * ymax, label = sprintf('%.2f', peak_hi$x), hjust = .5, vjust = .5, 
-                 family = "Roboto Condensed", size = 3, label.padding = unit(.15, "lines"), label.size = 0, alpha = .8) 
-    } else {
-      p <- p +
-        annotate('label', x = peak_hi$x, y = peak_hi$y + .26 * ymax, label = sprintf('%.2f', peak_hi$x), hjust = .5, vjust = .5, 
-                 family = "Roboto Condensed", size = 3, label.padding = unit(.15, "lines"), label.size = 0, alpha = .8) 
-    }
-  }
-  p
-}
-
-
-# function to increase vertical spacing between legend keys
-# @clauswilke
-draw_key_polygon3 <- function(data, params, size) {
-  lwd <- min(data$size, min(size) / 4)
-  
-  grid::rectGrob(
-    width = grid::unit(0.3, "npc"),
-    height = grid::unit(0.8, "npc"),
-    gp = grid::gpar(
-      col = data$colour,
-      fill = alpha(data$fill, data$alpha),
-      lty = data$linetype,
-      lwd = lwd * .pt,
-      linejoin = "mitre"
-    ))
-}
-
-# register new key drawing function, 
-# the effect is global & persistent throughout the R session
-GeomDensity$draw_key = draw_key_polygon3
-
-
-sim_plot_dens_comp <- function(sims1, sims2, label1 = "Gp. A Final", label2 = "Gp. B Final", title = ggtitle(NULL), cvec = c(pal[2], pal[1], pal[3]), dnmarmod = 0, upmarmod = 0, lmarmod = 0, rmarmod = 0){
-  
-  Tmax1 <- max(sims1$time) 
-  
-  df_i <- sims1 %>% 
-    mutate(state = states[state]) %>% # rescale
-    filter(time %in% 1) %>%
-    select(state) %>%
-    add_column(id = "Initial")
-  
-  df1 <- sims1 %>% 
-    mutate(state = states[state]) %>% # rescale
-    filter(time %in% Tmax1) %>%
-    select(state) %>%
-    add_column(id = label1)
-  
-  Tmax2 <- max(sims2$time) 
-  df2 <- sims2 %>% 
-    mutate(state = states[state]) %>% # rescale
-    filter(time %in% Tmax1) %>%
-    select(state) %>%
-    add_column(id = label2)
-  
-  rbind(df_i, df1, df2) %>% mutate(id = factor(id, unique(id))) %>%
-    ggplot() + geom_density(aes(state, group = id, fill = id, color = id), alpha=0.5) +
-    coord_flip() +
-    title +
-    labs(x="", y="Density") +
-    scale_x_continuous(limits = c(0,1.5), expand = c(.02,.02)) +
-    scale_y_continuous(breaks = scales::pretty_breaks(n = 2)) +
-    scale_fill_manual(values = cvec) +
-    scale_color_manual(values = cvec) +
-    theme(axis.text.x=element_text(size=10),
-          axis.text.y=element_blank(),
-          axis.title.x=element_text(size=10),
-          axis.title.y=element_text(size=10),
-          legend.text=element_text(size=9),
-          legend.title = element_blank(),
-          legend.key.size = unit(12, "mm"),
-          legend.spacing.x = unit(-3, 'mm'),
-          legend.box.margin=margin(0,0,0,-18),
-          plot.title = element_text(size = 10, face = "bold"),
-          panel.grid.minor = element_blank(),
-          plot.margin=grid::unit(c(5+upmarmod,5+rmarmod,5+dnmarmod,5+lmarmod), "mm"))
-}
+```{r global_sim_params, include = FALSE}
+reps <- 500
+init <- truncnorm::rtruncnorm(reps, 0, 1, 0.5, 0.2) %>% 
+  map_int(function(x) which.min(abs(x - states)))
 
 ```
-
-
-```{r p_inc_dec, include = FALSE}
-# Prop decreasing or increasing ES over the run
-p_up_dn <- function(sims){
-  i_state <- sims %>%
-    filter(time == 1) %>%
-    select(state) %>%
-    mutate(state = states[state])
-  
-  f_state <- sims %>%
-    filter(time == 10) %>%
-    select(state) %>%
-    mutate(state = states[state])
-  
-  state <- data.frame(i = i_state$state, f = f_state$state)
-  
-  state$up <- state$i < .5 & state$f > .5
-  state$dn <- state$i > .5 & state$f < .5
-  
-  # c(mean(state$up), mean(state$dn))
-  print(sprintf('prop high final = %.2f, prop low final = %.2f', mean(state$f > .5), mean(state$f < .5)))
-  print(sprintf('prop increasing = %.2f, prop decreasing = %.2f', mean(state$up), mean(state$dn)))
-}
-```
-
-
 
 
 <!-- MANUSCRIPT START -->
@@ -361,81 +109,35 @@ Fig \ref{fig:res_policy} shows the policy $\pi$, or optimal course of action, fo
 
 ```{r res_policy, fig.cap = "Optimal decision policy $\\pi$ as a function of ecosystem state.", fig.width = 6, fig.asp = .5}
 
-# df <- sims %>% 
-#   mutate(state = states[state])
-# max(df$state)
-# max state reached in the simulations was 1.424242, so i think we're ok leaving the upper x axis limit on this plot at 1.5
-
-ggplot(soln_df, aes(state,action)) +
-geom_point(size = 1) +
-geom_vline(xintercept = .477, linetype="dashed", color = "red", size=.7) +
-annotate('label', x = .55, y = .35, label = "0.48", hjust = 0, vjust = .5,
-         family = "Roboto", size = 3.25, label.padding = unit(.15, "lines"), label.size = 0, alpha = .8) +
-annotate("segment", x = .55, xend = .49, y = .35, yend = .35, size=.5, arrow=arrow(length = unit(0.22, "cm"))) +
-labs(x="ES state", y="Optimal DP investment") +
-scale_x_continuous(limits = c(0,1.5), expand = c(.01,.01)) +
-scale_y_continuous(limits = c(0,1), expand = c(.01,.01)) +
-theme(axis.text.x=element_text(size=10),
-      axis.text.y=element_text(size=10),
-      axis.title.x=element_text(size=10),
-      axis.title.y=element_text(size=10),
-      panel.grid.minor = element_blank(),
-      plot.margin=grid::unit(c(5,5,5,5), "mm"))
+soln_plot(base_soln_df)
 
 ```
 
 Fig \ref{fig:res_bimodal} shows the simulation results from 500 model repetitions.  Agents' initial ecosystem states are distributed normally with a mean at $\bar{S} = 0.5$.  After having followed policy $\pi$ for nine timesteps, at $t = 10$ we find that agents have largely bifurcated into two groups, with farms in the "simplified" class centered around $S = 0.17$, and those in the "diversified" class around $S = 0.82$.  Further, we find strong path dependency, with only 11\% of runs which started in a simplified ($S < 0.5$) state concluding in a diversified ($S > 0.5$) state, and only 7\% of runs initially in the diversified state transitioning to simplified.  
 
-```{r base_case_sim, results="hide"}
-reps <- 500
-init <- truncnorm::rtruncnorm(reps, 0, 1, 0.5, 0.2) %>% 
-  map_int(function(x) which.min(abs(x - states)))
-
+```{r base_case_sim, include = FALSE}
 sim <- function(soln, 
                 Tmax = 10,
                 x0 =  init){
   map_dfr(1:length(x0), 
-          function(i)
-            mdp_planning(model$P, model$U, discount, 
-                         policy = soln$policy,
-                         x0 = x0[i], Tmax = Tmax), .id = "reps")
+          function(i) mdp_planning(model$P, model$U, discount, policy = soln$policy, x0 = x0[i], Tmax = Tmax), 
+          .id = "reps")
 }
-
-sims <- sim(soln)
-#write_csv(sims, "../data/sims.csv.gz")
+sims_baseline <- sim(base_soln)
+#write_csv(sims_baseline, "../model-data/sims_baseline.csv.gz")
 ```
 
-```{r ca_or_wa_hist, message=FALSE, echo=FALSE}
-
-hst <- as.data.frame(table(caorwa_dp_counts)) %>% ggplot(aes(x=caorwa_dp_counts)) +
-  geom_bar(aes(y=Freq), color=NA, fill="black", alpha = .8, stat = "identity") +
-  geom_text(aes(y = Freq, label=Freq), hjust=1.6, color="white", position = position_dodge(0.9), size=3, family = "Roboto Condensed") +
-  coord_flip() +
-  xlab("Num. DPs adopted") +
-  ylab("Frequency") +
-  ggtitle("C. Empirical distrib.") +
-  scale_x_discrete(expand = c(.08,.08)) +
-  scale_y_continuous(expand = c(.015,.015)) +
-  theme(axis.text.x=element_text(size=10),
-        axis.text.y=element_text(size=10),
-        axis.title.x=element_text(size=10),
-        axis.title.y=element_text(size=10),
-        plot.title = element_text(size = 10, face = "bold"),
-        axis.ticks.x=element_blank(),
-        panel.grid.major.y = element_blank(),
-        panel.grid.minor.y = element_blank(),
-        panel.grid.minor.x = element_blank(),
-        plot.margin=grid::unit(c(5,5,5,0), "mm"))
-
-```
 
 ```{r res_bimodal, fig.cap = "Simulations of 500 model agents over ten farming seasons.  Initial ES states follow a truncated normal distribution (mean = 0.5; S.D. = 0.2; truncated at [0,1]).  Agents utilize decision policy $\\pi$ as shown in Fig \\ref{fig:res_policy} for nine timesteps.  (A) shows the state of each agent throughout each run.  (B) shows the initial ES distribution (dark blue) and bimodal density distribution at $t = 10$ (light blue), with peaks annotated. (C) shows the observed bimodal DP adoption distribution in our survey data.", fig.width = 6, fig.asp = .5}
 
 ggarrange(
-  sim_plot_ts(sims, title = ggtitle("A. ES state over time"), rmarmod = -5), sim_plot_dens(sims, title = ggtitle("B. State distribution"), lab_lo_peak = TRUE, lab_hi_peak = TRUE, lmarmod = -5), hst, widths = c(3, 2, 1.75), nrow = 1, ncol = 3
+  sim_plot_ts(sims_baseline, title = ggtitle("A. ES state over time"), rmarmod = -5), 
+  sim_plot_dens(sims_baseline, title = ggtitle("B. State distribution"), lab_lo_peak = TRUE, lab_hi_peak = TRUE, lmarmod = -5), 
+  caorwa_dp_count_hst(caorwa_data, title = ggtitle("C. Empirical distrib.")), 
+  widths = c(3, 2, 1.75), nrow = 1, ncol = 3
 )
 
-# p_up_dn(sims)
+# p_up_dn(sims_baseline)
 ```
 
 
@@ -445,87 +147,21 @@ Many agrienvironmental practices require upfront investment, but can pay for the
 
 Using the same simulation parameters as outlined in the previous section, we solve the decision process on a finite, two-year time horizon, representing the shorter window within which many tenant farmers may make decisions.  Comparing Fig \ref{fig:res_tenure} to Fig \ref{fig:res_bimodal} above shows that, as length of land tenure or stability of lease agreements decline, optimal decisions are calculated more myopically and farmers are incentivized to severely limit investment into diversified practives.  This results in a degredation of ecosystem state even among those plots with an initially high value, with 92\% of farmers ending up in the simplified state.  
 
-```{r short_tenure_sim, results="hide"}
-tenure_2 <- MDPtoolbox::mdp_finite_horizon(model$P, model$U, discount, N = 2)
-sims_short_tenure <- sim(tenure_2)
-#write_csv(sims_short_tenure, "../data/sims_short_tenure.csv.gz")
+```{r short_tenure_sim, include = FALSE}
+short_tenure_soln <- MDPtoolbox::mdp_finite_horizon(model$P, model$U, discount, N = 2)
+sims_short_tenure <- sim(short_tenure_soln)
+#write_csv(sims_short_tenure, "../model-data/sims_short_tenure.csv.gz")
 ```
-
-```{r model_tenure_barplot, message=FALSE, echo=FALSE}
-thresh <- .15
-lt_p_over <- sims %>% filter(time == 10) %>% mutate(state = states[state]) %>% select(state) %>% dplyr::summarize(p_over_thresh = sum(state > thresh) / n())
-st_p_over <- sims_short_tenure %>% filter(time == 10) %>% mutate(state = states[state]) %>% select(state) %>% dplyr::summarize(p_over_thresh = sum(state > thresh) / n())
-plot_data <- tibble(cats = c("st", "lt"), vals = c(st_p_over[1,1], lt_p_over[1,1]))
-plot_data$cats <- factor(plot_data$cats, levels = plot_data$cats)
-
-p_mod_ten <- plot_data %>% ggplot(aes(x = cats, y = vals, fill=cats)) +
-  geom_bar(width = .75, position=position_dodge(width=.84), stat="identity", color=NA, alpha = .8,) +
-  geom_text(aes(label=sprintf("%.2f", round(vals,2))), vjust=1.6, color="white", position = position_dodge(0.9), size=3, family = "Roboto Condensed") +
-  xlab("") +
-  ylab(expression("p. ES">="0.15")) +
-  ggtitle("C. Simulation data") +
-  scale_x_discrete(expand = c(0,0), labels = c("Short\ntenure", "Long\ntenure")) +
-  scale_y_continuous(expand = c(0,0)) +
-  scale_fill_manual(values = c(pal[3], pal[1])) +
-  theme(axis.text.x=element_text(size=10, color = "black", family = "Roboto Condensed"),
-        axis.text.y=element_text(size=10),
-        axis.title.x=element_text(size=10),
-        axis.title.y=element_text(size=10),
-        plot.title = element_text(size = 10, face = "bold"),
-        plot.title.position = "plot",
-        axis.ticks.x=element_blank(),
-        panel.grid.major.x = element_blank(),
-        panel.grid.minor.x = element_blank(),
-        legend.position = "none",
-        plot.margin=grid::unit(c(5,5,0,2.5), "mm"))
-
-```
-
-
-```{r ca_or_wa_tenure_barplot, message=FALSE, echo=FALSE}
-# differences in prob. of using 1 or more dps based on owned/leased land tenure
-prop_owned <- caorwa_data[,"FC1_Owned.ac"] / caorwa_data[,"FC1_Total.ac"]
-ownrshp <- data.frame(prop_owned) %>%
-  mutate(mo_ml = case_when(prop_owned >= .5 ~ 'Mostly Owned',
-                           TRUE ~ 'Mostly Leased'))
-mo_ml <- ownrshp$mo_ml
-dp_count_cum_probs <- data.frame(caorwa_dp_counts) %>%
-  mutate(one = case_when(caorwa_dp_counts >= 1 ~ 1, TRUE ~ 0))
-moml_p_one_plus_dps <- data.frame(mo_ml, dp_count_cum_probs$one)
-plot_data <- group_by(moml_p_one_plus_dps, mo_ml) %>%
-  summarize_all(mean, na.rm = TRUE)
-
-p_caorwa_ten <- plot_data %>%
-  ggplot(aes(x = mo_ml, y = dp_count_cum_probs.one, fill = mo_ml)) +
-  geom_bar(width = .75, position=position_dodge(width=.84), stat="identity", color=NA, alpha = .8,) +
-  geom_text(aes(label=sprintf("%.2f", round(dp_count_cum_probs.one,2))), vjust=1.6, color="white", position = position_dodge(0.9), size=3, family = "Roboto Condensed") +
-  xlab("") +
-  ylab(expression("p.">="1 DP")) +
-  ggtitle("D. Empirical data") +
-  scale_x_discrete(expand = c(0,0), labels = c("Mostly\nleased", "Mostly\nowned")) +
-  scale_y_continuous(expand = c(0,0)) +
-  scale_fill_manual(values = c(pal[3], pal[1])) +
-  theme(axis.text.x=element_text(size=10, color = "black", family = "Roboto Condensed"),
-        axis.text.y=element_text(size=10),
-        axis.title.x=element_text(size=10),
-        axis.title.y=element_text(size=10),
-        plot.title = element_text(size = 10, face = "bold"),
-        plot.title.position = "plot",
-        axis.ticks.x=element_blank(),
-        panel.grid.major.x = element_blank(),
-        panel.grid.minor.x = element_blank(),
-        legend.position = "none",
-        plot.margin=grid::unit(c(2.5,5,2.5,2.5), "mm"))
-
-```
-
 
 ```{r res_tenure, fig.cap = "(A) Result of short land tenure on DEP adoption.  The simulation is identical to that in Fig \\ref{fig:res_bimodal}, but the MDP is solved under a finite, two-year time horizon. (B) Comparison between final state distribution of short- vs. long-tenure model runs.  (C) Probability of ecosystem services state being $\\geq 0.15$ at $t=10$ for the short-tenure simulation vs. the base-case simulation. (D) Impact of land tenure on the probability of a farmer in our survey dataset adopting at least one DP.", fig.width = 6, fig.asp = .5}
 
 ggarrange(
   sim_plot_ts(sims_short_tenure, title = ggtitle("A. Short-tenure timeseries"), endcol = pal[3], rmarmod = -5),
-  sim_plot_dens_comp(sims, sims_short_tenure, label1 = "Long\ntenure\nfinal", label2 = "Short\ntenure\nfinal", title = ggtitle("B. ES state distribution"), lmarmod = -5, rmarmod = -5),
-  ggarrange(p_mod_ten, p_caorwa_ten, nrow = 2, ncol = 1),
+  sim_plot_dens_comp(sims_baseline, sims_short_tenure, label1 = "Long\ntenure\nfinal", label2 = "Short\ntenure\nfinal", title = ggtitle("B. ES state distribution"), lmarmod = -5, rmarmod = -5),
+  ggarrange(
+    sim_tenure_thresh_bar(sims_baseline, sims_short_tenure, title = ggtitle("C. Simulation data")), 
+    caorwa_tenure_thresh_bar(caorwa_data, title = ggtitle("D. Empirical data")), 
+    nrow = 2, ncol = 1),
   widths = c(2.5, 2.5, 1.65), nrow = 1, ncol = 3
 )
 
@@ -542,49 +178,39 @@ Using the same initial setup as described above, we implement two competing subs
 Fig \ref{fig:res_subsidy} shows that longer, more sustained subsidies may be more beneficial to nudge behavior over the critical threshold toward more sustainable systems in the long term.  Comparing these experimental results to those in Fig \ref{fig:res_bimodal}, we find that both subsidy packages were effective in shifting farmers to a sustained higher ecosystem-services state.  However, the sustained subsidy was much more effective at moving the needle.  Due to the previously-discussed "tipping point" dynamic inherent in the model, once an agent has crossed the threshold to the diversified state, it becomes much less likely that they will fall back toward the "simplified" state, at least in the short term.  With state-transition stochasticity a major factor in a given model run (as it is in the real world), longer-term subsidy packages have a higher chance of nudging behavior beyond the critical threshold.  
 
 
-```{r subsidies_sim, results="hide"}
-params_subsidy_burst <- list(benefit = 1.57, cost = 0, sigma = 0.1, r = .1)
-params_subsidy_sustained <- list(benefit = 1.57, cost = .8, sigma = 0.1, r = .1)
+```{r subsidies_sim, include = FALSE}
+subs_sim <- function(params) {
+  subs_model <- continuous_model(states, actions, params, transition_fn, utility_fn)
+  subs_soln <- MDPtoolbox::mdp_value_iteration(subs_model$P, subs_model$U, discount)
+  # simulate subsidy period
+  start <- sim(subs_soln, Tmax = params$Tsubs, x0 = init)
+  xi <- start %>% filter(time == params$Tsubs) %>% pull(state)
+  # pad to Tmax with baseline decision rule
+  rest <- sim(base_soln, Tmax = params$Tmax - params$Tsubs + 1, x0 = xi) %>% filter(time!=1) %>% mutate(time = time + params$Tsubs - 1)
+  bind_rows(start, rest)
+}
 
-## Note that farmers do not solve the finite-time horizon problem for the short period of the subsidy,
-## because they are not "cashing out" (moving off the land) after the subsidy expires.
-## This is still not the optimal solution, but is a reasonable approximation.
-modelA <- continuous_model(states, actions, params_subsidy_burst, transition_fn, utility_fn)
-solnA <- MDPtoolbox::mdp_value_iteration(modelA$P, modelA$U, discount)
-  
-## Do 2 years with large subsidy (no cost to adoption)
-start <- sim(solnA, Tmax = 3, x0 = init)
-x1 <- start %>% filter(time == 3) %>% pull(state)
-## Go another 18 years with decision rule under no subsidy
-rest <- sim(soln, Tmax = 18, x0 = x1) %>% filter(time!=1) %>% mutate(time = time+2)
-simA <- bind_rows(start, rest)
+sims_subs_abrupt <- subs_sim(list(benefit = 1.57, cost = 0, sigma = 0.1, r = .1, Tsubs = 2, Tmax = 20))
+sims_subs_sust <- subs_sim(list(benefit = 1.57, cost = .8, sigma = 0.1, r = .1, Tsubs = 10, Tmax = 20))
+# sims_subs_v_sust <- subs_sim(list(benefit = 1.57, cost = .9, sigma = 0.1, r = .1, Tsubs = 20, Tmax = 20)) # did a real long one, just to see
 
-## Do 10 years with minor subsidy (subsidize 10% of unit cost over first 10 years)
-modelB <- continuous_model(states, actions, params_subsidy_sustained, transition_fn, utility_fn)
-solnB <- MDPtoolbox::mdp_value_iteration(modelB$P, modelB$U, discount)
-start <- sim(solnB, Tmax=10, x0 = init)  
-x10 <- start %>% filter(time == 10) %>% pull(state)
-## Go another 10 years with decision rule under no subsidy
-rest <- sim(soln, Tmax = 10, x0 = x10) %>% filter(time!=1) %>% mutate(time = time+10)
-simB <- bind_rows(start, rest)
-
-#write_csv(simA, "../data/simA.csv.gz")
-#write_csv(simB, "../data/simB.csv.gz")
+#write_csv(sims_subs_abrupt, "../model-data/sims_subs_abrupt.csv.gz")
+#write_csv(sims_subs_sust, "../model-data/sims_subs_sust.csv.gz")
 ```
 
-```{r res_subsidy, fig.cap = "Replicate simulations from 500 normally-distributed starting states (mean = 0.5; S.D. = 0.2; truncated at [0,1]) over 20 timesteps.  (A) shows the effects of a large, abrupt subsidy (no direct cost to adoption during the initial two years).  (B) simulates a smaller, yet more sustained subsidy (adoption cost = 0.8 during the first 10 years).  Ingoring discounting, subsidies have the same total cost to the issuing organization.  After subsidy is removed, agents adjust their decision rule to that of the base case (i.e. no subsidy) for the remainder of the run.  (C) shows that the sustained subsidy drove more adoption at $t = 20$.", fig.width = 6, fig.asp = .5}
+```{r res_subsidy, fig.cap = "Replicate simulations from 500 normally-distributed starting states (mean = 0.5; S.D. = 0.2; truncated at [0,1]) over 20 timesteps.  (A) shows the effects of a large, abrupt subsidy (100\\% of adoption expenses are covered during the initial two years).  (B) simulates a smaller, yet more sustained subsidy (adoption cost is 80\\% of baseline during the first 10 years).  Ingoring discounting, subsidies have the same total cost to the funder (the equivalent of 2 years' worth of full adoption cost offsets).  After subsidy is removed, agents adjust their decision rule to that of the base case (i.e. no subsidy) for the remainder of the run.  (C) shows that the sustained subsidy drove more adoption at $t = 20$.", fig.width = 6, fig.asp = .5}
 
 ggarrange(
-  sim_plot_ts(simA, title = ggtitle("A. Abrupt subsidy"), rmarmod = -10, endcol = pal[1]),
-  sim_plot_ts(simB, title = ggtitle("B. Sustained subsidy"), ytxtoff = T, endcol = pal[3], rmarmod = -5, lmarmod = -5),
-  sim_plot_dens_comp(simA, simB, label1 = "Abrupt\nsubsidy\nfinal", label2 = "Sustained\nsubsidy\nfinal", title = ggtitle("C. ES state distribution"), lmarmod = -5, rmarmod = -5),
+  sim_plot_ts(sims_subs_abrupt, title = ggtitle("A. Abrupt subsidy"), rmarmod = -10, endcol = pal[1]),
+  sim_plot_ts(sims_subs_sust, title = ggtitle("B. Sustained subsidy"), ytxtoff = T, endcol = pal[3], rmarmod = -5, lmarmod = -5),
+  sim_plot_dens_comp(sims_subs_abrupt, sims_subs_sust, sims_base = sims_baseline, label1 = "Abrupt\nsubsidy", label2 = "Sustained\nsubsidy", label_base = "No\nsubsidy", title = ggtitle("C. Final ES state distribution"), lmarmod = -5, rmarmod = -5),
   nrow = 1, ncol = 3, widths = c(1,1,1)
 )
 
 # print("abrupt: ")
-# p_up_dn(simA)
+# p_up_dn(sims_subs_abrupt)
 # print("sustained: ")
-# p_up_dn(simB)
+# p_up_dn(sims_subs_sust)
 ```
 
 \section{Discussion}
