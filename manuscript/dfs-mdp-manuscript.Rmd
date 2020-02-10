@@ -76,6 +76,8 @@ model <- continuous_model(states, actions, params, transition_fn, utility_fn)
 base_soln <- MDPtoolbox::mdp_value_iteration(model$P, model$U, discount)
 base_soln_df <- tibble(state = states,
                        action = actions[base_soln$policy])
+
+# soln_plot(base_soln_df)
 #write_csv(base_soln_df, "../model-data/base_soln_df.csv.gz")
 ```
 
@@ -102,7 +104,15 @@ We present a stylized coupled human and natural systems model, focusing on adopt
 
 \section{Results}
 
-We explore the transition to and from DFS using a Markov Decision Process (MDP), in which an agent (farmer) makes a series of choices about their interactions with the environment. We formulate a 'system state' $s$ to represent the degree of ecological services derived from an ecological state, which provide immediate benefits to the agent.  At each time step the agent chooses an action from a set of available actions, described by a spectrum from 0\% to 100\% investment in adopting or maintaining diversified farming practices.  More investment corresponds to a greater probability of transitioning to a higher (more beneficial) ecological state.  Given the current state and action the environment moves to a higher or lower ecological state with some probability (*reference conceptutal figure*), providing the agent a reward.  However, actions have some associated cost, which is subtracted from the benefit received from the ecological state.  The agent calculates optimal action based on their future cumulative discounted rewards over a defined time horizon. The discount factor informs how much the agent values current rewards relative to future rewards.
+We explore the transition to and from DFS using a Markov Decision Process (MDP), in which an agent (farmer) makes a series of choices about their interactions with the environment. We formulate a 'system state' $s$ to represent the degree of ecological services derived from an ecological state, which provide immediate benefits to the agent.  At each time step the agent chooses an action from a set of available actions, described by a spectrum from 0\% to 100\% investment in adopting or maintaining diversified farming practices.  More investment corresponds to a greater probability of transitioning to a higher (more beneficial) ecological state.  Given the current state and action the environment moves to a higher or lower ecological state with some probability (\ref{fig:res_conceptual}), providing the agent a reward.  However, actions have some associated cost, which is subtracted from the benefit received from the ecological state.  The agent calculates optimal action based on their future cumulative discounted rewards over a defined time horizon. The discount factor informs how much the agent values current rewards relative to future rewards.
+
+
+\begin{figure}
+\centering 
+\includegraphics[width=.5\textwidth]{external-figs/dfs_mdp_conceptual_fig_3.png}
+\caption{High level conceptual DFS-MDP figure...}\label{fig:res_conceptual}
+\end{figure}
+
 
 The time step $t$ corresponds to a single growing season.  At each time step, the agent chooses an action $a$ representing the intensity of investment into diversification-enhancing practices.  The action space $A$ is characterized by an integer vector from 1 (no investment) to 10 (investing everything possible).  We assume that $A_s = A$ for all states.
 
@@ -273,6 +283,14 @@ The ecosystem state is also dynamic, evolving according to the transition functi
 $$x_{t+1} = f(x_t, a_t) := x_t + r \left(a_t - x_t \right)$$ 
 
 This provides a minimal, one-parameter model in which the parameter $r$ sets the natural timescale at which the ecosystem can respond to a change in mangement practice.  
+
+
+{>>Include figure \ref{fig:mth_tipping}?<<}
+
+\begin{figure}
+{\centering \includegraphics{external-figs/methods1a.png}}
+\caption{Millie's conceptual MDP tipping point figure...}\label{fig:mth_tipping}
+\end{figure}
 
 
 \subsection{Model implementation}
