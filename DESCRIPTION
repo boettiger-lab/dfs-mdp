@@ -1,7 +1,7 @@
 Package: compendium
 Project: 
 Version: 0.1.0
-Depends: tidyverse, mdplearning, truncnorm, MDPtoolbox
+Depends: tidyverse, mdplearning, truncnorm, MDPtoolbox, Hmisc
 Suggests: rmarkdown, hrbrthemes, Cairo, rticles, patchwork, ggthemes, ggtext
 License: CC0
 Title: Compendium Package
