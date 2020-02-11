@@ -233,6 +233,81 @@ ggarrange(
 ```
 
 
+```{r subsidies, include = FALSE}
+subsidies <- 
+  tidyr::crossing(# Do all combinations of:
+                  #cost = seq(0, 1, by = 0.1),
+                  Tsubs = seq(2, 10, by = 1),
+                  r = seq(0.1, 3, by = .2),
+                  benefit = 1.57, 
+                  sigma = 0.1,
+                  Tmax = 20
+  ) %>% tibble::rownames_to_column("id") %>%
+  mutate(cost = (Tsubs-2)/10)
+```
+
+We then create a function to simulate the multiple scenarios through
+time
+
+```{r simulate, include = FALSE}
+subs_sim <- function(row) {
+  subs_model <- continuous_model(states, actions, row, transition_fn, utility_fn)
+  subs_soln <- MDPtoolbox::mdp_value_iteration(subs_model$P, subs_model$U, discount)
+  # simulate subsidy period
+  start <- sim(subs_soln, Tmax = row$Tsubs, x0 = init)
+  xi <- start %>% filter(time == row$Tsubs) %>% pull(state)
+  # pad to Tmax with baseline decision rule
+  params <- list(benefit = 1.57, cost = 1, sigma = 0.1, r = row$r)
+  model <- continuous_model(states, actions, params, transition_fn, utility_fn)
+  # solve the MDP
+  no_subs_soln <- MDPtoolbox::mdp_value_iteration(model$P, model$U, discount)
+  rest <- sim(no_subs_soln, Tmax = row$Tmax - row$Tsubs + 1, x0 = xi) %>% filter(time!=1) %>% mutate(time = time + row$Tsubs - 1)
+  bind_rows(start, rest) %>% filter(time == 20) %>% summarise(mean(state))
+}
+
+no_subs_sim <- function(row) {
+  model <- continuous_model(states, actions, row, transition_fn, utility_fn)
+  soln <- MDPtoolbox::mdp_value_iteration(model$P, model$U, discount)
+  # simulate subsidy period
+  # pad to Tmax with baseline decision rule
+  sim(soln, Tmax = 20) %>% filter(time == 20) %>% summarise(mean(state))
+}
+```
+
+
+```{r no_subsidy_r, include = FALSE}
+no_subsidy <- 
+  tidyr::crossing(# Do all combinations of:
+                  # Tsubs = 11,
+                  r = seq(0.1, 3, by = .2),
+                  benefit = 1.57, 
+                  sigma = 0.1,
+                  Tmax = 20,
+                  cost = 1
+  ) %>% tibble::rownames_to_column("id") 
+```
+And apply that function to all of the scenarios of interest
+
+```{r all_subsidies, include = FALSE}
+no_sub_results <- no_subsidy %>%
+  purrr::transpose() %>% 
+  furrr::future_map_dfr(no_subs_sim, .id = "id") %>% 
+  left_join(no_subsidy, by = "id") %>%
+  rename(no_sub_state = `mean(state)`) %>%
+  select(r, no_sub_state)
+
+sub_results <- subsidies %>%
+  purrr::transpose() %>% 
+  furrr::future_map_dfr(subs_sim, .id = "id") %>% 
+  left_join(subsidies, by = "id") %>%
+  left_join(no_sub_results, by = "r")
+```
+
+```{r grid, fig.cap = "how does r effect subsidy structure impacts", fig.width = 4.5, fig.asp = 1}
+sub_results %>% rename(state = `mean(state)`) %>%
+  mutate(delta = state-no_sub_state)%>% ggplot(aes(x = Tsubs, y = r, fill = state)) + geom_tile()  
+
+```
 
 
 \section{Discussion}
