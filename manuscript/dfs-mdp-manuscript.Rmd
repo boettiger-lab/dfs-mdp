@@ -104,7 +104,7 @@ We present a stylized coupled human and natural systems model, focusing on adopt
 
 \section{Results}
 
-We explore the transition to and from DFS using a Markov Decision Process (MDP), in which an agent (farmer) makes a series of choices about their interactions with the environment. We formulate a 'system state' $s$ to represent the degree of ecological services derived from an ecological state, which provide immediate benefits to the agent.  At each time step the agent chooses an action from a set of available actions, described by a spectrum from 0\% to 100\% investment in adopting or maintaining diversified farming practices.  More investment corresponds to a greater probability of transitioning to a higher (more beneficial) ecological state.  Given the current state and action the environment moves to a higher or lower ecological state with some probability (\ref{fig:res_conceptual}), providing the agent a reward.  However, actions have some associated cost, which is subtracted from the benefit received from the ecological state.  The agent calculates optimal action based on their future cumulative discounted rewards over a defined time horizon. The discount factor informs how much the agent values current rewards relative to future rewards.
+We explore the transition to and from DFS using a Markov Decision Process (MDP), in which an agent (farmer) makes a series of choices about their interactions with the environment.  We formulate a 'system state' $s$ to represent the degree of ecological services derived from an ecological state, which provide immediate benefits to the agent.  At each time step the agent chooses an action from a set of available actions, described by a spectrum from 0\% to 100\% investment in adopting or maintaining diversified farming practices.  More investment corresponds to a greater probability of transitioning to a higher (more beneficial) ecological state.  Given the current state and action the environment moves to a higher or lower ecological state with some probability (\ref{fig:res_conceptual}), providing the agent a reward.  However, actions have some associated cost, which is subtracted from the benefit received from the ecological state.  The agent calculates optimal action based on their future cumulative discounted rewards over a defined time horizon. The discount factor informs how much the agent values current rewards relative to future rewards.
 
 
 \begin{figure}
@@ -220,9 +220,9 @@ sims_subs_sust <- subs_sim(list(benefit = 1.57, cost = .8, sigma = 0.1, r = .1, 
 
 ```{r res_subsidy, fig.cap = "Replicate simulations from 500 normally-distributed starting states (mean = 0.5; S.D. = 0.2; truncated at [0,1]) over 20 timesteps.  (A) shows the effects of a large, abrupt subsidy (100\\% of adoption expenses are covered during the initial two years).  (B) simulates a smaller, yet more sustained subsidy (adoption cost is 80\\% of baseline during the first 10 years).  Ingoring discounting, subsidies have the same total cost to the funder (the equivalent of 2 years' worth of full adoption cost offsets).  After subsidy is removed, agents adjust their decision rule to that of the base case (i.e. no subsidy) for the remainder of the run.  (C) shows that the sustained subsidy drove more adoption at $t = 20$.", fig.width = 6, fig.asp = .5}
 ggarrange(
-  sim_plot_ts(sims_subs_abrupt, title = ggtitle("A. Abrupt subsidy"), rmarmod = -10, endcol = pal[1]),
-  sim_plot_ts(sims_subs_sust, title = ggtitle("B. Sustained subsidy"), ytxtoff = T, endcol = pal[3], rmarmod = -5, lmarmod = -5),
-  sim_plot_dens_comp(sims_subs_abrupt, sims_subs_sust, sims_base = sims_baseline, label1 = "Abrupt\nsubsidy", label2 = "Sustained\nsubsidy", label_base = "No\nsubsidy", title = ggtitle("C. Final ES state distribution"), lmarmod = -5, rmarmod = -5),
+  sim_plot_ts(sims_subs_abrupt, title = ggtitle("A. Abrupt subsidy"), rmarmod = -10, endcol = pal[5]),
+  sim_plot_ts(sims_subs_sust, title = ggtitle("B. Sustained subsidy"), ytxtoff = T, endcol = pal[6], rmarmod = -5, lmarmod = -5),
+  sim_plot_dens_comp(sims_subs_abrupt, sims_subs_sust, sims_base = sims_baseline, label1 = "Abrupt\nsubsidy", label2 = "Sustained\nsubsidy", label_base = "No\nsubsidy", title = ggtitle("C. Final ES state distribution"), cvec = c(pal[2], pal[5], pal[6]), lmarmod = -5, rmarmod = -5),
   nrow = 1, ncol = 3, widths = c(1,1,1)
 )
 
@@ -358,14 +358,6 @@ The ecosystem state is also dynamic, evolving according to the transition functi
 $$x_{t+1} = f(x_t, a_t) := x_t + r \left(a_t - x_t \right)$$ 
 
 This provides a minimal, one-parameter model in which the parameter $r$ sets the natural timescale at which the ecosystem can respond to a change in mangement practice.  
-
-
-{>>Include figure \ref{fig:mth_tipping}?<<}
-
-\begin{figure}
-{\centering \includegraphics{external-figs/methods1a.png}}
-\caption{Millie's conceptual MDP tipping point figure...}\label{fig:mth_tipping}
-\end{figure}
 
 
 \subsection{Model implementation}
