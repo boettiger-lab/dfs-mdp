@@ -7,7 +7,7 @@ soln_plot <- function(soln_df) {
              family = "Roboto", size = 3.25, label.padding = unit(.15, "lines"), label.size = 0, alpha = .8) +
     annotate("segment", x = .55, xend = .49, y = .35, yend = .35, size=.5, arrow=arrow(length = unit(0.22, "cm"))) +
     labs(x="ES state", y="Optimal DP investment") +
-    scale_x_continuous(limits = c(0,1.5), expand = c(.01,.01)) +
+    scale_x_continuous(limits = c(0,NA), expand = c(.01,.01)) +
     scale_y_continuous(limits = c(0,1), expand = c(.01,.01)) +
     theme(axis.text.x=element_text(size=10),
           axis.text.y=element_text(size=10),

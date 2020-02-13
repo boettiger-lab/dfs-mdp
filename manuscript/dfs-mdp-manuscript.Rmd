@@ -92,46 +92,46 @@ init <- truncnorm::rtruncnorm(reps, 0, 1, 0.5, 0.2) %>%
 
 \section{Introduction}
 
-Agriculture is among the most fundamental drivers of anthropogenic ecological change \cite{stoate2009ecological} and a valuable system for examining core properties of the human-environment nexus. While agricultural increasingly influences both human and ecosystem well-being, practices vary in their environmental impacts, long term sustainability, and climate resilience. It is increasingly recognized that effective policies to address environmental issues, including the long term sustainability of agricultural practices, requires interdisciplinary approaches which consider both human decision-making and ecology as a coupled human and natural system (CHANS) {cite, cite} .  
+Agriculture is among the most fundamental drivers of anthropogenic ecological change \cite{stoate2009ecological}, providing a valuable context for examining core properties of the human-environment nexus.  While agriculture influences both human and ecosystem well-being, practices vary in their environmental impacts, long term sustainability, financial viability, and climate resilience.  It is increasingly recognized that effective policies to address environmental issues, including the long term sustainability of agricultural practices, requires interdisciplinary approaches which consider both human decision-making and ecology as a coupled human and natural system (CHANS) {cite, cite} .  
 
-However, empiracally exploring coupled dynamic processes presents numerous challenges. The temporal dynamics of ecological processes do not always align with the temporal scale of decision making of individual farm units. Further complicating, many ecosystem benefits that result from sustainable farming practices take years to realize, meaning decisions to adopt these practices require decision makers to be foreward looking, adaptive, and considerate of deep environmental and economic uncertainty. While understanding structural attributes and qualitative dynamics of coupled systems can provide valuable information on effective levers of change and important assumptions to explore empiracally, much of the existing literature stands upon simplified representations of decision making or static representations of ecological processes \cite{vandermeer2012syndromes}. Those techniques that do present dynamic processes and responsive decision making don't generally allow for forward looking decision agents \cite{lippe2019using}, ultimately misrepresenting the complex coupling of systems that proceed at fundementally different rates, such is the case in many coupled human and natural systems.  
+However, empirically exploring such tightly-enmeshed dynamic systems presents numerous challenges.  Human decisions, such as adopting sustainable agricultural practrices, impact ecological processes and the resultant changes create feedbacks that alter the scope and efficacy of future decisions \cite{ostrom2009general, walker2004resilience, liu2007complexity}.  Decisions can enhance or degrade ecological services that affect the long-term productive capacity of the land base and impact future financial returns \cite{zhang2007ecosystem}.  However, the temporal dynamics of ecological processes do not always align with the temporal scale of human decision-making.  Many ecosystem services that emerge from sustainable farming practices take years to accrue, meaning adoption of these practices requires decisionmakers to be foreward looking, adaptive, and comfortable with environmental and economic uncertainty.  For example, practices to reduce topsoil loss and harmful runoff such as riparian buffers and hedgerows require up to seven years to provide sufficient ecosystem benefits to offset the costs required for implementation and maintenance \cite{rein1999economic}. 
 
-Diversified Farming Systems (DFS) employ practices which promote beneficial biodiversity and bolster ecosystem services, enhancing farm and landscape scale productivity and providing net benefits to production \cite{kremen2012diversified}. However, the additional costs required to adopt these practices on top of the stochastic nature and slow rate of benefits provided require forward thinking and  consistent investments by farmers. Human decisions, such as investment in diversification practices, impact ecological processes and the resultant changes create feedbacks that alter the scope and efficacy of future decisions \cite{ostrom2009general, walker2004resilience, liu2007complexity}. Decisions can enhance or degrade ecological services that affect the long-term productive capacity of the land base and the resultant financial returns \cite{zhang2007ecosystem}.   For example, practices to reduce topsoil loss and harmful runoff such as riparian buffers and hedgerows require years to providee sufficient ecosystem benefits to offset the costs required for implementation and maintenance \cite{rein1999economic}. 
+Here we focus on Diversified Farming Systems (DFS), which are characterized by practices which promote beneficial biodiversity and bolster ecosystem services, enhancing farm- and landscape-scale productivity \cite{kremen2012diversified}.  While existing DFS research has increased our understanding of how diversification practices affect ecological and financial outcomes, an integrated approach requires a consideration of the feedback loop between adoption of a given practice, resultant ecological outcomes, and future adoption decision factors.  For example, community composition of birds and soil microbes jointly influence food safety through the incidence and suppression of foodborne pathogens, and are impacted by farm level decisions about practices. An integrated CHANS approach to questions about sustainability provides an framework to increase scientific understanding of the potential synergies and tradeoffs of how diversified farming practices affect and are affected by ecosystem processes.
 
-While increasing our understanding of how diversified farming practices affect biodiversity, ecosystem services, short-term profitability, and long-term sustainability, an integrated approach requires a consideration for how those affects alter subsequent decision making. For example, community composition of birds and soil microbes jointly influence food safety through the incidence and suppression of foodborne pathogens, and are impacted by farm level decisions about practices. An integrated CHANS approach to questions about sustainability provides an framework to increase scientific understanding of the potential synergies and tradeoffs of how diversified farming practices affect and are affected by ecosystem processes.
+While understanding structural attributes and qualitative dynamics of human-environment systems can provide valuable information on effective levers of change and important assumptions to explore empirically, much of the existing literature in this area focuses either on human decision-making (with ecological processes being exogenous to the model), or explores the complexity of ecological processes without sufficiently considering adaptive human agents \cite{vandermeer2012syndromes}.  Further, those techniques that do present dynamic processes and responsive decision-making don't generally allow for forward looking decision agents \cite{lippe2019using}, ultimately misrepresenting the complex coupling of systems that proceed at fundementally different rates.  This paper presents a stylized coupled human and natural systems model of DFS adoption to explore the complex dynamical properties that result specifically from interactions between an adaptive agent and a changing environment.  While we do not suggest that our model captures the full complexity of individual decision making or environmental processes, it does provide a novel framework for integrating empirical findings and exploring emergent dynamics of coupled human and natural systems.
 
-We present a stylized coupled human and natural systems model, focusing on adoption of diversified farming practices as a case study. While we do not suggest that our model captures the full complexity of individual decision making nor does it address social dynamics, it does provide a novel framework for integrating empiracle work and exploring emergent dynamics of systems at the intersection of coupled human and natural systems.
 
-\section{Results}
+\section{Conceptual model description}
 
-(this section still needs some work- I'm struggling with balancing clarity with the relevant amount of detail...)
-We explore the transition to and from diversificattion practices using a Markov Decision Process (MDP), in which an agent makes a series of choices about their interactions with the environment.  In this case, the agent represents a single farm unit. We formulate a 'system state', $s$, to represent the degree of ecological services derived from an ecological, or farm, state, which provides immediate benefits to the agent  At each time step the agent chooses an action from a set of available actions, described by a spectrum from 0\% to 100\% investment in adopting or maintaining diversified farming practices.  More investment corresponds to a greater probability of transitioning to a higher (more beneficial) ecological state.  Given the current state and action the environment moves to a higher or lower ecological state with some probability (\ref{fig:res_conceptual}), providing the agent a reward, $r$.  However, actions have some associated cost, which is subtracted from the benefit received from the ecological state.  The agent calculates optimal action based on their future cumulative discounted rewards over a defined time horizon. The discount factor, $\gamma$ informs how much the agent values current rewards relative to future rewards and the noise factor, $\sigma$ represents the stochastic properties of the system.
-
+We explore the transition to and from diversified farming systems using a Markov Decision Process (MDP), in which an agent makes a series of choices about their interactions with the environment (\ref{fig:res_conceptual}).  In this case, the agent represents a single farm unit.  We formulate a 'system state' to represent the degree of beneficial ecological services derived from the farm's investments into diversification practices.  Each farming season the agent chooses an action, described by a spectrum from 0\% to 100\% investment in adopting or maintaining diversification practices.  More investment corresponds to a greater probability of transitioning to a higher (more beneficial) ecological state the next year.  While transitioning to a higher ecological state provides the agent an increased benefit, higher investment actions also come with a greater associated cost.  Using these parameters, we can calculate the optimal action for each state, known as the 'policy', based on the agent's future cumulative discounted rewards over a defined time horizon.  
 
 \begin{figure}
 \centering 
-\includegraphics[width=.5\textwidth]{external-figs/dfs_mdp_conceptual_fig_3.png}
-\caption{High level conceptual DFS-MDP figure...}\label{fig:res_conceptual}
+\includegraphics[width=.75\textwidth]{external-figs/dfs_mdp_conceptual_fig_4.pdf}
+\caption{High level conceptual DFS-MDP illustration, showing the system state in green (with a higher state corresponding to increased diversification practices), the DP investment decision in blue, and the interaction between the farmer's perceived utility function $u()$ and the state transition probability function $p()$.}\label{fig:res_conceptual}
 \end{figure}
 
 
-The time step $t$ corresponds to a single growing season.  At each time step, the agent chooses an action $a$ representing the intensity of investment into diversification-enhancing practices.  The action space $A$ is characterized by an integer vector from 1 (no investment) to 10 (investing everything possible).
+\section{Results}
 
-The system state $s$ represents the degree to which the agent derives ecosystem services (ES) such as soil productivity, water infiltration, and climate resilience from the diversification practices they have implemented on their farm at $t$.  The state space $S$ is an integer vector from 0 to 1, with 1 being the maximum possible level of derived ecosystem services benefit.  
+Using the model described above, we conduct a series of simulation runs to observe the behavior of agents' sequential choices and resultant environmental outcomes over time.  Parameter values used in the simulations appear in Table \ref{tab:baseline_params}.  Agents' initial ecosystem states are distributed normally with a mean at $\bar{S} = 0.5$.  Fig \ref{fig:res_bimodal} shows that, after having followed policy $\pi$ for nine timesteps, at $t = 10$ agents have largely bifurcated into two groups, with some farms transitioning to more "simplified" farming systems, and others to more "diversified" systems.  Further, we find strong path dependency, with only 11\% of runs which started in a simplified ($S < 0.5$) state concluding in a diversified ($S > 0.5$) state, and only 7\% of runs initially in the diversified state transitioning to simplified.
 
-A probability matrix $P_a(s,s')$ describes the chance that the agent will transition from their current ES state $s$ to some state $s'$, given action $a$. $s$ may only decrement by one, stay the same, or increment by one at each time step.  Higher-investment actions yield a higher probability of transitioning to a higher (i.e. more beneficial) ES state. The shape of the probability curve can be tuned to reflect, for example, diminishing marginal increases in the probability of stepping to the next ES state with each increment in $a$.  At the boundaries of the state space, an action cannot result in a state lower than $s_{min}$ or higher than $s_{max}$. The agent's reward $R$ is a function of the current ES state $s$ and the chosen action $a$.   As above, depending on underlying contexts and assumptions, the benefit accrual function can be linear ($s \propto b$), or more complex, for example if we assume diminishing benefit returns as $s$ approaches  $s_{max}$.  
-
-Investment in diversification practices also incurs costs $c_a$, either as a direct result of implementation (e.g. equipment, materials, and labor), opportunity costs (e.g. forgone yields due to reduced cultivated acreage or lost production efficiency), or both.  A higher level of investment will obviously result in higher costs, but, once again, we can either assume that $c$ scales linearly with $a$, or make the relationship more complex as the situation demands.  Populating the reward matrix is simply a matter of subtracting costs from benefits ($R(s,a) = b(s) - c(a)$).  
-
-The action policy, $\pi$, is  an optimal course of action for a given state. Fig \ref{fig:res_policy} shows the policy $\pi$ for an agent investing in diversification practices. We find a critical bifurcation, or tipping point, at an specific ecosystem state, below which the highest expected value is derived by investing little to nothing into diversified farming systems.  Above the threshold, the optimum action becomes near-full investment into diversified farming systems. Over time, this results in a bimodal distribution of ecosystem states, as the result of transition probabilities. 
-
-```{r res_policy, fig.cap = "Optimal decision policy $\\pi$ as a function of ecosystem state.", fig.width = 6, fig.asp = .5}
-
-soln_plot(base_soln_df)
-
-```
-
-Over time, ecosystem states respond to sequential decisions made by agents \ref{fig:res_bimodal}. Agents' initial ecosystem states are distributed normally with a mean at $\bar{S} = 0.5$.  After having followed policy $\pi$ for nine timesteps, at $t = 10$ we find that agents have largely bifurcated into two groups, with farms in the "simplified" class , and those in the "diversified" class.  Further, we find strong path dependency, with only 11\% of runs which started in a simplified ($S < 0.5$) state concluding in a diversified ($S > 0.5$) state, and only 7\% of runs initially in the diversified state transitioning to simplified.
+\begin{table}
+	\centering
+	\caption{Base case parameter values}
+	\begin{tabular}{lc}
+		\hline
+		\textbf{Parameter}			& \textbf{Value} \\
+		\hline
+		Benefit ($b$)	& 1.57 \\
+		Cost ($c$)	& 1.00 \\
+		Transition stochasticity ($\sigma$) & 0.1 \\
+		Ecosystem response rate ($r$) & 0.1 \\
+		Discount factor ($\gamma$) & 0.97 \\
+		\hline
+	\end{tabular}
+	\label{tab:baseline_params}
+\end{table}
 
 
 ```{r base_case_sim, include = FALSE}
@@ -159,12 +159,27 @@ ggarrange(
 # p_up_dn(sims_baseline)
 ```
 
+\subsubsection{Optimal decision policy}
+The decision policy, $\pi$, describes the optimal course of action for a given state, with each agent in the simulation above using this policy to guide their decision-making.  Fig \ref{fig:res_policy} reveals that there is a critical bifurcation, or tipping point, at an specific ecosystem state, below which the highest expected value is derived by investing little to nothing into diversified farming systems.  Above the threshold, the optimum action becomes near-full investment into diversified farming systems. Over time, this results in a bimodal distribution of ecosystem states, as seen in Fig \ref{fig:res_bimodal}. 
+
+```{r res_policy, fig.cap = "Optimal decision policy $\\pi$ as a function of ecosystem state.  The upper $x$ axis limit is the 99th percentile of observed states in our simulation results ($\\approx 1.23$).", fig.width = 3, fig.asp = 1}
+
+state99th <- sims_baseline %>% 
+            mutate(state = states[state]) %>% 
+            pull(state) %>% 
+            quantile(.99) %>% 
+            unname()
+
+soln_plot(base_soln_df %>% filter(state <= state99th))
+
+```
+
 
 \subsection{Land tenure}
 
 With 39\% of U.S. farmland under lease (USDA NASS 2016 find citation), and with widely-varying rental agreements, the impact of land tenure on best-managment-practice adoption has been increasingly examined in agricultural lands.  For example, a study of U.S. corn producers found that cash renters were less likely than land owners to implement grassed waterways, strip cropping, contour farming, or conservation tillage \cite{soule2000land}.  A study conducted in British Columbia found that tenant farmers planted fewer perennial crops than land owners \cite{fraser2004land}.  Our own ongoing research with lettuce farmers in California's Salinas Valley suggests that land tenure is an important factor in decisions about cover cropping and crop rotation.  In addition, investments in diversified farming practices may require access to credit, which often also hinges on secure land tenure as a form of collateral \cite{richardson2015land}.
 
-Using the same simulation methods and parameters outlined we solve the decision process on a finite, two-year time horizon, representing the shorter window within which many tenant farmers may make decisions.  Comparing Fig \ref{fig:res_tenure} to Fig \ref{fig:res_bimodal} above shows that, as length of land tenure or stability of lease agreements decline, optimal decisions are calculated more myopically and farmers are incentivized to severely limit investment into diversified practives.  This results in a degredation of ecosystem state even among those plots with an initially high value, with 92\% of farmers ending up in the simplified state.  
+Using the same simulation methods and parameters outlined above, we solve the decision model on a finite, two-year time horizon, representing the shorter window within which many tenant farmers may make decisions (Fig \ref{fig:res_tenure}).  Comparing the final state distribution of the baseline model to the short tenure model shows that, as length of land tenure or stability of lease agreements decline, optimal decisions are calculated more myopically and farmers are incentivized to severely limit investment into diversified practives.  This results in a degredation of ecosystem state even among those plots with an initially high value, with 92\% of farmers ending up in the simplified state.  Our model data echoes empirical findings from a recent large-scale survey of U.S. west coast produce growers, which shows that farmers who primarily own their land are roughly 20\% more likely to invest in at least one diversification practice.  
 
 ```{r short_tenure_sim, include = FALSE}
 short_tenure_soln <- MDPtoolbox::mdp_finite_horizon(model$P, model$U, discount, N = 2)
@@ -193,7 +208,9 @@ ggarrange(
 While land tenure is intertwined with land use decisions, agricultural subsidies have also become an integral part of farming over the past half-century, and policymakers are continually called upon to weigh farm viability against food affordability and environmental sustainability {>>cite farm bill, etc.<<}.  In recent years, climate change, soil degradation, and water use/quality considerations have increasingly pressured agricultural policy optimization {>>cite<<}.  Some have suggested that large, short-term subsidies may be more efficacious in nudging farmers toward management systems that effectively weigh these tradeoffs, while others are proponents of long-term, yet smaller subsidies {>>cite<<}. The capacity to explore the impacts of policy in the framework of a sequentially decisions that impact ecological systems allows us to investigate this question in silico.  
 
 Using the same initial setup as described above, we implement two competing subsidy structures: a short-term (two-year) subsidy which completely covers the cost of transitioning to a more diversified state, versus a longer-term (ten-year) subsidy which only marginally offests the transition cost.  Formally, the cost of each subsidy package to the issuing organization is equal, and in fact the short-term subsidy is technically more valuable if economic discounting is applied.  Within the model, agents adapt their decision policy $\pi$ during the subsidy period, and at its conclusion they revert to base case (i.e. subsidy-free) decision rules.  
-Fig \ref{fig:res_subsidy} shows that longer, more sustained subsidies may be more beneficial to nudge behavior over the critical threshold toward more sustainable systems in the long term.  Comparing these experimental results to those in Fig \ref{fig:res_bimodal}, we find that both subsidy packages were effective in shifting farmers to a sustained higher ecosystem-services state.  However, the sustained subsidy was much more effective at moving the needle.  Due to the previously-discussed "tipping point" dynamic inherent in the model, once an agent has crossed the threshold to the diversified state, it becomes much less likely that they will fall back toward the "simplified" state, at least in the short term.  With state-transition stochasticity a major factor in a given model run (as it is in the real world), longer-term subsidy packages have a higher chance of nudging behavior beyond the critical threshold.  However, as the ecological dynamics increase in rate, which is relevant in analagous contexts of sequentially controlled ecological systems, this effect decreases (create figure for this?).
+Fig \ref{fig:res_subsidy} shows that longer, more sustained subsidies may be more beneficial to nudge behavior over the critical threshold toward more sustainable systems in the long term.  Comparing these experimental results to those in Fig \ref{fig:res_bimodal}, we find that both subsidy packages were effective in shifting farmers to a sustained higher ecosystem-services state.  However, the sustained subsidy was much more effective at moving the needle.  Due to the previously-discussed "tipping point" dynamic inherent in the model, once an agent has crossed the threshold to the diversified state, it becomes much less likely that they will fall back toward the "simplified" state, at least in the short term.  With state-transition stochasticity a major factor in a given model run (as it is in the real world), longer-term subsidy packages have a higher chance of nudging behavior beyond the critical threshold.  
+
+<!-- However, as the ecological dynamics increase in rate, which is relevant in analagous contexts of sequentially controlled ecological systems, this effect decreases (create figure for this?). -->
 
 
 ```{r subsidies_sim, include = FALSE}
@@ -333,24 +350,36 @@ Despite these simplifications, our analysis provides a novel approach to
 
 \section{Methods}
 
+DFS-MDP is a Markov Decision Process model (etc... briefly describe history and impetus of MDPs and include citations)
+
+The state space $S$ is a vector with a lower bound of 0, and a soft upper bound of 1, with the system state $s_t$ representing the degree to which the agent derives ecosystem services benefits $b_s$ such as soil productivity, water infiltration, and climate resilience from the diversification practices they have implemented on their farm.  Actions to increase investments in diversification practices probabalistically increase or decrease the future system state, with $r$ defining the rate at which the ecosystem responds to change.  While agents may stochastically transition to $s>1$, investments into diversification practices do not positively correlate with the probability of upward state transitions beyond $s=1$.  In our simulation runs, the 99th percentile of states actually encountered by agents was $\approx 1.23$.  
+
+The action space $A$ is a continuous vector from 0 to 1, with $a=0$ representing no investment of resources into DP adoption and maintenance and $a=1$ representing the highest conceivable level of investment.  Investment in diversification practices incurs costs $c_a$, either as a direct result of implementation (e.g. equipment, materials, and labor), opportunity costs (e.g. forgone yields due to reduced cultivated acreage or lost production efficiency), or both.  
+
+The time step $t$ corresponds to a single growing season.  At each time step, the agent chooses an action based on their current state by following decision policy $\pi$.  $\pi$ is calculated by maximizing expected utility for each state/action pair over the full time horizon using a Stochastic Dynamic Programming (SDP) approach \cite{marescot2013complex}, with the discount rate $\gamma$ determining how much the agent values current rewards relative to future rewards.
+
+
 \subsection{Model mathematical description}
 
-Mathematically, the farmer's decision model can be expressed as 
+The farmer's decision model can be expressed as
 
-$$\max_{\lbrace a_t \rbrace} \mathbb{E} \left[ \sum_t^T U(x_t, a_t) \delta^t \right] $$
+$$\max_{\lbrace a_t \rbrace} \mathbb{E} \left[ \sum_t^T u(s_t, a_t) \gamma^t \right] $$
 
-where $\lbrace a_t \rbrace$ is the set of available actions to be taken at each point in time $t$, $\delta$ is the discount rate, $\mathbb{E}$ the expectation operator, and $U(x_t, a_t)$ the utility which the farmer associates with being in state $x_t$ and taking action $a_t$ at time $t$. $T$ is the land tenure of the farm ($T = \infty$ if the farmer owns the land or otherwise expects to be able to farm the same land and thus benefit from the ecosystem services established there indefinitely)
+where $\lbrace a_t \rbrace$ is the set of available actions to be taken at each point in time $t$, $\gamma$ is the discount rate, $\mathbb{E}$ the expectation operator, and $u(x_t, a_t)$ the utility which the farmer associates with being in state $s_t$ and taking action $a_t$ at time $t$. $T$ is the land tenure of the farm ($T = \infty$ if the farmer owns the land or otherwise expects to be able to farm the same land and thus benefit from the ecosystem services established there indefinitely).
 
-We assume a simple model for the farmer's utility $U(x_t, a_t)$  as combination of the costs associated with adopting the diversified practice and the benefits derived from the ecosystem state (which is in turn influenced by the diversified practices or non-diversified practices adopted),
+We assume a simple model for the farmer's utility $u(s_t, a_t)$ as a combination of the costs $c$ associated with the diversification practice investment action $a$ and the benefits $b$ derived from the ecosystem state $s$ (which is in turn influenced by the practices adopted)
 
-$$U(x_t, a_t) = b x_t  - c a_t$$
-Where $x_t$ is the ecosystem state, $b$ the benefit associated, and $c a_t$ the cost of taking action $a_t$.  In general, more complicated nonlinear functions of both the ecosystem state and action are possible in this framework.  
+$$u(s_t, a_t) = b s_t  - c a_t$$
 
-The ecosystem state is also dynamic, evolving according to the transition function $f(x_t, a_t)$ 
+The ecosystem state is also dynamic, evolving according to the transition probability function $p(s_t, a_t)$:
 
-$$x_{t+1} = f(x_t, a_t) := x_t + r \left(a_t - x_t \right)$$ 
+$$s_{t+1} = p(s_t, a_t) := s_t + r \left(a_t - s_t \right)$$ 
 
-This provides a minimal, one-parameter model in which the parameter $r$ sets the natural timescale at which the ecosystem can respond to a change in mangement practice.  
+This provides a minimal, one-parameter state transition model in which the parameter $r$ sets the natural timescale at which the ecosystem can respond to a change in mangement practice.  
+
+{>>Need to include sigma in the equation<<} To capture stochastic noise inherent to the ecological system, $\sigma$ defines the spread of the state transition probability distribution.  
+
+While we have assumed very basic transition and utility functions for this stylized model, in general more complicated nonlinear functions of both the ecosystem state transition and derived utility are possible in this framework.  
 
 
 \subsection{Model implementation}
@@ -394,7 +423,6 @@ To evaluate the extent to which these observed adoption distributions hold quant
 As discussed above, land tenure has often been shown to be a decision factor that impinges upon agricultural management practice adoption \cite{soule2000land, fraser2004land, richardson2015land, long2017hedgerow}.  Growers who have a long-term personal stake in the productive quality of their soil ecology are more likely to take the long view and invest in practices that will benefit them years down the line.  On the other hand, growers who are uncertain whether they will personally be farming a given parcel of land in future seasons may be less likely to adopt practices whose positive effects will not come to fruition in the short term.  To investigate the effect of land tenure on DEP adoption, we partition the dataset into growers who primarily own their land versus those who primarily lease it.  Figure \ref{fig:res_tenure}B shows that owners in our sample are about 20\% more likely than leasers to invest in at least one diversification practice.  
 
 
-# References
 
 \bibliography{alt_stable_states}
 
