@@ -1,0 +1,92 @@
+---
+# title: "Alternate Stable States in Farming System Diversification: Effects of Land Tenure, Environmental Shocks, and Subsidy Structures" #original title
+# title: "Tipping points in the adoption of sustainable agricultural practices: A coupled human and natural systems approach." #Carl's
+#title: "Getting over the hump: A coupled human and natural systems approach to the adoption of sustainable agricultural practices." #Serge's
+title: "Tipping points in sustainable agriculture adoption" 
+author:
+  - name: Melissa Chapman
+    affiliation: espm
+  - name: Serge Wiltshire
+    affiliation: espm
+  - name: Timothy Bowles
+    affiliation: espm
+  - name: Claire Kremen
+    affiliation: espm
+  - name: Kathryn De Master
+    affiliation: espm
+  - name: "...others in group"
+    affiliation: espm
+  - name: Carl Boettiger
+    affiliation: espm
+    footnote: Corresponding Author
+address:
+  - code: espm
+    address: "Dept of Environmental Science, Policy, and Management, University of California Berkeley, Berkeley CA 94720-3114, USA"
+  - code: ubc
+    address: "University of British Columbia"
+abstract: |
+keywords:
+  - diversified practices,
+  - ecosystem services
+bibliography: alt_stable_states.bib
+date: "`r Sys.Date()`"
+output: rticles::elsevier_article
+layout: 3p # review # review = doublespace, 3p = singlespace, 5p = two-column
+header-includes: 
+  - \journal{TBD}
+  - \graphicspath{{ext-figs/}}
+  - \usepackage{float}
+
+---
+
+```{r setup, include = FALSE}
+rm(list = ls(all.names = TRUE)) # clean environment
+
+# load external scripts
+source("../R/load-libraries.R")
+source("../R/continuous-model.R")
+source("../R/sim-plot-fxns.R")
+source("../R/caorwa-plot-fxns.R")
+# load CA_OR_WA farmer survey dataset
+caorwa_data <- read.csv("../external-data/ADAPT_CA-OR-WA_2_2020.csv")
+
+knitr::opts_chunk$set(echo = FALSE,
+                      cache = FALSE,
+                      message = FALSE,
+                      warning = FALSE,
+                      fig.align = "center",
+                      dev = "cairo_pdf")
+
+pal <- solarized_pal()(7) # global color pallette
+set.seed(4) # random seed
+```
+
+
+
+
+\section{Discussion}
+
+Recent research in complexity theory reveals the importance of understanding nonlinear behaviors within dynamical systems.  For example, when pushed beyond some threshold, a system may enter a virtually-irreversible state, driving its behavior into divergent basins of attraction, even given potent countervailing actions on the part of a decision-maker \cite{bar2019dynamics}.  These types of complex dynamics have been observed empirically across a wide variety of SESs, such that the identification of effective policy measures to effect change in these areas have been described as "wicked problems" that often confound traditional methods of analysis \cite{head2008wicked}.
+
+While much of the research on agriculture has continued to revolve around unidisciplinary approaches, \cite{francis2008transdisciplinary}, computational methods like agent-based modeling, network analytics, and machine learning have been employed and provided important insights \cite{lippe2019using, wiltshire2018using, wiltshire2019network}. However, these tools often rely on predefined decision rules, removing the dynamic and responsive nature of agent decision making and planning and with that the capacity to explore different levers of change, such as subsidies, insurance, and land tenure, to those decisions in varying ecological environments.  
+
+Representing the coupled human-environmental system as a controlled dynamic system we find that the empirically-observed bistability in the adoption of diversification practices adoption may be the result of tipping points in optimal sequential control, rather than inherent tipping points in the ecological dynamics themselves. The model we present here represents a simplified and stylized version of the feedbacks between  human decision making and ecological processes of diversification practice adoption.  While the concept of alternate stable states and tipping points within agricultural SESs has been previously explored \cite{vandermeer2012syndromes}, our experimental results cast light on several core mechanisms that help to explain these behaviors, suggesting novel considerations as policymakers work to enhance the sustanability and resilience of agricultural production systems.  
+
+In light of historical agricultural catastrophes like the dust bowl, both scholars and society have called for swift action around  stressors like climate change, soil degradation, water quality, and biodiversity loss.  Policymakers have responded by developing programs which offer incentives and support for agriecological practice adoption, yet designing effective policies has proven challenging.  Recent case studis emphasize that policy mechanisms designed to promote agricultural sustainability have complex ramifications across various contexts \cite{ipes2018breaking}.  Critical to designing incentives is an understanding of the thresholds which render a given management practice viable to one farmer while nonviable to another.   
+
+While it is well known that many practices that increase ecosystem services can take several years before significant beneficial effects are realized \cite{carlisle2014diversity, long2017hedgerow}. We find a threshold such that agents on each side of a tipping point are drawn to alternate stable states, one being more simplfied and the other more diversified.  This leads to path dependency, whereby a farmer who begins with degraded land is incentivized to transition even more toward the simplified state while a farmer who begins with well-cared-for, fertile land is incentivized to adopt management practices that maintain and improve functional diversification.  Given this finding, we suggest that a key lever of change for policymakers interested in promoting adoption of agrienvironmental practices may be to increasingly focus on supporting farmers' transitions within the critical window from the simplified to the diversified state by opening space for viable intermediate states.  Given this, binary certifications like the organic standard may be critiqued in some for some of their unintended consequences.  Although organic systems often use diversification practices, rules governing organic agriculture stipulate allowable inputs rather than strategic management of biodiversity; and producers are either certified or not, even if the ways in which farmers implement organic agriculture is quite heterogeneous \cite{shennan2017organic}.  An increasing focus on adoption of individual practices, rather than a cut and dried standard, may allow for a process of incremental transition, with farmers embedded in monocultural agricultural systems able to move stepwise toward the adoption of diversification practice.
+
+While certification and therefore cost structures are important for adoption tajectories, the impact of secure land tenure is integral to adoption diversification practices.  Growers who either own land or have a long lease agreement are incentivized to invest more in the long-term productive capacity of their land, which can result in adoption of agrienvironmental practices that have an upfront cost, yet pay out over longer time horizons.  If farmers maximize their expected value on only a two-year time horizon, there is a strong incentive to maximize short-term profits by disinvesting in diversification practices.  
+
+Subsidies are a fundamental part of modern U.S. agricultural policy, be it through direct payments, or, under more recent farm bills, heavy subsidization of crop insurance premiums.  Our subsidy experiment shows that---all else being equal---a given quantity of taxpayer funding devoted to diversification practices will more-effectively move the needle if it is guaranteed over a longer period rather than being offered as a lump sum.  Specifically, we find that a sustained subsidy was successful in moving 43\% of farmers who started in the simplified state to the diversified state, whereas the figure was only 24\% for the abrupt subsidy.  A ramification of this finding is that the perceived stability of suibsidy programs may be important in promoting agrienvironmental practice adoption.  Since, as we have seen, the transitional "hump" between the two stable states represents a precarious economic position, if a subsidy is not guaranteed for a long enough period to get over the hump toward DFS, the rational farmer will be incentivized to simply continue in their simplified state.  With U.S. farm bills being completely overhauled every five years or so, a farmer may have limited confidence that a critical subsidy program will be sufficiently long-lived, suggesting that a policy lever may be to prolong the sunsetting of any new agrienvironmental subsidy.  
+
+Several limitations of this study must be acknowledged.  We do not draw distinctions between diversification practices that require large up-front costs versus those that require continual maintenance, instead lumping practices together into a generalized framework.  Our model does not capture market dynamics resulting from feedbacks between production and consumption, but rather conceives of the system as a commodity market within which an individual grower's production does not influence the overarching market price.  We also do not consider ecosystem services and/or deleterious environmental effects that spill over from neighboring farmers' practices.  Each of these areas remains a potential avenue for future research.  
+
+** CONCLUSION PARAGRAPH** 
+Despite these simplifications, our analysis provides a novel approach to 
+
+
+
+
+\bibliography{alt_stable_states}
+
