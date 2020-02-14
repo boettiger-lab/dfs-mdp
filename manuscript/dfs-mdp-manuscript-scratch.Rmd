@@ -3,6 +3,9 @@ title: "dfs-med manuscript scratchpad"
 output: pdf_document
 ---
 
+##pulled out of intro, didn't seem to fit
+For example, community composition of birds and soil microbes jointly influence food safety through the incidence and suppression of foodborne pathogens, and are impacted by farm level decisions about practices. 
+
 ## Serge's original intro
 
 In recent years, scholars have increasingly recognized that solutions to complex ecological policy issues often require an interdisciplinary approach, conceiving human decisionmaking and ecology as a tightly-enmeshed social-ecological system (SES) or coupled human and natural system (CHANS).  SES/CHANS analysis is appropriate wherever human agents make choices that impact the environment, and the resultant environmental change creates complex feedback loops that impinge upon the scope and efficacy of the human agent's future decisions \cite{ostrom2009general, walker2004resilience, liu2007complexity}.  Agriculture---being among the most fundamental drivers of anthropogenic ecological change \cite{stoate2009ecological}---represents a critical focus area to examine the core dynamical properties inherent to such human-environment nexuses.  While agriculture is often studied through a discipline-specific lens, in reality growers' management decisions---in particular those which promote functional biodiversity---have profound and complex effects on their local ecology, with these agronomic outcomes in turn embuing ecological services (ES) that affect the long-term productive capacity of their land base, and their resultant financial returns \cite{zhang2007ecosystem}.  
