@@ -24,10 +24,14 @@ address:
     address: "Dept of Environmental Science, Policy, and Management, University of California Berkeley, Berkeley CA 94720-3114, USA"
   - code: ubc
     address: "University of British Columbia"
-abstract: |
+abstract: The emergence and impact of tipping points have been of immense interest both in studies of social systems and natural phenomena. Yet despite widespread interest in integrated socio-ecological systems, it is generally assumed that the underlying alternative stable states must be ascribed either to social process or natural phenomenon alone. Our work shows how alternative stable states can arise in a stylized socio-ecological model of ecosystem services and the adoption of farming practices which promote them as the result of the interactions between decision making time scales, horizons of objectives, and rates of ecological processes.  This behavior is not observed if we consider either ecological or the social dynamics in isolation, but emerges as very general pattern of dynamically coupling a simple ecosystem model with a rational decision process over time. Because benefits of ecosystem services take time to acrue, farmers in environments with poor ecosystem services are unlikely to invest in maintaining them, while farmers in environments with higher ecosystem service value are more likely to bolster those services further.  This leads to a bifurcation in adoption of practices which promote ecosystem health.  We show how such tipping point dynamics can have important implications for policy design over a range of issues, from land tenure to the design of subsidies.
+
 keywords:
-  - diversified practices,
+  - agriculture
   - ecosystem services
+  - tipping points
+  - diversification practices
+  - decision making
 bibliography: alt_stable_states.bib
 date: "`r Sys.Date()`"
 output: rticles::elsevier_article
@@ -88,50 +92,33 @@ init <- truncnorm::rtruncnorm(reps, 0, 1, 0.5, 0.2) %>%
 
 ```
 
-<!-- MANUSCRIPT START -->
 
 \section{Introduction}
 
-Agriculture is among the most fundamental drivers of anthropogenic ecological change \cite{stoate2009ecological}, providing a valuable context for examining core properties of the human-environment nexus.  While agriculture influences both human and ecosystem well-being, practices vary in their environmental impacts, long term sustainability, financial viability, and climate resilience.  It is increasingly recognized that effective policies to address environmental issues, including the long term sustainability of agricultural practices, requires interdisciplinary approaches which consider both human decision-making and ecology as a coupled human and natural system (CHANS) {cite, cite} .  
+Both ecosystems and social systems have been observed to abruptly change states as the result of crossing a threshold. While theories of ecological multistability describe this phenomenon in ecosystems \cite{scheffer2003catastrophic} and many studies have explored how management impacts stability landscapes in ecological systems \cite{Horan7333} underlying tipping dynamics are assumed to be present in the ecological system. Similarly, examples from the social systems suggest similar tipping points but as the result of tipping dynamics present in the social systems; from the collapse of societies \cite{downey2016european} to social networks dynamics \cite{kuehn2014critical}.  Despite widespread interest in and importance of integrated socio-ecological systems, it is generally assumed that the underlying alternative stable states must be ascribed either to social process or natural phenomenon alone. 
 
-However, empirically exploring such tightly-enmeshed dynamic systems presents numerous challenges.  Human decisions, such as adopting sustainable agricultural practrices, impact ecological processes and the resultant changes create feedbacks that alter the scope and efficacy of future decisions \cite{ostrom2009general, walker2004resilience, liu2007complexity}.  Decisions can enhance or degrade ecological services that affect the long-term productive capacity of the land base and impact future financial returns \cite{zhang2007ecosystem}.  However, the temporal dynamics of ecological processes do not always align with the temporal scale of human decision-making.  Many ecosystem services that emerge from sustainable farming practices take years to accrue, meaning adoption of these practices requires decisionmakers to be foreward looking, adaptive, and comfortable with environmental and economic uncertainty.  For example, practices to reduce topsoil loss and harmful runoff such as riparian buffers and hedgerows require up to seven years to provide sufficient ecosystem benefits to offset the costs required for implementation and maintenance \cite{rein1999economic}. 
+While the coupled human and natural systems literature has advanced our understanding of state shifts, empiracal observations of alternate stable states may not always be attributed to underlying dynamics of a single system but rather the emergent properties of their coupled dynamics. (add more here)
+
+Empirically exploring tightly coupled dynamic systems presents numerous challenges \cite{kline2017integrating}.  Human decisions impact ecological processes and the resultant changes create feedbacks that alter the scope and efficacy of future decisions \cite{ostrom2009general, walker2004resilience, liu2007complexity}.  Decisions can enhance or degrade ecological services that affect the long-term productive capacity of the land base and impact future financial returns \cite{zhang2007ecosystem}.  However, the temporal dynamics of ecological processes do not always align with the temporal scale of human decision-making.  For example, many ecosystem services the the result of sequential investment in practices and take years to accrue, meaning adoption of these practices requires decisionmakers to be foreward looking, adaptive, and cognizant of environmental and economic uncertainty.  
+
+Agriculture is among the most fundamental drivers of anthropogenic ecological change \cite{stoate2009ecological}, providing a valuable context for examining core properties of the human-environment nexus.  While agriculture influences both human and ecosystem well-being, practices vary in their environmental impacts, long term sustainability, financial viability, and climate resilience.  It is increasingly recognized that effective policies to address environmental issues, including the long term sustainability of agricultural practices, requires interdisciplinary approaches which consider both human decision-making and ecology as a coupled human and natural system (CHANS) \cite{liu2007complexity, alberti2011research} .  
 
 Here we focus on Diversified Farming Systems (DFS), which are characterized by practices which promote beneficial biodiversity and bolster ecosystem services, enhancing farm- and landscape-scale productivity \cite{kremen2012diversified}.  While existing DFS research has increased our understanding of how diversification practices affect ecological and financial outcomes, an integrated approach requires a consideration of the feedback loop between adoption of a given practice, resultant ecological outcomes, and future adoption decision factors.  For example, community composition of birds and soil microbes jointly influence food safety through the incidence and suppression of foodborne pathogens, and are impacted by farm level decisions about practices. An integrated CHANS approach to questions about sustainability provides an framework to increase scientific understanding of the potential synergies and tradeoffs of how diversified farming practices affect and are affected by ecosystem processes.
 
-While understanding structural attributes and qualitative dynamics of human-environment systems can provide valuable information on effective levers of change and important assumptions to explore empirically, much of the existing literature in this area focuses either on human decision-making (with ecological processes being exogenous to the model), or explores the complexity of ecological processes without sufficiently considering adaptive human agents \cite{vandermeer2012syndromes}.  Further, those techniques that do present dynamic processes and responsive decision-making don't generally allow for forward looking decision agents \cite{lippe2019using}, ultimately misrepresenting the complex coupling of systems that proceed at fundementally different rates.  This paper presents a stylized coupled human and natural systems model of DFS adoption to explore the complex dynamical properties that result specifically from interactions between an adaptive agent and a changing environment.  While we do not suggest that our model captures the full complexity of individual decision making or environmental processes, it does provide a novel framework for integrating empirical findings and exploring emergent dynamics of coupled human and natural systems.
+While understanding structural attributes and qualitative dynamics of human-environment systems can provide valuable information on effective levers of change and important assumptions to explore empirically, much of the existing literature in this area focuses either on human decision-making (with ecological processes being exogenous to the model), or explores the complexity of ecological processes without sufficiently considering adaptive human agents \cite{vandermeer2012syndromes}.  Further, those techniques that do present dynamic processes and responsive decision-making don't generally allow for forward looking decision agents \cite{lippe2019using}, ultimately misrepresenting the complex coupling of systems that proceed at fundementally different rates.  This paper presents a stylized coupled human and natural systems model of DFS adoption to explore the complex dynamical properties that result specifically from interactions between adaptive decision making and a changing environment.  We find a novel mechanism for bistability that is the result not of complex structural assumptions in either system, but simply the rates at which two systems interact. While we do not suggest that our model captures the full complexity of individual decision making or environmental processes, it does provide a novel framework for integrating empirical findings and exploring emergent dynamics of coupled human and natural systems. Additionally, we show how such tipping point dynamics can have important implications for policy design over a range of issues, from land tenure to subsidy structure.
 
-
-\section{Conceptual model description}
+\section{Results}
 
 We explore the transition to and from diversified farming systems using a Markov Decision Process (MDP), in which an agent makes a series of choices about their interactions with the environment (\ref{fig:res_conceptual}).  In this case, the agent represents a single farm unit.  We formulate a 'system state' to represent the degree of beneficial ecological services derived from the farm's investments into diversification practices.  Each farming season the agent chooses an action, described by a spectrum from 0\% to 100\% investment in adopting or maintaining diversification practices.  More investment corresponds to a greater probability of transitioning to a higher (more beneficial) ecological state the next year.  While transitioning to a higher ecological state provides the agent an increased benefit, higher investment actions also come with a greater associated cost.  Using these parameters, we can calculate the optimal action for each state, known as the 'policy', based on the agent's future cumulative discounted rewards over a defined time horizon.  
 
 \begin{figure}
 \centering 
 \includegraphics[width=.75\textwidth]{external-figs/dfs_mdp_conceptual_fig_4.pdf}
-\caption{High level conceptual DFS-MDP illustration, showing the system state in green (with a higher state corresponding to increased diversification practices), the DP investment decision in blue, and the interaction between the farmer's perceived utility function $u()$ and the state transition probability function $p()$.}\label{fig:res_conceptual}
+\caption{Conceptual diagram showing the system state in green (with a higher state corresponding to increased diversification practices), the DP investment decision in blue, and the interaction between the farmer's perceived utility function $u()$ and the state transition probability function $p()$.}\label{fig:res_conceptual}
 \end{figure}
 
 
-\section{Results}
-
 Using the model described above, we conduct a series of simulation runs to observe the behavior of agents' sequential choices and resultant environmental outcomes over time.  Parameter values used in the simulations appear in Table \ref{tab:baseline_params}.  Agents' initial ecosystem states are distributed normally with a mean at $\bar{S} = 0.5$.  Fig \ref{fig:res_bimodal} shows that, after having followed policy $\pi$ for nine timesteps, at $t = 10$ agents have largely bifurcated into two groups, with some farms transitioning to more "simplified" farming systems, and others to more "diversified" systems.  Further, we find strong path dependency, with only 11\% of runs which started in a simplified ($S < 0.5$) state concluding in a diversified ($S > 0.5$) state, and only 7\% of runs initially in the diversified state transitioning to simplified.
-
-\begin{table}
-	\centering
-	\caption{Base case parameter values}
-	\begin{tabular}{lc}
-		\hline
-		\textbf{Parameter}			& \textbf{Value} \\
-		\hline
-		Benefit ($b$)	& 1.57 \\
-		Cost ($c$)	& 1.00 \\
-		Transition stochasticity ($\sigma$) & 0.1 \\
-		Ecosystem response rate ($r$) & 0.1 \\
-		Discount factor ($\gamma$) & 0.97 \\
-		\hline
-	\end{tabular}
-	\label{tab:baseline_params}
-\end{table}
 
 
 ```{r base_case_sim, include = FALSE}
@@ -207,8 +194,9 @@ ggarrange(
 
 While land tenure is intertwined with land use decisions, agricultural subsidies have also become an integral part of farming over the past half-century, and policymakers are continually called upon to weigh farm viability against food affordability and environmental sustainability {>>cite farm bill, etc.<<}.  In recent years, climate change, soil degradation, and water use/quality considerations have increasingly pressured agricultural policy optimization {>>cite<<}.  Some have suggested that large, short-term subsidies may be more efficacious in nudging farmers toward management systems that effectively weigh these tradeoffs, while others are proponents of long-term, yet smaller subsidies {>>cite<<}. The capacity to explore the impacts of policy in the framework of a sequentially decisions that impact ecological systems allows us to investigate this question in silico.  
 
-Using the same initial setup as described above, we implement two competing subsidy structures: a short-term (two-year) subsidy which completely covers the cost of transitioning to a more diversified state, versus a longer-term (ten-year) subsidy which only marginally offests the transition cost.  Formally, the cost of each subsidy package to the issuing organization is equal, and in fact the short-term subsidy is technically more valuable if economic discounting is applied.  Within the model, agents adapt their decision policy $\pi$ during the subsidy period, and at its conclusion they revert to base case (i.e. subsidy-free) decision rules.  
-Fig \ref{fig:res_subsidy} shows that longer, more sustained subsidies may be more beneficial to nudge behavior over the critical threshold toward more sustainable systems in the long term.  Comparing these experimental results to those in Fig \ref{fig:res_bimodal}, we find that both subsidy packages were effective in shifting farmers to a sustained higher ecosystem-services state.  However, the sustained subsidy was much more effective at moving the needle.  Due to the previously-discussed "tipping point" dynamic inherent in the model, once an agent has crossed the threshold to the diversified state, it becomes much less likely that they will fall back toward the "simplified" state, at least in the short term.  With state-transition stochasticity a major factor in a given model run (as it is in the real world), longer-term subsidy packages have a higher chance of nudging behavior beyond the critical threshold.  
+We implement two competing subsidy structures: a short-term (two-year) subsidy which completely covers the cost of transitioning to a more diversified state, versus a longer-term (ten-year) subsidy which only marginally offests the transition cost.  Formally, the cost of each subsidy package to the issuing organization is equal, and in fact the short-term subsidy is technically more valuable if economic discounting is applied.  Within the model, agents adapt their decision policy $\pi$ during the subsidy period, and at its conclusion they revert to base case (i.e. subsidy-free) decision rules.  
+
+Fig \ref{fig:res_subsidy} shows that longer, more sustained subsidies may be more beneficial to nudge behavior over the critical threshold toward more sustainable systems in the long term.  Comparing these experimental results to those in Fig \ref{fig:res_bimodal}, we find that both subsidy packages were effective in shifting farmers to a sustained higher ecosystem-services state.  However, the sustained subsidy was much more effective at moving the needle.  Due to the previously-discussed tipping point dynamic that emerges in the model, once an agent has crossed the threshold to the diversified state, it becomes much less likely that they will fall back toward the "simplified" state, at least in the short term.  With state-transition stochasticity a major factor in a given model run, and the real world, longer-term subsidy packages have a higher chance of nudging behavior beyond the critical threshold.  
 
 <!-- However, as the ecological dynamics increase in rate, which is relevant in analagous contexts of sequentially controlled ecological systems, this effect decreases (create figure for this?). -->
 
@@ -350,14 +338,11 @@ Despite these simplifications, our analysis provides a novel approach to
 
 \section{Methods}
 
-DFS-MDP is a Markov Decision Process model (etc... briefly describe history and impetus of MDPs and include citations)
-
-The state space $S$ is a vector with a lower bound of 0, and a soft upper bound of 1, with the system state $s_t$ representing the degree to which the agent derives ecosystem services benefits $b_s$ such as soil productivity, water infiltration, and climate resilience from the diversification practices they have implemented on their farm.  Actions to increase investments in diversification practices probabalistically increase or decrease the future system state, with $r$ defining the rate at which the ecosystem responds to change.  While agents may stochastically transition to $s>1$, investments into diversification practices do not positively correlate with the probability of upward state transitions beyond $s=1$.  In our simulation runs, the 99th percentile of states actually encountered by agents was $\approx 1.23$.  
+The state space $S$ is a vector with a lower bound of 0, and a soft upper bound of 1, with the system state $s_t$ representing the degree to which the agent derives ecosystem services benefits $b_s$ such as soil productivity, water infiltration, and climate resilience from the diversification practices they have implemented on their farm.  Actions to increase investments in diversification practices probabalistically increase or decrease the future system state, with $r$ defining the rate at which the ecosystem responds to change.  While agents may stochastically transition to $s>1$, investments into diversification practices do not positively correlate with the probability of upward state transitions beyond $s=1$.  
 
 The action space $A$ is a continuous vector from 0 to 1, with $a=0$ representing no investment of resources into DP adoption and maintenance and $a=1$ representing the highest conceivable level of investment.  Investment in diversification practices incurs costs $c_a$, either as a direct result of implementation (e.g. equipment, materials, and labor), opportunity costs (e.g. forgone yields due to reduced cultivated acreage or lost production efficiency), or both.  
 
 The time step $t$ corresponds to a single growing season.  At each time step, the agent chooses an action based on their current state by following decision policy $\pi$.  $\pi$ is calculated by maximizing expected utility for each state/action pair over the full time horizon using a Stochastic Dynamic Programming (SDP) approach \cite{marescot2013complex}, with the discount rate $\gamma$ determining how much the agent values current rewards relative to future rewards.
-
 
 \subsection{Model mathematical description}
 
@@ -373,31 +358,42 @@ $$u(s_t, a_t) = b s_t  - c a_t$$
 
 The ecosystem state is also dynamic, evolving according to the transition probability function $p(s_t, a_t)$:
 
-$$s_{t+1} = p(s_t, a_t) := s_t + r \left(a_t - s_t \right)$$ 
+$$s_{t+1} = p(s_t, a_t) := s_t + r \left(a_t - s_t \right) + \sigma$$ 
 
-This provides a minimal, one-parameter state transition model in which the parameter $r$ sets the natural timescale at which the ecosystem can respond to a change in mangement practice.  
+This provides a minimal state transition model in which the parameter $r$ sets the natural timescale at which the ecosystem can respond to a change in mangement practice.  We have chosen parameters for illustrative purposes (Table 1) and the results should be interpreted as numerical examples of bistability in CHANs resulting from optimal decision making under uncertainty in ranges of ecological dynamic rates and decision making scales.
 
-{>>Need to include sigma in the equation<<} To capture stochastic noise inherent to the ecological system, $\sigma$ defines the spread of the state transition probability distribution.  
+\begin{table}
+	\centering
+	\caption{Table 1: Parameter values}
+	\begin{tabular}{lc}
+		\hline
+		\textbf{Parameter}			& \textbf{Value} \\
+		\hline
+		$b$	& 1.57 \\
+		$c$	& 1.00 \\
+		$\sigma$ & 0.1 \\
+		$r$ & 0.1 \\
+		$\gamma$ & 0.97 \\
+		\hline
+	\end{tabular}
+	\label{tab:baseline_params}
+\end{table}
+
+To capture stochastic noise inherent to the ecological system, $\sigma$ defines the spread of the state transition probability distribution.  
 
 While we have assumed very basic transition and utility functions for this stylized model, in general more complicated nonlinear functions of both the ecosystem state transition and derived utility are possible in this framework.  
 
-
-\subsection{Model implementation}
-
-Our MDP was developed in R, using the MDPtoolbox library.  {>>ETC...<<}
-
-
 \subsection{Parameterization from field observations and empirical data}
 
-To establish the general parameters of our MDP model, our interdisciplinary research team began by exploring empirical evidence about the real-world drivers and distributions of farmers' adoption of diversification-enhancing practices.  We take a twofold approach, beginning with qualitative observations of trends within a relatively-small sample, and then testing hypotheses using results from a large-scale survey.  
+To establish the general parameters, our interdisciplinary research team began by exploring empirical evidence about the real-world drivers and distributions of farmers' adoption of diversification-enhancing practices using ualitative observations of trends within a relatively-small sample.  We then test hypotheses using results from a large-scale survey.  
 
 \subsubsection{Original interviews}
 
-Members of our team conducted interviews and on-farm observational studies of 20 organic lettuce growers and 8 technical assistance providers based in the California central coast region.  The sample was stratified to include growers across the spectrum of scale and market outlet.  Based on these studies, several important trends emerge.  Echoing previous research in this area, we find that adoption of DEPs tends to be bimodal; that is, growers are likely to either intensively-adopt many DEPs, or to adopt these practices minimally or not-at-all.  This may be explained by factors including limited capital availability to implement those DEPs with high up-front costs, food safety stipulations based on market outlet, risk attitude, and myopic discounting.  Land tenure---in terms of both length of time on the land, and whether land is leased versus owned---also appears to be a salient decision factor.  
+We conducted interviews and on-farm observational studies of 20 organic lettuce growers and 8 technical assistance providers based in the California central coast region.  The sample was stratified to include growers across the spectrum of scale and market outlet.  Based on these studies, several important trends emerge.  Echoing previous research in this area, we find that adoption of diversification practices tends to be bimodal; that is, growers are likely to either intensively-adopt many diversification practices, or to adopt these practices minimally.  This may be explained by factors including limited capital availability to implement practices with high up-front costs, food safety stipulations based on market outlet, risk attitude, and myopic discounting.  Both length of time on the land, and whether land is leased versus owned also emerged as a salient decision factor.  
 
 \subsubsection{Survey dataset}
 
-To evaluate the extent to which these observed adoption distributions hold quantitatively, we leverage a dataset of survey responses from 295 vegetable growers in Washington, Oregon, and California (!!CITE DATA SOURCE!!).  Table \ref{tab:dps_in_survey} shows the set of DPs queried in the survey, with their adoption rates across the entire sample.  A histogram plotting the number of diversification practices used by each grower (Fig \ref{fig:res_bimodal}B) shows a bimodal distribution, with growers generally tending to either adopt zero DPs---the most likely case---or else to adopt many, with six practices being the next-most-likely.
+To evaluate the extent to which these observed adoption distributions hold quantitatively, we leverage a dataset of survey responses from 295 vegetable growers in Washington, Oregon, and California (CITE).  Table \ref{tab:dps_in_survey} shows the set of DPs queried in the survey, with their adoption rates across the entire sample.  A histogram plotting the number of diversification practices used by each grower (Fig \ref{fig:res_bimodal}B) shows a bimodal distribution, with growers generally tending to either adopt zero diversification practices or else to adopt many.
 
 \begin{table}
 	\centering
