@@ -238,7 +238,7 @@ ggarrange(
 
 Recent research in complexity theory reveals the importance of understanding nonlinear behaviors within dynamical systems.  For example, when pushed beyond some threshold, even given potent countervailing actions on the part of a decision-maker, a system may enter a virtually-irreversible state, driving its behavior into divergent basins of attraction \cite{bar2019dynamics}.  These types of complex dynamics have been observed empirically across a wide variety of coupled human and natural systems, and the identification of effective policy measures to effect change in these areas has been described as a "wicked problem" that often confounds traditional methods of analysis for precisely this reason \cite{head2008wicked}.
 
-While much of the research on agricultural management has continued to revolve around traditional unidisciplinary approaches \cite{francis2008transdisciplinary}, novel computational methods like agent-based modeling, network analytics, and machine learning have been increasingly employed, providing important insights into its complexities \cite{lippe2019using, wiltshire2018using, wiltshire2019network}.  However, these tools often rely on predefined decision rules, removing the dynamic and responsive nature of agent decision-making and planning, and thus limiting the capacity to explore levers of change that stem from interactions between adaptive agents and a changing environment.  
+While much of the research on agricultural management has continued to revolve around traditional unidisciplinary approaches \cite{francis2008transdisciplinary}, novel computational methods like agent-based modeling, network analytics, and machine learning have increasingly provided important insights into the complexities of CHANS \cite{lippe2019using, wiltshire2018using, wiltshire2019network}.  However, these tools often rely on predefined decision rules, removing the dynamic and responsive nature of agent decision-making and planning, and thus limiting the capacity to explore levers of change that stem from interactions between adaptive agents and a changing environment.  
 
 Representing agriculture management in silico as a dynamic CHANS, we find that the empirically-observed bistability in diversification practice adoption may be the result of tipping points in optimal sequential control, rather than inherent tipping points in the ecological dynamics themselves, or in the predispositions of human agents.  The model we present here represents a simplified and stylized version of the feedbacks between human decision-making and ecological processes, but even still we show that complex dynamics can arise as a direct result of human-environment interaction.  While the concept of alternate stable states and tipping points within agricultural SESs has been previously explored \cite{vandermeer2012syndromes}, our experimental results cast light on several core mechanisms that help to explain this phenomenon, suggesting novel considerations as policymakers work to enhance the sustanability and resilience of agricultural production systems.  
 
@@ -259,11 +259,11 @@ Even based on a relatively-simple stylized model, our analysis suggests a novel 
 
 \section{Methods}
 
-The state space $S$ is a vector with a lower bound of 0, and a soft upper bound of 1, with the system state $s_t$ representing the degree to which the agent derives ecosystem services benefits $b_s$ such as soil productivity, water infiltration, and climate resilience from the diversification practices they have implemented on their farm.  Actions to increase investments in diversification practices probabalistically increase or decrease the future system state, with $r$ defining the rate at which the ecosystem responds to change.  While agents may stochastically transition to $s>1$, investments into diversification practices do not positively correlate with the probability of upward state transitions beyond $s=1$.  
+The model's state space is a vector with a lower bound of 0 and a soft upper bound of 1, with the system state $s_t$ representing the degree to which the agent derives ecosystem service benefits $b_s$ from the diversification practices they have implemented on their farm.  Actions to increase investments in diversification practices probabilistically increase or decrease the future system state, with $r$ defining the rate at which the ecosystem responds to change.  While agents may stochastically transition to $s>1$, investments into diversification practices do not positively correlate with the probability of upward state transitions beyond $s=1$.
 
-The action space $A$ is a continuous vector from 0 to 1, with $a=0$ representing no investment of resources into DP adoption and maintenance and $a=1$ representing the highest conceivable level of investment.  Investment in diversification practices incurs costs $c_a$, either as a direct result of implementation (e.g. equipment, materials, and labor), opportunity costs (e.g. forgone yields due to reduced cultivated acreage or lost production efficiency), or both.  
+The action space is a continuous vector from 0 to 1, with $a=0$ representing no investment of resources into DP adoption or maintenance, and $a=1$ representing the highest conceivable level of investment.  Investment in diversification practices incurs costs $c_a$, either as a direct result of implementation (e.g. equipment, materials, and labor), opportunity costs (e.g. forgone yields due to reduced cultivated acreage or lost production efficiency), or both.
 
-The time step $t$ corresponds to a single growing season.  At each time step, the agent chooses an action based on their current state by following decision policy $\pi$.  $\pi$ is calculated by maximizing expected utility for each state/action pair over the full time horizon using a Stochastic Dynamic Programming (SDP) approach \cite{marescot2013complex}, with the discount rate $\gamma$ determining how much the agent values current rewards relative to future rewards.
+The time step $t$ corresponds to a single growing season.  At each time step, the agent chooses an action based on their current state by following decision policy $\pi$.  The policy is calculated by maximizing expected utility for each state/action pair over the full time horizon using a Stochastic Dynamic Programming (SDP) approach \cite{marescot2013complex}, with the discount rate $\gamma$ determining how much the agent values current rewards relative to future rewards.
 
 \subsection{Model mathematical description}
 
@@ -271,34 +271,32 @@ The farmer's decision model can be expressed as
 
 $$\max_{\lbrace a_t \rbrace} \mathbb{E} \left[ \sum_t^T u(s_t, a_t) \gamma^t \right] $$
 
-where $\lbrace a_t \rbrace$ is the set of available actions to be taken at each point in time $t$, $\gamma$ is the discount rate, $\mathbb{E}$ the expectation operator, and $u(x_t, a_t)$ the utility which the farmer associates with being in state $s_t$ and taking action $a_t$ at time $t$. $T$ is the land tenure of the farm ($T = \infty$ if the farmer owns the land or otherwise expects to be able to farm the same land and thus benefit from the ecosystem services established there indefinitely).
+where $\lbrace a_t \rbrace$ is the set of available actions to be taken at each point in time $t$, $\mathbb{E}$ the expected utility operator, $u(s_t, a_t)$ the utility which the farmer associates with being in state $s_t$ and taking action $a_t$ at time $t$, and $\gamma$ the myopic discount factor. $T$ is the land tenure of the farm ($T \to \infty$ if the farmer owns the land or has a long lease).
 
-We assume a simple model for the farmer's utility $u(s_t, a_t)$ as a combination of the costs $c$ associated with the diversification practice investment action $a$ and the benefits $b$ derived from the ecosystem state $s$ (which is in turn influenced by the practices adopted)
+We assume a simple model of the farmer's perceived utility, $u(s_t, a_t)$, as a function of the costs $c$ associated with diversification practice investment action $a$, versus benefits $b$ derived from achieved ecosystem state $s$:
 
 $$u(s_t, a_t) = b s_t  - c a_t$$
 
-The ecosystem state is also dynamic, evolving according to the transition probability function $p(s_t, a_t)$:
+The ecosystem state is also dynamic, evolving according to the transition probability function $p(s_t, a_t)$, such that
 
-$$s_{t+1} = p(s_t, a_t) := s_t + r \left(a_t - s_t \right) + \sigma$$ 
+$$s_{t+1} = p(s_t, a_t) := s_t + r \left(a_t - s_t \right) + \sigma$$
 
-This provides a minimal state transition model in which the parameter $r$ sets the natural timescale at which the ecosystem can respond to a change in mangement practice, and $\sigma$ defines the spread of the state transition probability distribution, capturing stochastic noise inherent to the ecological system's change over time.  While we have assumed very basic transition and utility functions for this stylized model, in general more complicated nonlinear functions of both the ecosystem state transition and derived utility are possible in this framework.  
+This provides a minimal state transition model in which the parameter $r$ sets the natural timescale at which the ecosystem can respond to a change in land mangement and $\sigma$ defines the spread of the state transition probability distribution, capturing the noise inherent to ecological system change over time.  While we have assumed very basic transition and utility functions for this stylized model, in general more complicated nonlinear functions for both the ecosystem state transition and derived utility are possible using this framework.
 
-\subsection{Model parameters}
-
-We have chosen parameters for illustrative purposes (Table \ref{tab:baseline_params}) and the results should be interpreted as numerical examples of bistability in CHANS resulting from optimal decision making under uncertainty in ranges of ecological dynamic rates and decision making scales.
+We have parameterized the model to illustrate bistability in CHANS resulting from optimal agroenvironmental investment decision-making given stochastic ecological responses over time.  Parameter values appear in Table \ref{tab:baseline_params}.
 
 \begin{table}
 	\centering
-	\caption{Table 1: Parameter values}
+	\caption{Baseline parameter values}
 	\begin{tabular}{lc}
 		\hline
 		\textbf{Parameter}			& \textbf{Value} \\
 		\hline
-		$b$	& 1.57 \\
-		$c$	& 1.00 \\
-		$\sigma$ & 0.1 \\
-		$r$ & 0.1 \\
-		$\gamma$ & 0.97 \\
+		Benefit $b$	& 1.57 \\
+		Cost $c$	& 1.00 \\
+		State transition noise $\sigma$ & 0.1 \\
+		State response rate $r$ & 0.1 \\
+		Discount factor $\gamma$ & 0.97 \\
 		\hline
 	\end{tabular}
 	\label{tab:baseline_params}
@@ -306,15 +304,15 @@ We have chosen parameters for illustrative purposes (Table \ref{tab:baseline_par
 
 \subsection{Field observations and empirical data}
 
-To ground-truth our modeling work, our interdisciplinary research team began by exploring empirical evidence about the real-world drivers and distributions of farmers' adoption of diversification-enhancing practices using qualitative observations of trends within a relatively-small sample.  We then test hypotheses using results from a large-scale survey.  
+To ground-truth this modeling work, our interdisciplinary research team began by investigating real-world drivers of farmers' management practices using qualitative observations of trends within a relatively-small sample.  We then test hypotheses using data from a larger-scale survey.
 
 \subsubsection{Original interviews}
 
-We conducted interviews and on-farm observational studies of 20 organic lettuce growers and 8 technical assistance providers based in the California central coast region.  The sample was stratified to include growers across the spectrum of scale and market outlet.  Based on these studies, several important trends emerge.  Echoing previous research in this area, we find that adoption of diversification practices tends to be bimodal; that is, growers are likely to either intensively-adopt many diversification practices, or to adopt these practices minimally.  This may be explained by factors including limited capital availability to implement practices with high up-front costs, food safety stipulations based on market outlet, risk attitude, and myopic discounting.  Both length of time on the land, and whether land is leased versus owned also emerged as a salient decision factor.  
+We conducted interviews and on-farm observational studies of 20 organic lettuce growers and 8 technical assistance providers in California's Salinas Valley.  The sample was stratified to include growers across the spectrum of scale and market outlet.  Echoing previous research in this area, we find that adoption of diversification practices tends to be bimodal; that is, growers are likely to either intensively-adopt many DPs, or to adopt them minimally.  Participants cited decision factors including limited capital availability to implement practices with high up-front costs, food safety stipulations based on market outlet, risk attitude, and economic discounting.  Both length of time on the land and whether land is leased versus owned also emerged as salient decision criteria.
 
 \subsubsection{Survey dataset}
 
-To evaluate the extent to which these observed adoption distributions hold quantitatively, we leverage a dataset of survey responses from 295 vegetable growers in Washington, Oregon, and California *CITE DATA SOURCE*.  Table \ref{tab:dps_in_survey} shows the set of DPs queried in the survey, with their adoption rates across the entire sample.  A histogram plotting the number of diversification practices used by each grower (Fig \ref{fig:res_bimodal}B) shows a bimodal distribution, with growers generally tending to either adopt zero DPs---the most likely case---or else to adopt many, with six practices being the next-most-likely.  To investigate the effect of land tenure on DEP adoption, we partition the dataset into growers who primarily own their land versus those who primarily lease it.  Figure \ref{fig:res_tenure}B shows that owners in our sample are about 20\% more likely than leasers to invest in at least one diversification practice.  
+To evaluate the extent to which these observed adoption distributions hold quantitatively, we leverage a dataset of survey responses from 295 vegetable growers in Washington, Oregon, and California *CITE DATA SOURCE*.  Table \ref{tab:dps_in_survey} shows the set of DPs queried in the survey, with their adoption rates across the entire sample.  A histogram plotting the number of diversification practices used by each grower (Fig \ref{fig:res_bimodal}C) shows a bimodal distribution, with growers generally tending to either adopt zero DPs---the most likely case---or else to adopt many, with six practices being the next-most-likely.  To investigate the effect of land tenure on DEP adoption, we partition the dataset into growers who primarily own their land versus those who primarily lease.  Figure \ref{fig:res_tenure}D shows that owners in our sample are about 20\% more likely than leasers to invest in at least one diversification practice.
 
 \begin{table}
 	\centering
