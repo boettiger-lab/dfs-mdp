@@ -4,41 +4,50 @@
 
  +  As you probably guess, I and others in my specialty of Organic Agriculture take issue with the statements about organic certification. See my previous comments.
  + I’m not sure people would take issue with much, especially given that the model is so abstract. The only concern I have is that investment in DPs is assumed to increase the ecosystem state which then benefits the farmer. That assumption is probably ok, but it may be worth noting that not all DPs will end up benefiting farmers. Some may increase services AND disservices, ultimately balancing out or even harming production. I can add in cites for this if you are interested but it might be worth noting regardless in the limitations section. Aside from that, I think that some statements need citations to back them up but I flagged those in the MS. 
-
+ + Yes, comments from Amber on characterization of organics. 
+Also, I would focus on ‘environmental incentive policies’ rather than attempting to cover all subsidies, since they can do such different things — and in the simulation we only explore the effects of an environmental incentive policy
 
 
 **(2) Are the parts outside of your specialty clearly explained?**
 
  +  Yes
  +  In my comments, I flagged some technical jargon that was a bit difficult to follow (e.g., wicked problems, optimal sequential control, etc). The reader could also use a bit more help navigating the conceptual framework of the model in Fig 1.
+ + Mostly, see comments.
+
 
 
 **(3) What do you see as the most important message in the paper for your own community of practice? (i.e. the take-aways here for a modeler may be different than for a soil scientist)**
 
  +  The methods and results from this paper indicate leverage points for policy changes that should be considered (or at least further explored) in order to promote farming with conservation practices. This takes a very theoretical methodology and turns into a tangible and applicable message.
  +  My takeaway is that, under really limited assumptions, most farms will bifurcate into highly diversified and monocultural categories. However, long term subsidies and increased land tenure could help farmers shift to better ecosystem states with more DPs. 
+ + The long-term incentive working more effectively to nudge farmers to positive practices. The inherent bifurcation (although we did find this relaxed with other forms of the ecosystem state to action relationship…) - see comment on that.
 
 **(4) What do you think of the current balance of focus? Are we too much 'general CNHS' and not enough 'agricultural systems', or the reverse?**
 
  +  Balance seems good to me
  +  I actually really like the balance of focus. I do think we need more citations and examples for the agricultural systems side of things. But I really like the framing. 
+ + good balance
 
 
 **(5) opinion on the title? other suggestions?**
 
  +  Looks good to me
- +  I like it. Though I do wonder about using sustainable agriculture versus something about diversified agriculture (to be more consistent with the rest of the paper). 
+ +  I like it. Though I do wonder about using sustainable agriculture versus something about diversified agriculture (to be more consistent with the rest of the paper).
+ + agree we need standardization of terminology.  I suggest relying primarily on two terms:  diversified, agroecological practices  AND Diversified Farming Systems.  at times use of ’sustainable agriculture’ seems appropriate, but not in title.  have made suggestions throughout
+
 
 
 **(6) Can you suggest 1-2 reviewers?**
 
   + NA
   + You cite John Vandermeer once in here and I think he could be a good reviewer (given that he is both a modeler and an agroecologist). Wei Zhang is also cited- she’s an economist who works on diversified agricultural issues (mostly with pest management). She’s stellar and I think could be good for this as well. 
+  + Agree with Danny’s suggestion of John Vandermeer — perfect for this. Simon Levin also good from complex adaptive systems perspective. Lucas Garibaldi is a modeler who is also an agronomist/agroecologist
 
 **(7)  Please suggest suitable citations where indicated that a citation is needed.  We'd also love additional suggestions for highly relevant literature that we've failed to acknowledge so far.**
 
  +  I attached the NOP guidance that could be used. I looked for a resource that discloses how much EQIP budget is appropriated and how much has been spent annually, but couldn’t find anything quickly. Mostly, I think there is opportunity for data sharing with the strawberry project if Claire and Kathy think it’s appropriate. I think there will be more confirmation of your results.
  + I added some citation possibilities to the document. I also suggest some places where examples are needed. If you want me to dig up any other citations on the ecological side of things, please let me know and I’d be happy to help!
+ + In attached
 
 
 
@@ -46,12 +55,13 @@
 
  +  I thank you for your offer and will accept .
  + I’d love to be author on this. But I also want to be sure to carry my weight. So do let me know if there’s anything else I can do to help! 
-
+ + Yes
 
 **(9) Please reply with your full name and any affiliations (and ORCID if you want it listed).**
 
   + Amber Renee Sciligo ; The Organic Center, 444 North Capitol St NW #445a, Washington, DC 20001; https://orcid.org/0000-0003-2437-8799
   + Daniel S. Karp ; Department of Wildlife, Fish, and Conservation Biology, University of California, Davis, California 95616 ;https://orcid.org/0000-0002-3832-4428
+  + Claire Kremen, Institute for Resources, Environment and Sustainability and Biodiversity Research Centre, University of British Columbia AND Dept. of Environmental Science, Policy and Management, University of California, Berkeley
 
 
 
