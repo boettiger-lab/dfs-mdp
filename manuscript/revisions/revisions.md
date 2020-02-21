@@ -6,6 +6,8 @@
  + I’m not sure people would take issue with much, especially given that the model is so abstract. The only concern I have is that investment in DPs is assumed to increase the ecosystem state which then benefits the farmer. That assumption is probably ok, but it may be worth noting that not all DPs will end up benefiting farmers. Some may increase services AND disservices, ultimately balancing out or even harming production. I can add in cites for this if you are interested but it might be worth noting regardless in the limitations section. Aside from that, I think that some statements need citations to back them up but I flagged those in the MS. 
  + Yes, comments from Amber on characterization of organics. 
 Also, I would focus on ‘environmental incentive policies’ rather than attempting to cover all subsidies, since they can do such different things — and in the simulation we only explore the effects of an environmental incentive policy
+ + I agree with Danny's comments here. I also agree with Claire's point on subsidies -- focus on environmental incentive programs (like CSP and EQIP, plus a few sustainable agriculture programs). I had already made a few comments about the reasons why existing subsidy/incentive programs are troublesome for farmers, and these relate to US and CA environmental incentive programs specifically. The idea of a critical period for navigating a tipping point/threshold (ie. the time around the tipping point) is central to the paper's analysis and discussion -- but I don't know if it's been grounded enough in the modeling results explanation or empirical data. It seemed as though it was added to the observations of tipping point behavior. As a transitions researcher, I agree with this analysis (it squares with what we know about the risks of trying to make a transition and the problems that actors can face in getting around entrenched market and production systems). But more grounding might help make the link. Or, it needs to be framed as a hypothesis. Another interesting issue is whether farmers with degraded lands are more likely to go into the simplified state and not to invest in DFS (while farmers with fertile lands are more likely to go into the diversification pathway). I think this is ok for an abstract model and a baby MDP run. But as you will see in several comments, I suspect the actual dynamic is also to do with (1) access to resources and (2) lockedness into dominant production structures - eg. a small farmer with poorer land (as opposed to fertile land) is likely not to have the resources needed to invest into DFS and to survive while transitioning to DFS. The land tenure status and subsidy parts start getting at these aspects. This is for future MDP work, as noted in the final paragraph.
+
 
 
 **(2) Are the parts outside of your specialty clearly explained?**
@@ -13,6 +15,7 @@ Also, I would focus on ‘environmental incentive policies’ rather than attemp
  +  Yes
  +  In my comments, I flagged some technical jargon that was a bit difficult to follow (e.g., wicked problems, optimal sequential control, etc). The reader could also use a bit more help navigating the conceptual framework of the model in Fig 1.
  + Mostly, see comments.
+ + Yes, for the most part. I made some suggested line edits to try to make some bits more easy to 'see' and follow. These are mostly to do with the nature of critical thresholds and alternative stable states/pathways.
 
 
 
@@ -21,12 +24,15 @@ Also, I would focus on ‘environmental incentive policies’ rather than attemp
  +  The methods and results from this paper indicate leverage points for policy changes that should be considered (or at least further explored) in order to promote farming with conservation practices. This takes a very theoretical methodology and turns into a tangible and applicable message.
  +  My takeaway is that, under really limited assumptions, most farms will bifurcate into highly diversified and monocultural categories. However, long term subsidies and increased land tenure could help farmers shift to better ecosystem states with more DPs. 
  + The long-term incentive working more effectively to nudge farmers to positive practices. The inherent bifurcation (although we did find this relaxed with other forms of the ecosystem state to action relationship…) - see comment on that.
+ + As a policy/social science scholar, the key messages are that -- under really limited assumptions -- thresholds/tipping points do exist and can affect the capacity of farmers to adopt DFS. The bifurcated nature of the model runs are striking and pose a hypothesis that needs to be confirmed through empirical data (which is coming). I don't think policy-makers or social scientists have thought much in terms of tipping points in complex systems. So how policies can support efforts to guide farmers through tipping points toward diversified outcomes is a very good question -- and I am glad that the discussion section really emphasizes policy.
 
 **(4) What do you think of the current balance of focus? Are we too much 'general CNHS' and not enough 'agricultural systems', or the reverse?**
 
  +  Balance seems good to me
  +  I actually really like the balance of focus. I do think we need more citations and examples for the agricultural systems side of things. But I really like the framing. 
  + good balance
+ + It's a very good balance in my opinion. The agricultural elements are very strong. I would not change the balance.
+
 
 
 **(5) opinion on the title? other suggestions?**
@@ -34,20 +40,26 @@ Also, I would focus on ‘environmental incentive policies’ rather than attemp
  +  Looks good to me
  +  I like it. Though I do wonder about using sustainable agriculture versus something about diversified agriculture (to be more consistent with the rest of the paper).
  + agree we need standardization of terminology.  I suggest relying primarily on two terms:  diversified, agroecological practices  AND Diversified Farming Systems.  at times use of ’sustainable agriculture’ seems appropriate, but not in title.  have made suggestions throughout
+ + I'd eliminate sustainable agriculture and adopt a single consistent terminology, like Claire suggests. I would favor diversified practices (and these need to be briefly defined/identified upfront as I note in my comments).
+
 
 
 
 **(6) Can you suggest 1-2 reviewers?**
 
   + NA
-  + You cite John Vandermeer once in here and I think he could be a good reviewer (given that he is both a modeler and an agroecologist). Wei Zhang is also cited- she’s an economist who works on diversified agricultural issues (mostly with pest management). She’s stellar and I think could be good for this as well. 
+  + You cite John Vandermeer once in here and I think he could be a good reviewer (given that he is both a modeler and an agroecologist). Wei Zhang is also cited- she’s an economist who works on diversified agricultural issues (mostly with pest management). She’s stellar and I think could be good for this as well.
   + Agree with Danny’s suggestion of John Vandermeer — perfect for this. Simon Levin also good from complex adaptive systems perspective. Lucas Garibaldi is a modeler who is also an agronomist/agroecologist
+  + John Vandermeer would be great, I agree. What about John Reganold as a more general agriculture science reviewer? It would be good to have a range of perspectives.
+
 
 **(7)  Please suggest suitable citations where indicated that a citation is needed.  We'd also love additional suggestions for highly relevant literature that we've failed to acknowledge so far.**
 
  +  I attached the NOP guidance that could be used. I looked for a resource that discloses how much EQIP budget is appropriated and how much has been spent annually, but couldn’t find anything quickly. Mostly, I think there is opportunity for data sharing with the strawberry project if Claire and Kathy think it’s appropriate. I think there will be more confirmation of your results.
  + I added some citation possibilities to the document. I also suggest some places where examples are needed. If you want me to dig up any other citations on the ecological side of things, please let me know and I’d be happy to help!
  + In attached
+ + I made a few suggestions.
+
 
 
 
@@ -56,12 +68,14 @@ Also, I would focus on ‘environmental incentive policies’ rather than attemp
  +  I thank you for your offer and will accept .
  + I’d love to be author on this. But I also want to be sure to carry my weight. So do let me know if there’s anything else I can do to help! 
  + Yes
+ + I don't need to be listed as a formal author per se. Only if I've made substantial contributions to the paper and have been carrying some weight.
 
 **(9) Please reply with your full name and any affiliations (and ORCID if you want it listed).**
 
   + Amber Renee Sciligo ; The Organic Center, 444 North Capitol St NW #445a, Washington, DC 20001; https://orcid.org/0000-0003-2437-8799
   + Daniel S. Karp ; Department of Wildlife, Fish, and Conservation Biology, University of California, Davis, California 95616 ;https://orcid.org/0000-0002-3832-4428
   + Claire Kremen, Institute for Resources, Environment and Sustainability and Biodiversity Research Centre, University of British Columbia AND Dept. of Environmental Science, Policy and Management, University of California, Berkeley
+  + Alastair Iles, Environmental Science, Policy and Management, University of California, Berkeley
 
 
 
