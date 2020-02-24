@@ -1,0 +1,417 @@
+% Encoding: UTF-8
+
+@article{downey2016european,
+  title={European Neolithic societies showed early warning signals of population collapse},
+  author={Downey, Sean S and Haas, W Randall and Shennan, Stephen J},
+  journal={Proceedings of the National Academy of Sciences},
+  volume={113},
+  number={35},
+  pages={9751--9756},
+  year={2016},
+  publisher={National Acad Sciences}
+}
+@article{kuehn2014critical,
+  title={Critical transitions in social network activity},
+  author={Kuehn, Christian and Martens, Erik A and Romero, Daniel M},
+  journal={Journal of Complex Networks},
+  volume={2},
+  number={2},
+  pages={141--152},
+  year={2014},
+  publisher={Oxford University Press}
+}
+@article {Horan7333,
+	author = {Horan, Richard D. and Fenichel, Eli P. and Drury, Kevin L. S. and Lodge, David M.},
+	title = {Managing ecological thresholds in coupled environmental{\textendash}human systems},
+	volume = {108},
+	number = {18},
+	pages = {7333--7338},
+	year = {2011},
+	doi = {10.1073/pnas.1005431108},
+	publisher = {National Academy of Sciences},
+	issn = {0027-8424},
+	URL = {https://www.pnas.org/content/108/18/7333},
+	eprint = {https://www.pnas.org/content/108/18/7333.full.pdf},
+	journal = {Proceedings of the National Academy of Sciences}
+}
+
+@article{scheffer2003catastrophic,
+  title={Catastrophic regime shifts in ecosystems: linking theory to observation},
+  author={Scheffer, Marten and Carpenter, Stephen R},
+  journal={Trends in ecology \& evolution},
+  volume={18},
+  number={12},
+  pages={648--656},
+  year={2003},
+  publisher={Elsevier}
+}
+@article{kline2017integrating,
+  title={Integrating social science into empirical models of coupled human and natural systems},
+  author={Kline, Jeffrey D and White, Eric M and Fischer, A Paige and Steen-Adams, Michelle M and Charnley, Susan and Olsen, Christine S and Spies, Thomas A and Bailey, John D},
+  journal={Ecology and Society},
+  volume={22},
+  number={3},
+  year={2017},
+  publisher={JSTOR}
+}
+
+@article{alberti2011research,
+  title={Research on coupled human and natural systems (CHANS): approach, challenges, and strategies},
+  author={Alberti, Marina and Asbjornsen, Heidi and Baker, Lawrence A and Brozovic, Nicholas and Drinkwater, Laurie E and Drzyzga, Scott A and Jantz, Claire A and Fragoso, Jos{\'e} and Holland, Daniel S and Kohler, Timothy (Tim) A and others},
+  journal={The Bulletin of the Ecological Society of America},
+  volume={92},
+  number={2},
+  pages={218--228},
+  year={2011},
+  publisher={Wiley Online Library}
+}
+
+@article{lippe2019using,
+  title={Using agent-based modelling to simulate social-ecological systems across scales},
+  author={Lippe, Melvin and Bithell, Mike and Gotts, Nick and Natalini, Davide and Barbrook-Johnson, Peter and Giupponi, Carlo and Hallier, Mareen and Hofstede, Gert Jan and Le Page, Christophe and Matthews, Robin B and others},
+  journal={GeoInformatica},
+  volume={23},
+  number={2},
+  pages={269--298},
+  year={2019},
+  publisher={Springer}
+}
+
+@article{rosa2019ecological,
+  title={Ecological-economic trade-offs of Diversified Farming Systems--A review},
+  author={Rosa-Schleich, Julia and Loos, Jacqueline and Mu{\ss}hoff, Oliver and Tscharntke, Teja},
+  journal={Ecological economics},
+  volume={160},
+  pages={251--263},
+  year={2019},
+  publisher={Elsevier}
+}
+
+
+@article{schill2019more,
+  title={A more dynamic understanding of human behaviour for the Anthropocene},
+  author={Schill, Caroline and Anderies, John M and Lindahl, Therese and Folke, Carl and Polasky, Stephen and C{\'a}rdenas, Juan Camilo and Cr{\'e}pin, Anne-Sophie and Janssen, Marco A and Norberg, Jon and Schl{\"u}ter, Maja},
+  journal={Nature Sustainability},
+  pages={1--8},
+  year={2019},
+  publisher={Nature Publishing Group}
+}
+
+
+@Misc{ipes2018breaking,
+  author = {IPES-Food},
+  title  = {Breaking away from industrial food and farming systems: Seven case studies of agroecological transition},
+  year   = {2018},
+}
+
+@Article{vandermeer2012syndromes,
+  author    = {Vandermeer, John and Perfecto, Ivette},
+  title     = {Syndromes of production in agriculture: Prospects for social-ecological regime change},
+  journal   = {Ecology and Society},
+  year      = {2012},
+  volume    = {17},
+  number    = {4},
+  publisher = {The Resilience Alliance},
+}
+
+@Article{kremen2012diversified,
+  author    = {Kremen, Claire and Iles, Alastair and Bacon, Christopher},
+  title     = {Diversified farming systems: an agroecological, systems-based alternative to modern industrial agriculture},
+  journal   = {Ecology and Society},
+  year      = {2012},
+  volume    = {17},
+  number    = {4},
+  publisher = {JSTOR},
+}
+
+@Article{carlisle2014diversity,
+  author    = {Carlisle, Liz},
+  title     = {Diversity, flexibility, and the resilience effect: lessons from a social-ecological case study of diversified farming in the northern Great Plains, USA},
+  journal   = {Ecology and Society},
+  year      = {2014},
+  volume    = {19},
+  number    = {3},
+  publisher = {The Resilience Alliance},
+}
+
+@Article{shennan2017organic,
+  author    = {Shennan, Carol and Krupnik, Timothy J and Baird, Graeme and Cohen, Hamutahl and Forbush, Kelsey and Lovell, Robin J and Olimpi, Elissa M},
+  title     = {Organic and conventional agriculture: a useful framing?},
+  journal   = {Annual Review of Environment and Resources},
+  year      = {2017},
+  volume    = {42},
+  pages     = {317--346},
+  publisher = {Annual Reviews},
+}
+
+@Article{richardson2015land,
+  author    = {Richardson Jr, Jesse J},
+  title     = {Land tenure and sustainable agriculture},
+  journal   = {Tex. A\&M L. Rev.},
+  year      = {2015},
+  volume    = {3},
+  pages     = {799},
+  publisher = {HeinOnline},
+}
+
+@Article{long2017hedgerow,
+  author    = {Long, R and Garbach, Kelly and Morandin, L and others},
+  title     = {Hedgerow benefits align with food production and sustainability goals},
+  journal   = {California Agriculture},
+  year      = {2017},
+  volume    = {71},
+  number    = {3},
+  pages     = {117--119},
+  publisher = {University of California, Agriculture and Natural Resources},
+}
+
+@Article{soule2000land,
+  author    = {Soule, Meredith J and Tegene, Abebayehu and Wiebe, Keith D},
+  title     = {Land tenure and the adoption of conservation practices},
+  journal   = {American journal of agricultural economics},
+  year      = {2000},
+  volume    = {82},
+  number    = {4},
+  pages     = {993--1005},
+  publisher = {Oxford University Press},
+}
+
+@Article{fraser2004land,
+  author    = {Fraser, Evan DG},
+  title     = {Land tenure and agricultural management: soil conservation on rented and owned fields in southwest British Columbia},
+  journal   = {Agriculture and Human Values},
+  year      = {2004},
+  volume    = {21},
+  number    = {1},
+  pages     = {73--79},
+  publisher = {Springer},
+}
+
+@Article{bellman1957markovian,
+  author   = {Richard Bellman},
+  title    = {A Markovian Decision Process},
+  journal  = {Indiana Univ. Math. J.},
+  year     = {1957},
+  volume   = {6},
+  pages    = {679--684},
+  issn     = {0022-2518},
+  coden    = {IUMJAB},
+  fjournal = {Indiana University Mathematics Journal},
+  issue    = {4},
+}
+
+@Article{lyson2004commodity,
+  author    = {Lyson, Thomas A and Guptill, Amy},
+  title     = {Commodity agriculture, civic agriculture and the future of US farming},
+  journal   = {Rural sociology},
+  year      = {2004},
+  volume    = {69},
+  number    = {3},
+  pages     = {370--385},
+  publisher = {Wiley Online Library},
+}
+
+@Book{lyson2008food,
+  title     = {Food and the mid-level farm: Renewing an agriculture of the middle},
+  publisher = {MIT Press},
+  year      = {2008},
+  author    = {Lyson, Thomas A and Stevenson, George W and Welsh, Rick},
+}
+
+@Article{marescot2013complex,
+  author    = {Marescot, Lucile and Chapron, Guillaume and Chades, Iadine and Fackler, Paul L and Duchamp, Christophe and Marboutin, Eric and Gimenez, Olivier},
+  title     = {Complex decisions made simple: a primer on stochastic dynamic programming},
+  journal   = {Methods in Ecology and Evolution},
+  year      = {2013},
+  volume    = {4},
+  number    = {9},
+  pages     = {872--884},
+  publisher = {Wiley Online Library},
+}
+
+@Article{vandermeer1997syndromes,
+  author   = {John Vandermeer},
+  title    = {Syndromes of Production: an Emergent Property of Simple Agroecosystem Dynamics},
+  journal  = {Journal of Environmental Management},
+  year     = {1997},
+  volume   = {51},
+  number   = {1},
+  pages    = {59 - 72},
+  issn     = {0301-4797},
+  abstract = {Ecological and economic forces are combined in a model of agroecosystem dynamics. Functions relating (1) cultivation intensity to regional yield, (2) regional yield to unit price, and (3) unit price to cultivation intensity are composed into a single function relating production and/or prices from one time period to another. The combination of ecological and economic dynamics are thus seen as codeterminants of two possible “syndromes of production”. One syndrome includes high product prices, market volatility, ecological decline, high cultivation intensity and low overall supply while the other syndrome includes low prices, stable markets, ecologically benign, low cultivation intensity, and high overall supply. The dynamical consequences of the model include stable points, permanent oscillations and chaos, either in the region of one or the other syndrome or periodically changing from one syndrome to the other.},
+  doi      = {https://doi.org/10.1006/jema.1997.0128},
+  keywords = {agroecosystems, one dimensional maps, chaos},
+  url      = {http://www.sciencedirect.com/science/article/pii/S0301479797901286},
+}
+
+@Article{head2008wicked,
+  author    = {Head, Brian W and others},
+  title     = {Wicked problems in public policy},
+  journal   = {Public policy},
+  year      = {2008},
+  volume    = {3},
+  number    = {2},
+  pages     = {101},
+  publisher = {John Curtin Institute of Public Policy, Curtin University of Technology},
+}
+
+@Article{ostrom2009general,
+  author    = {Ostrom, Elinor},
+  title     = {A general framework for analyzing sustainability of social-ecological systems},
+  journal   = {Science},
+  year      = {2009},
+  volume    = {325},
+  number    = {5939},
+  pages     = {419--422},
+  publisher = {American Association for the Advancement of Science},
+}
+
+@Article{crowder2008impacts,
+  author    = {Crowder, Larry B and Hazen, Elliott L and Avissar, Naomi and Bjorkland, Rhema and Latanich, Catherine and Ogburn, Matthew B},
+  title     = {The impacts of fisheries on marine ecosystems and the transition to ecosystem-based management},
+  journal   = {Annual Review of Ecology, Evolution, and Systematics},
+  year      = {2008},
+  volume    = {39},
+  pages     = {259--278},
+  publisher = {Annual Reviews},
+}
+
+@Article{francis2008transdisciplinary,
+  author    = {Francis, CA and Lieblein, G and Breland, TA and Salomonsson, L and Geber, U and Sriskandarajah, N and Langer, Vibeke},
+  title     = {Transdisciplinary research for a sustainable agriculture and food sector},
+  journal   = {Agronomy Journal},
+  year      = {2008},
+  volume    = {100},
+  number    = {3},
+  pages     = {771--776},
+  publisher = {American Society of Agronomy},
+}
+
+@Article{kristensen2003general,
+  author    = {Kristensen, Anders Ringgaard},
+  title     = {A general software system for Markov decision processes in herd management applications},
+  journal   = {Computers and Electronics in Agriculture},
+  year      = {2003},
+  volume    = {38},
+  number    = {3},
+  pages     = {199--215},
+  publisher = {Elsevier},
+}
+
+@InProceedings{peyrard2007graph,
+  author       = {Peyrard, N and Sabbadin, R and Aubertot, J-n},
+  title        = {A graph-based Markov decision process framework for optimising integrated management of diseases in agriculture},
+  booktitle    = {In: Proceedings of MODSIM, Christchurch, New-Zealand},
+  year         = {2007},
+  organization = {Citeseer},
+}
+
+@InCollection{clark1989bioeconomic,
+  author    = {Clark, Colin W},
+  title     = {Bioeconomic modeling and resource management},
+  booktitle = {Applied mathematical ecology},
+  publisher = {Springer},
+  year      = {1989},
+  pages     = {11--57},
+}
+
+@Article{wiltshire2018using,
+  author    = {Wiltshire, Serge W},
+  title     = {Using an agent-based model to evaluate the effect of producer specialization on the epidemiological resilience of livestock production networks},
+  journal   = {PloS one},
+  year      = {2018},
+  volume    = {13},
+  number    = {3},
+  publisher = {Public Library of Science},
+}
+
+@Article{wiltshire2019network,
+  author    = {Wiltshire, Serge and Zia, Asim and Koliba, Christopher and Bucini, Gabriela and Clark, Eric and Merrill, Scott and Smith, Julie and Moegenburg, Susan and others},
+  title     = {Network Meta-Metrics: Using Evolutionary Computation to Identify Effective Indicators of Epidemiological Vulnerability in a Livestock Production System Model},
+  journal   = {Journal of Artificial Societies and Social Simulation},
+  year      = {2019},
+  volume    = {22},
+  number    = {2},
+  pages     = {1--8},
+  publisher = {Journal of Artificial Societies and Social Simulation},
+}
+
+@Article{liu2007complexity,
+  author    = {Liu, Jianguo and Dietz, Thomas and Carpenter, Stephen R and Alberti, Marina and Folke, Carl and Moran, Emilio and Pell, Alice N and Deadman, Peter and Kratz, Timothy and Lubchenco, Jane and others},
+  title     = {Complexity of coupled human and natural systems},
+  journal   = {science},
+  year      = {2007},
+  volume    = {317},
+  number    = {5844},
+  pages     = {1513--1516},
+  publisher = {American Association for the Advancement of Science},
+}
+
+@Article{walker2004resilience,
+  author    = {Walker, Brian and Holling, Crawford S and Carpenter, Stephen R and Kinzig, Ann},
+  title     = {Resilience, adaptability and transformability in social--ecological systems},
+  journal   = {Ecology and society},
+  year      = {2004},
+  volume    = {9},
+  number    = {2},
+  publisher = {JSTOR},
+}
+
+@Article{stoate2009ecological,
+  author    = {Stoate, C and B{\'a}ldi, A and Beja, Pl and Boatman, ND and Herzon, I and Van Doorn, A and De Snoo, GR and Rakosy, L and Ramwell, C},
+  title     = {Ecological impacts of early 21st century agricultural change in Europe--a review},
+  journal   = {Journal of environmental management},
+  year      = {2009},
+  volume    = {91},
+  number    = {1},
+  pages     = {22--46},
+  publisher = {Elsevier},
+}
+
+@Article{zhang2007ecosystem,
+  author    = {Zhang, Wei and Ricketts, Taylor H and Kremen, Claire and Carney, Karen and Swinton, Scott M},
+  title     = {Ecosystem services and dis-services to agriculture},
+  journal   = {Ecological economics},
+  year      = {2007},
+  volume    = {64},
+  number    = {2},
+  pages     = {253--260},
+  publisher = {Elsevier},
+}
+
+@Article{rein1999economic,
+  author    = {Rein, Felicia A},
+  title     = {An economic analysis of vegetative buffer strip implementation. Case study: Elkhorn Slough, Monterey Bay, California},
+  journal   = {Coastal Management},
+  year      = {1999},
+  volume    = {27},
+  number    = {4},
+  pages     = {377--390},
+  publisher = {Taylor \& Francis},
+}
+
+@Book{bar2019dynamics,
+  title     = {Dynamics of complex systems},
+  publisher = {CRC Press},
+  year      = {2019},
+  author    = {Bar-Yam, Yaneer},
+}
+
+@Misc{usda2016,
+  author = {USDA National Agricultural Statistics Service},
+  title  = {2016 Agricultural Statistics},
+  year   = {2016},
+  url    = {https://data.nal.usda.gov/dataset/nass-quick-stats},
+}
+
+@Article{graddy2017supply,
+  author    = {Graddy-Lovelace, Garrett and Diamond, Adam},
+  title     = {From supply management to agricultural subsidies—and back again? The US Farm Bill \& agrarian (in) viability},
+  journal   = {Journal of Rural Studies},
+  year      = {2017},
+  volume    = {50},
+  pages     = {70--83},
+  publisher = {Elsevier},
+}
+
+@Comment{jabref-meta: databaseType:bibtex;}
