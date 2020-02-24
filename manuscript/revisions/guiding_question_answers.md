@@ -19,7 +19,7 @@ Also, I would focus on ‘environmental incentive policies’ rather than attemp
  + Mostly, see comments.
  + Yes, for the most part. I made some suggested line edits to try to make some bits more easy to 'see' and follow. These are mostly to do with the nature of critical thresholds and alternative stable states/pathways.
  +  Yes. I think if we want to make a big push to engage more non-specialists and highlight the major messages, we could write a piece for an outlet like The Conversation — and I’d be happy to help with that.
- + Considering I have no background in modeling, I think it was well explained. ( I did not delve too deeply into the methods because of this but the bulk of the paper was easy to understand).
+ + Considering I have no background in modeling, I think it was well explained. ( I did not delve too deeply into the methods because of this but the bulk of the paper was easy to understand)
 
 
 
