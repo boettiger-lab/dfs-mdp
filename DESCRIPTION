@@ -2,7 +2,8 @@ Package: compendium
 Project: 
 Version: 0.1.0
 Depends: tidyverse, mdplearning, truncnorm, MDPtoolbox, Hmisc
-Suggests: rmarkdown, hrbrthemes, Cairo, rticles, patchwork, ggthemes, ggtext
+Suggests: rmarkdown, hrbrthemes, Cairo, rticles, patchwork, ggthemes, ggtext, corrplot, 
+RColorBrewer, ggpubr, extrafont, 
 License: CC0
 Title: Compendium Package
 Description: A generic description file for dependency management of this research
