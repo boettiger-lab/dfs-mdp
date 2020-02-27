@@ -10,11 +10,27 @@ author:
     affiliation: espm
   - name: Timothy Bowles
     affiliation: espm
+  - name: Liz Carlisle
+    affiliation: ucsb
+  - name: Fredrico Castillo
+    affiliation: espm
+  - name: David Gonthier
+    affiliation: ky
+  - name: Alastair Iles
+    affiliation: espm
+  - name: Daniel Karp
+    affiliation: davis
   - name: Claire Kremen
+    affiliation: espm, ucb
+  - name: Jeff Liebert
+    affiliation: cornell
+  - name: Elissa Olimpi
+    affiliation: davis
+  - name: Amber Sciligo
+    affiliation: organic
+  - name: Jennifer Thompson
     affiliation: espm
-  - name: Kathryn De Master
-    affiliation: espm
-  - name: "...others in group"
+  - name: Hannah Waterhouse
     affiliation: espm
   - name: Carl Boettiger
     affiliation: espm
@@ -23,7 +39,18 @@ address:
   - code: espm
     address: "Dept of Environmental Science, Policy, and Management, University of California Berkeley, Berkeley CA 94720-3114, USA"
   - code: ubc
-    address: "University of British Columbia"
+    address: "Institute of Resources, Environment and Sustainability, University of British Columbia, Vancouver, BC, Canada"
+  - code: ucsb
+    address: "Environmental Studies, University of California, Santa Barbara, Santa Barbara, CA"
+  - code: davis
+    address: "Wildlife, Fish, and Conservation Biology, University of California, Davis, Davis, CA"
+  - code: ky
+    address: "Entomology, University of Kentucky, Lexington, KY"
+  - code: cornell
+    address: "School of Integrated Plant Science, Cornell University"
+  - code: organic
+    address: "The Organic Center, Washington, DC"
+    
 abstract: The emergence and impact of tipping points are of immense interest in both social and ecological systems research. Despite widespread recognition of the importance of coupled human and natural systems (CHANS) analysis, it is often assumed that the underlying forces that lead to nonlinear behaviors like tipping points rest squarely within either human or natural processes. Our work shows how tipping points can arise in a stylized CHANS model representing adoption of sustainable agricultural practices. Temporal feedbacks between a farmer\'s investment choice, based on their perceived utility over a given time horizon, and probabilistic changes in the ecological services derived from the environment, can result in alternate stable states. Because benefits of ecosystem services take time to accrue, farmers in environments with degraded land are unlikely to invest in agroecology, while farmers who benefit from ecosystem services are more likely to bolster those services further. This path dependency leads to a bifurcation into either a more-simplified or more-diversified farming approach, which echoes empirical findings. We show that these alternate stable states need not be an inherent feature of either ecological or decision dynamics but can emerge as a very general pattern by dynamically coupling a simple ecosystem model with a rational decision process over time.  We suggest that better understanding such tipping points has important implications for policy design across a range of domains, including land tenure and agricultural subsidies.
 
 keywords:
@@ -233,7 +260,7 @@ ggarrange(
 # p_up_dn(sims_subs_sust)
 ```
 
-Rate of ecological process and decision making:
+The bistability goes away when the ecological process becomes "fast" or the decision becomes temporally myopic. 
 
 ```{r final_fig, include = FALSE}
 scenarios_r <-
