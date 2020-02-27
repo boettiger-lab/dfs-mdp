@@ -233,6 +233,99 @@ ggarrange(
 # p_up_dn(sims_subs_sust)
 ```
 
+Rate of ecological process and decision making:
+
+```{r final_fig, include = FALSE}
+scenarios_r <-
+  tidyr::crossing(# Do all combinations of:
+                  cost = 1,
+                  r = 0.5,
+                  benefit = seq(1,1.6, by = 0.05),
+                  sigma = 0.1,
+                  Tmax = 20
+  ) %>% tibble::rownames_to_column("id")
+
+scenarios_d <- tidyr::crossing(# Do all combinations of:
+                  cost = 0.5,
+                  r = 0.1,
+                  benefit = seq(2,20, by = 1),
+                  sigma = 0.1,
+                  Tmax = 20,
+  ) %>% tibble::rownames_to_column("id") 
+```
+
+```{r inf_sim, include = FALSE}
+infinite_sim <- function(row) {
+  model <- continuous_model(states, actions, row, transition_fn, utility_fn)
+  soln <- MDPtoolbox::mdp_value_iteration(model$P, model$U, discount)
+  # simulate subsidy period
+  # pad to Tmax with baseline decision rule
+  sim(soln, Tmax = 20) %>% filter(time == 20)
+}
+```
+
+```{r fin_sim, include = FALSE}
+finite_sim <- function(row) {
+  model <- continuous_model(states, actions, row, transition_fn, utility_fn)
+  soln <- MDPtoolbox::mdp_finite_horizon(model$P, model$U, discount, N = 2)
+  # simulate subsidy period
+  # pad to Tmax with baseline decision rule
+  sim(soln, Tmax = 20) %>% filter(time == 20)
+}
+```
+
+```{r fast_r, include = FALSE}
+colfunc <- colorRampPalette(c("#D0F0C0", "#005502"))
+
+fast_r <- scenarios_r %>%
+  purrr::transpose() %>%
+  furrr::future_map_dfr(infinite_sim, .id = "id") %>%
+  left_join(scenarios_r, by = "id") %>%
+  mutate(state = state/100)
+
+plota <- fast_r %>% mutate(benefit = as.factor(benefit)) %>%
+  ggplot(aes(x=state, color = benefit, fill = benefit)) +geom_density(alpha=0.2) + 
+  labs(title = "A. Fast ecological process", x = "ES state") +
+  scale_fill_manual(values = colfunc(13)) +
+  scale_color_manual(values = colfunc(13)) +
+  scale_x_continuous(breaks = seq(0, 1, by = .2)) +
+  theme(axis.text.x=element_text(size=10),
+          axis.text.y=element_blank(),
+          axis.title.x=element_text(size=10),
+          axis.title.y=element_text(size=10),
+          plot.title = element_text(size = 10, face = "bold"),
+          panel.grid.minor = element_blank(),
+          legend.position = "none")
+
+```
+
+
+```{r, include = FALSE}
+fast_decision <- scenarios_d %>%
+  purrr::transpose() %>%
+  furrr::future_map_dfr(finite_sim, .id = "id") %>%
+  left_join(scenarios_d, by = "id") %>%
+  mutate(state = state/100)
+
+plotb <- fast_decision %>% mutate(benefit = as.factor(benefit)) %>%
+  ggplot(aes(x=state, color = benefit, fill = benefit)) +geom_density(alpha=0.2) +
+  labs(title = "B. Myopic decision", x = "ES state") +
+    scale_fill_manual(values = colfunc(19)) +
+    scale_color_manual(values = colfunc(19)) +
+    scale_x_continuous(breaks = seq(0, 1, by = .2)) +
+    theme(axis.text.x=element_text(size=10),
+          axis.text.y=element_blank(),
+          axis.title.x=element_text(size=10),
+          axis.title.y=element_text(size=10),
+          plot.title = element_text(size = 10, face = "bold"),
+          panel.grid.minor = element_blank(),
+          legend.position = "none")
+```
+
+```{r explore_r,  fig.cap = "Replicate simulations from 500 normally-distributed starting states (mean = 0.5; S.D. = 0.2; truncated at [0,1]) over 20 timesteps. Color of the density corresponds to cost-benefit ratio. (A) shows the effects of fast ecological process simulated through cost-benefit space. No bimodality is seen in any single parameter cases. However, both low and high states are possible under different cost-benefit ratios.  (B) Similar results are seen in the case of decision-making that is not forward looking.", fig.width = 6, fig.asp = .5}
+ggarrange(plota, plotb, nrow = 1, ncol = 2)
+```
+
 
 # Discussion
 
@@ -333,6 +426,7 @@ To evaluate the extent to which these observed adoption distributions hold quant
 	\end{tabular}
 	\label{tab:dps_in_survey}
 \end{table}
+
 
 
 # References
