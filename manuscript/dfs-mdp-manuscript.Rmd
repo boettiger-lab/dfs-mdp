@@ -1,8 +1,5 @@
 ---
-# title: "Alternate Stable States in Farming System Diversification: Effects of Land Tenure, Environmental Shocks, and Subsidy Structures" #original title
-# title: "Tipping points in the adoption of sustainable agricultural practices: A coupled human and natural systems approach." #Carl's
-#title: "Getting over the hump: A coupled human and natural systems approach to the adoption of sustainable agricultural practices." #Serge's
-title: "Tipping points in the adoption of diversified agroecological practices" 
+title: "Tipping points in the adoption of agroecological diversification practices" # changed from "diversified agroecological" to "agroecological diversification" because the former suggests more of a diversity of practices, whereas we're trying to convey practices that support biodiversity - s.w. 3/5/20
 author:
   - name: Melissa Chapman
     affiliation: espm
@@ -37,21 +34,21 @@ author:
     footnote: Corresponding Author
 address:
   - code: espm
-    address: "Dept of Environmental Science, Policy, and Management, University of California Berkeley, Berkeley CA 94720-3114, USA"
+    address: "Dept. of Environmental Science, Policy, and Management, University of California Berkeley, Berkeley, CA, USA"
   - code: ubc
     address: "Institute of Resources, Environment and Sustainability, University of British Columbia, Vancouver, BC, Canada"
   - code: ucsb
-    address: "Environmental Studies, University of California, Santa Barbara, Santa Barbara, CA"
+    address: "Environmental Studies, University of California Santa Barbara, Santa Barbara, CA, USA"
   - code: davis
-    address: "Wildlife, Fish, and Conservation Biology, University of California, Davis, Davis, CA"
+    address: "Wildlife, Fish, and Conservation Biology, University of California Davis, Davis, CA, USA"
   - code: ky
-    address: "Entomology, University of Kentucky, Lexington, KY"
+    address: "Dept. of Entomology, University of Kentucky, Lexington, KY, USA"
   - code: cornell
-    address: "School of Integrated Plant Science, Cornell University"
+    address: "School of Integrated Plant Science, Cornell University, Cornell, NY, USA"
   - code: organic
-    address: "The Organic Center, Washington, DC"
+    address: "The Organic Center, Washington, DC, USA"
     
-abstract: The emergence and impact of tipping points are of immense interest in both social and ecological systems. Despite widespread recognition of the importance of coupled human and natural systems, it is often assumed that the underlying forces that lead to nonlinear behaviors like tipping points rest squarely within either human or natural processes. Our work shows how tipping points can arise in a stylized coupled natural human systems (CHANS) model representing adoption of sustainable agricultural practices, in which neither system alone has these dynamics. Temporal feedbacks between a farmer's investment choice, based on their perceived utility over a given time horizon, and probabilistic changes in the ecological services derived from the environment, can result in alternate stable states. Because benefits of ecosystem services take time to accrue, farmers in environments with degraded land are unlikely to invest in agroecology, while farmers who benefit from ecosystem services are more likely to bolster those services further through choices of such practices. This path dependency leads to a bifurcation into either a more-simplified (conventional) or more-diversified (agroecological) farming approach, which echoes empirical findings. We show that these alternate stable states need not be an inherent feature of either ecological or decision dynamics but can emerge as a general pattern by dynamically coupling a simple ecosystem model with a rational decision process over time. We suggest that better understanding of such tipping points has important implications for agricultural and land use policy design across a range of domains, including land tenure and agricultural subsidies.
+abstract: The emergence and impact of tipping points are of immense interest in both social and ecological systems. Despite widespread recognition of the importance of coupled human and natural systems, it is often assumed that the underlying forces that lead to nonlinear behaviors like tipping points rest squarely within either human or natural processes. Our work shows how tipping points can arise in a stylized coupled natural human systems (CHANS) model representing adoption of agroecological practices, in which neither system alone has these dynamics. Temporal feedbacks between a farmer's investment choice, based on their perceived utility over a given time horizon, and probabilistic changes in the ecological services derived from the environment, can result in alternate stable states. Because benefits of ecosystem services take time to accrue, farmers in environments with degraded land are unlikely to invest in agroecology, while farmers who benefit from ecosystem services are more likely to bolster those services further through choices of such practices. This path dependency leads to a bifurcation into either a more-simplified (conventional) or more-diversified (agroecological) farming approach, which echoes empirical findings. We show that these alternate stable states need not be an inherent feature of either ecological or decision dynamics but can emerge as a general pattern by dynamically coupling a simple ecosystem model with a rational decision process over time. We suggest that better understanding of such tipping points has important implications for agricultural and land use policy design across a range of domains, including land tenure and agricultural subsidies.
 
 keywords:
   - agriculture,
@@ -133,43 +130,46 @@ Here we focus on Diversified Farming Systems (DFS), which use agricultural pract
 
 While understanding structural attributes and qualitative dynamics of human-environment systems can provide valuable information on effective levers of change and important assumptions to explore empirically, much of the existing literature in this area focuses either on human decision-making (with ecological processes being exogenous to the model), or explores the complexity of ecological processes or explores complex ecological processes without sufficiently considering the role of adaptive human agents  [@vandermeer2012syndromes].  Further, those techniques that do investigate dynamic processes and responsive decision-making don't generally allow for forward looking agents [@lippe2019using], ultimately misrepresenting the complex coupling of these systems.  
 
-This paper presents a stylized coupled human and natural systems model of diversification practive adoption to explore the complex dynamical properties that result specifically from interactions between adaptive decision making and an ever-changing environment.  We find a novel mechanism for bistability that is the result not of complex structural assumptions in either system, but simply the rates at which the two systems interact. While our model necessarily simplifies individual decision-making and environmental processes, it provides a novel framework for integrating empirical findings and exploring emergent dynamics of CHANS. Additionally, we describe important implications for agroecological policy design  of such tipping point dynamics
+This paper presents a stylized coupled human and natural systems model of diversification practive adoption to explore the complex dynamical properties that result specifically from interactions between adaptive decision making and an ever-changing environment.  We find a novel mechanism for bistability that is the result not of complex structural assumptions in either system, but simply the rates at which the two systems interact. While our model necessarily simplifies individual decision-making and environmental processes, it provides a novel framework for integrating empirical findings and exploring emergent dynamics of CHANS. Additionally, we describe important implications of such tipping point dynamics for agroecological policy design.
 
 
 # Conceptual model description
 
-We explore the transition to and from diversified farming systems using a Markov Decision Process (MDP), in which an agent makes a series of choices about their interactions with the environment (\ref{fig:res_conceptual}).  In this case, the agent represents a single farmer.  We formulate a 'system state' to represent the degree of beneficial ecosystem services derived from the farm's investments into diversification practices.  Each farming season the agent chooses an action, described by a spectrum from 0\% to 100\% investment in adopting or maintaining diversification practices.  More investment corresponds to a greater probability of transitioning to a higher (more beneficial) ecological state the next year.  While transitioning to a higher ecological state provides the agent an increased benefit, higher investment actions also come with a greater associated cost.  Using these parameters (values given in Methods, Tab \ref{tab:baseline_params}), we can calculate the optimal action strategy for each state, based on the agent's future cumulative discounted rewards over a defined time horizon.  
+We explore the transition to and from diversified farming systems using a Markov Decision Process (MDP), in which an agent makes a series of choices about their interactions with the environment (\ref{fig:res_conceptual}).  In this case, the agent represents a produce farmer.  We formulate a "system state" to represent the degree of beneficial ecosystem services derived from the farm's investments into diversification practices.  Each farming season the agent chooses an action, described by a spectrum from 0\% to 100\% investment in adopting or maintaining diversification practices.  More investment corresponds to a greater probability of transitioning to a higher (more beneficial) ecological state the next year.  While transitioning to a higher ecological state provides the agent an increased benefit, higher investment actions also come with a greater associated cost.  Using these parameters (values given in Methods, Tab \ref{tab:baseline_params}), we can calculate the optimal action strategy for each state, based on the agent's future cumulative discounted rewards over a defined time horizon.  
 
 \begin{figure}
 \centering 
-\includegraphics[width=.75\textwidth]{external-figs/dfs_mdp_conceptual_fig_4.pdf}
-\caption{Conceptual diagram: A higher system state corresponds to increased diversification practices. The diversification investment decision is in blue, and the interaction between the farmer's perceived utility function $u()$ and the state transition probability function $p()$.}\label{fig:res_conceptual}
+\includegraphics[width=.75\textwidth]{external-figs/dfs_mdp_conceptual_fig_5.png}
+\caption{Conceptual diagram of the DFS-MDP model. The farmer's choice of how much to invest (time and/or money) into diversification practices (DP) is shown in blue, and the resulting ecosystem services (ES) state in green.  Each year, the farmer evaluates which action they judge to have the highest expected utility, based on the transition probability function $(p)$ and perceived utility function $(u)$. The ecosystem responds stochastically over time, influencing the farmer's future choices. This leads to complex tradeoffs arising from the coupling of ecological processes with the series of DP investment decisions made by the farmer.}
+\label{fig:res_conceptual}
 \end{figure}
 
 
 # Results
 
-Using the model described above, we observe the behavior of agents' sequential choices and resultant environmental outcomes over time.  Agents' initial ecosystem states are distributed normally with a mean at $\bar{s} = 0.5$.  Fig \ref{fig:res_bimodal} shows that, after having followed the decision strategy $\pi$ for nine timesteps, at $t = 10$ agents have largely settled into two groups, with some farms transitioning to more "simplified" farming systems, and others to more "diversified" systems.  Further, we find strong path dependency, with only 11\% of runs which started in a simplified ($s < 0.5$) state concluding in a diversified ($s > 0.5$) state, and only 7\% of runs initially in the diversified state transitioning to simplified.
+Using the model described above, we observe the behavior of agents' sequential choices and resultant environmental outcomes over time.  Agents' initial ecosystem states are distributed normally with a mean at $\bar{s} = 0.5$.  Fig \ref{fig:res_bimodal} shows that, after having followed the decision strategy $\pi$ for nine timesteps, at $t = 20$ agents have largely settled into two groups, with some farms transitioning to more "simplified" farming systems, and others to more "diversified" systems.  Further, we find strong path dependency, with only 17\% of agents who started in a simplified ($s < 0.5$) state concluding in a diversified ($s > 0.5$) state, and only 7\% initially in the diversified state transitioning to simplified.
 
 
 ```{r base_case_sim, include = FALSE}
 sim <- function(soln, 
-                Tmax = 10,
-                x0 =  init){
+                Tmax = 20,
+                x0 = init){
   map_dfr(1:length(x0), 
-          function(i) mdp_planning(model$P, model$U, discount, policy = soln$policy, x0 = x0[i], Tmax = Tmax), 
+          function(i) sim_mdp(model$P, model$U, soln$policy, discount, x0 = x0[i], Tmax = Tmax), 
           .id = "reps")
 }
 sims_baseline <- sim(base_soln)
+
+# p_up_dn(sims_baseline)
 #write_csv(sims_baseline, "../model-data/sims_baseline.csv.gz")
 ```
 
 
-```{r res_bimodal, fig.cap = "Simulations of 500 model agents over ten farming seasons.  Initial ES states follow a truncated normal distribution (mean = 0.5; S.D. = 0.2; truncated at [0,1]).  Agents utilize decision policy $\\pi$ as shown in Fig \\ref{fig:res_policy} for nine timesteps.  (A) shows the state of each agent throughout each run.  (B) shows the initial ES distribution (dark blue) and bimodal density distribution at $t = 10$ (light blue), with peaks annotated. (C) shows the observed bimodal DP adoption distribution in our survey data.", fig.width = 6, fig.asp = .5}
+```{r res_bimodal, fig.cap = "Simulations of 500 model agents over 20 farming seasons.  Initial ES states follow a truncated normal distribution (mean = 0.5; S.D. = 0.2; truncated at [0,1]).  Agents then utilize decision strategy $\\pi$ as shown in Fig \\ref{fig:res_strategy} until $t = 20$.  (A) shows the state of each agent throughout each run.  (B) shows the initial ES distribution (dark blue) and bimodal density distribution at $t = 20$ (light blue), with peaks annotated. (C) shows the observed bimodal DP adoption distribution in our survey data.", fig.width = 6, fig.asp = .5}
 
 ggarrange(
   sim_plot_ts(sims_baseline, title = ggtitle("A. ES state over time"), rmarmod = -5), 
-  sim_plot_dens(sims_baseline, title = ggtitle("B. State distribution"), lab_lo_peak = TRUE, lab_hi_peak = TRUE, lmarmod = -5), 
+  sim_plot_dens(sims_baseline, title = ggtitle("B. Init. and final state"), lab_lo_peak = TRUE, lab_hi_peak = TRUE, lmarmod = -5), 
   caorwa_dp_count_hst(caorwa_data, title = ggtitle("C. Empirical distrib.")), 
   widths = c(3, 2, 1.75), nrow = 1, ncol = 3
 )
@@ -178,9 +178,9 @@ ggarrange(
 ```
 
 ### Optimal decision strategy
-The decision policy $\pi$ describes the optimal course of action for a given state, with each agent in the simulation above using this policy to guide their decision-making.  Fig \ref{fig:res_policy} reveals that there is a critical bifurcation, or tipping point, at an specific ecosystem state, below which the highest expected value is derived by investing little to nothing into diversified farming systems.  Above the threshold, the optimum action becomes near-full investment into diversified farming systems. Over time, this results in a bimodal distribution of ecosystem states, as seen in Fig \ref{fig:res_bimodal}. 
+The decision strategy $\pi$ describes the optimal course of action for a given state, with each agent in the simulation above using this strategy to guide their choices over time.  Fig \ref{fig:res_strategy} reveals that there is a critical bifurcation, or tipping point, at a specific ecosystem state, below which the highest expected value is derived by investing little to nothing into diversified farming systems, and above which the optimum action becomes near-full investment into DPs. Over time, this results in a bimodal distribution of ecosystem states, as seen in Fig \ref{fig:res_bimodal}. 
 
-```{r res_policy, fig.cap = "Optimal decision policy $\\pi$ as a function of ecosystem state.  The upper $x$ axis limit is the 99th percentile of observed states in our simulation results ($\\approx 1.23$).", fig.width = 3, fig.asp = 1}
+```{r res_strategy, fig.cap = "Optimal decision strategy $\\pi$ as a function of ecosystem state, showing a tipping point at $s \\approx 0.48$.  The upper $x$ axis limit is the 99th percentile of observed states in our simulation results ($s \\approx 1.23$).", fig.width = 3, fig.asp = 1}
 
 state99th <- sims_baseline %>% 
             mutate(state = states[state]) %>% 
@@ -205,7 +205,7 @@ sims_short_tenure <- sim(short_tenure_soln)
 #write_csv(sims_short_tenure, "../model-data/sims_short_tenure.csv.gz")
 ```
 
-```{r res_tenure, fig.cap = "(A) Result of short land tenure on DEP adoption.  The simulation is identical to that in Fig \\ref{fig:res_bimodal}, but the MDP is solved under a finite, two-year time horizon. (B) Comparison between final state distribution of short- vs. long-tenure model runs.  (C) Probability of ecosystem services state being $\\geq 0.15$ at $t=10$ for the short-tenure simulation vs. the base-case simulation. (D) Impact of land tenure on the probability of a farmer in our survey dataset adopting at least one DP.", fig.width = 6, fig.asp = .5}
+```{r res_tenure, fig.cap = "(A) Result of short land tenure on DEP adoption.  The simulation is identical to that in Fig \\ref{fig:res_bimodal}, but the MDP is solved under a finite, two-year time horizon. (B) Comparison between final state distribution of short- vs. long-tenure model runs.  (C) Probability of ecosystem services state being $\\geq 0.15$ at $t=20$ for the short-tenure simulation vs. the base-case simulation. (D) Impact of land tenure on the probability of a farmer in our survey dataset adopting at least one DP.", fig.width = 6, fig.asp = .5}
 
 ggarrange(
   sim_plot_ts(sims_short_tenure, title = ggtitle("A. Short-tenure timeseries"), endcol = pal[3], rmarmod = -5),
@@ -221,14 +221,23 @@ ggarrange(
 ```
 
 
-## Environmental incetive structures
+## Agroenvironmental subsidies
 
-While land tenure is intertwined with land use decisions, agricultural subsidies have also become an integral part of farming over the past half-century, and policymakers are continually called upon to weigh farm viability against food affordability and environmental sustainability and design effective incentive packages [@graddy2017supply]. We implement two competing incentive structures: a short-term (two-year) incentive which completely covers the cost of transitioning to a more diversified state, versus a longer-term (ten-year) incentive which only marginally offests the transition cost.  Formally, the cost of each incentive package to the issuing organization is equal, and in fact the short-term subsidy is technically more valuable if economic discounting is applied.  Within the model, agents adapt their decision policy $\pi$ during the subsidy period, and at its conclusion they revert to subsidy free decision rules.  
+While land tenure is intertwined with land use decisions, agricultural subsidies have also become an integral part of farming over the past half-century, and policymakers are continually called upon to weigh farm viability against food affordability and environmental sustainability to design effective incentive packages [@graddy2017supply]. Agricultural subsidies have a range of goals, one of which is the promotion of sustainable management practices. We implement two competing incentive structures: a short-term (two-year) incentive which completely covers the cost of diversification practice adoption, versus a longer-term (ten-year) incentive which only marginally offests the transition cost.  Within the model, agents adapt their decision strategy $\pi$ during the subsidy period, and at its conclusion they revert to the subsidy-free strategy.  Formally, the cost of each incentive package to the taxpayer is equal, and in fact the short-term subsidy is technically more valuable if economic discounting is applied.  
 
-Fig \ref{fig:res_subsidy] shows that longer, more sustained incentive programs may be more beneficial to nudge behavior over the critical threshold toward more sustainable systems in the long-term.  Comparing these experimental results to those in Fig \ref{fig:res_bimodal}, we find that both incentive packages were effective in shifting farmers to a sustained higher ecosystem-services state.  However, the sustained incentive was much more effective at moving the needle.  Due to the previously-discussed tipping point dynamic that emerges in the model, once an agent has crossed the threshold to the diversified state, it becomes much less likely that they will fall back toward the "simplified" state, at least in the short term.  With state-transition stochasticity a major factor in a given model run, and the real world, longer-term subsidy packages have a higher chance of nudging behavior beyond the critical threshold.  
+Fig \ref{fig:res_subsidy] shows that longer, more sustained incentive programs may be more effective at nudging behavior over the critical threshold toward more sustainable systems.  Comparing these subsidy simulations to the non-subsidy results in Fig \ref{fig:res_bimodal}, we find that both incentive packages were effective in shifting farmers to higher ecosystem-services states.  However, the sustained incentive was much more effective at moving the needle.  Due to the previously-discussed tipping point dynamic, once an agent has crossed the threshold to the diversified state, it becomes much less likely that they will fall back toward the "simplified" state.  Since ecosystem state change stochasticity is a major factor in a given model run, similar to real-world ecological dynamics, longer-term subsidy packages have a higher chance of nudging behavior beyond the critical threshold, resulting in more agroecological practice adoption.  
 
 
 ```{r subsidies_sim, include = FALSE}
+# set subsidy simulation parameters
+Tsubs1 <- 2
+Tsubs2 <- 10
+
+# calc modified cost during subsidy = 1 - 2 / Tsubs
+Csubs1 <- 1 - 2 / Tsubs1
+Csubs2 <- 1 - 2 / Tsubs2
+
+# subsidy simulation fxn
 subs_sim <- function(params) {
   subs_model <- continuous_model(states, actions, params, transition_fn, utility_fn)
   subs_soln <- MDPtoolbox::mdp_value_iteration(subs_model$P, subs_model$U, discount)
@@ -236,12 +245,13 @@ subs_sim <- function(params) {
   start <- sim(subs_soln, Tmax = params$Tsubs, x0 = init)
   xi <- start %>% filter(time == params$Tsubs) %>% pull(state)
   # pad to Tmax with baseline decision rule
-  rest <- sim(base_soln, Tmax = params$Tmax - params$Tsubs + 1, x0 = xi) %>% filter(time!=1) %>% mutate(time = time + params$Tsubs - 1)
+  rest <- sim(base_soln, Tmax = params$Tmax - params$Tsubs, x0 = xi) %>% filter(time!=0) %>% mutate(time = time + params$Tsubs)
   bind_rows(start, rest) 
 }
 
-sims_subs_abrupt <- subs_sim(list(benefit = 1.57, cost = 0, sigma = 0.1, r = .1, Tsubs = 2, Tmax = 20))
-sims_subs_sust <- subs_sim(list(benefit = 1.57, cost = .8, sigma = 0.1, r = .1, Tsubs = 10, Tmax = 20))
+# run subsidy simulation
+sims_subs_abrupt <- subs_sim(list(benefit = 1.57, cost = Csubs1, sigma = 0.1, r = .1, Tsubs = Tsubs1, Tmax = 20))
+sims_subs_sust <- subs_sim(list(benefit = 1.57, cost = Csubs2, sigma = 0.1, r = .1, Tsubs = Tsubs2, Tmax = 20))
 # sims_subs_v_sust <- subs_sim(list(benefit = 1.57, cost = .9, sigma = 0.1, r = .1, Tsubs = 20, Tmax = 20)) # did a real long one, just to see
 
 #write_csv(sims_subs_abrupt, "../model-data/sims_subs_abrupt.csv.gz")
@@ -250,8 +260,16 @@ sims_subs_sust <- subs_sim(list(benefit = 1.57, cost = .8, sigma = 0.1, r = .1, 
 
 ```{r res_subsidy, fig.cap = "Replicate simulations from 500 normally-distributed starting states (mean = 0.5; S.D. = 0.2; truncated at [0,1]) over 20 timesteps.  (A) shows the effects of a large, abrupt subsidy (100\\% of adoption expenses are covered during the initial two years).  (B) simulates a smaller, yet more sustained subsidy (adoption cost is 80\\% of baseline during the first 10 years).  Ingoring discounting, subsidies have the same total cost to the funder (the equivalent of 2 years' worth of full adoption cost offsets).  After subsidy is removed, agents adjust their decision rule to that of the base case (i.e. no subsidy) for the remainder of the run.  (C) shows that the sustained subsidy drove more adoption at $t = 20$.", fig.width = 6, fig.asp = .5}
 ggarrange(
-  sim_plot_ts(sims_subs_abrupt, title = ggtitle("A. Abrupt subsidy"), rmarmod = -10, endcol = pal[5]),
-  sim_plot_ts(sims_subs_sust, title = ggtitle("B. Sustained subsidy"), ytxtoff = T, endcol = pal[6], rmarmod = -5, lmarmod = -5),
+  sim_plot_ts(sims_subs_abrupt, title = ggtitle("A. Abrupt subsidy"), rmarmod = -10, endcol = pal[5]) +
+    geom_vline(xintercept = Tsubs1, linetype="dashed", color = "red", size=.5) + 
+    annotate('label', x = Tsubs1 + 2, y = 1.3, label = sprintf("%i year\n%i%% off", Tsubs1, round((1-Csubs1)*100)), hjust = 0, vjust = .5,
+             family = "Roboto", size = 3.25, label.padding = unit(.15, "lines"), label.size = 0, alpha = .6) +
+    annotate("segment", x = Tsubs1 + 1.75, xend = Tsubs1 + .5, y = 1.3, yend = 1.3, size=.5, arrow=arrow(length = unit(0.22, "cm"))),
+  sim_plot_ts(sims_subs_sust, title = ggtitle("B. Sustained subsidy"), ytxtoff = T, endcol = pal[6], rmarmod = -5, lmarmod = -5) +
+    geom_vline(xintercept = Tsubs2, linetype="dashed", color = "red", size=.5) + 
+    annotate('label', x = Tsubs2 + 2, y = 1.3, label = sprintf("%i year\n%i%% off", Tsubs2, round((1-Csubs2)*100)), hjust = 0, vjust = .5,
+             family = "Roboto", size = 3.25, label.padding = unit(.15, "lines"), label.size = 0, alpha = .6) +
+    annotate("segment", x = Tsubs2 + 1.75, xend = Tsubs2 + .5, y = 1.3, yend = 1.3, size=.5, arrow=arrow(length = unit(0.22, "cm"))),
   sim_plot_dens_comp(sims_subs_abrupt, sims_subs_sust, sims_base = sims_baseline, label1 = "Abrupt\nsubsidy", label2 = "Sustained\nsubsidy", label_base = "No\nsubsidy", title = ggtitle("C. Final ES state distribution"), cvec = c(pal[2], pal[5], pal[6]), lmarmod = -5, rmarmod = -5),
   nrow = 1, ncol = 3, widths = c(1,1,1)
 )
@@ -262,7 +280,10 @@ ggarrange(
 # p_up_dn(sims_subs_sust)
 ```
 
-The bistability goes away when the ecological process becomes "fast" or the decision becomes temporally myopic. 
+
+## Importance of coupling human and natural system dynamics
+
+As we have shown, a stylized model of agroecological decision-making over time can produce complex results like tipping points if the human and natural system are analyzed as one.  However, this bistability vanishes when the ecological process becomes "fast" or the decision strategy becomes temporally myopic. 
 
 ```{r final_fig, include = FALSE}
 scenarios_r <-
@@ -385,7 +406,7 @@ The model's state space is a vector with a lower bound of 0 and a soft upper bou
 
 The action space is a continuous vector from 0 to 1, with $a=0$ representing no investment of resources into DP adoption or maintenance, and $a=1$ representing the highest conceivable level of investment.  Investment in diversification practices incurs costs $c_a$, either as a direct result of implementation (e.g. equipment, materials, and labor), opportunity costs (e.g. forgone yields due to reduced cultivated acreage or lost production efficiency), or both.
 
-The time step $t$ corresponds to a single growing season.  At each time step, the agent chooses an action based on their current state by following decision policy $\pi$.  The policy is calculated by maximizing expected utility for each state/action pair over the full time horizon using a Stochastic Dynamic Programming (SDP) approach [@marescot2013complex], with the discount rate $\gamma$ determining how much the agent values current rewards relative to future rewards.
+The time step $t$ corresponds to a single growing season.  At each time step, the agent chooses an action based on their current state by following decision strategy $\pi$.  This strategy is calculated by maximizing expected utility for each state/action pair over the full time horizon using a Stochastic Dynamic Programming (SDP) approach [@marescot2013complex], with the discount rate $\gamma$ determining how much the agent values current rewards relative to future rewards.
 
 ### Model mathematical description
 

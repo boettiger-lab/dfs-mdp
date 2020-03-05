@@ -1,3 +1,5 @@
+#' Define MDP model
+
 #' @importFrom truncnorm dtruncnorm
 
 continuous_model <- function(states, actions, params, transition_fn, utility_fn){
@@ -46,3 +48,50 @@ continuous_model <- function(states, actions, params, transition_fn, utility_fn)
 }
 
 
+
+#' Simulate MDP under a given policy
+
+sim_spatial <- function(nodes, P, U, policy, discount, Tmax, nbr_s_wt) {
+  n_states <- dim(P)[1]
+  tsteps <- 1:Tmax
+
+  for (t in tsteps) {
+    # message(sprintf("Sim year %i", t))
+    for (id in nodes$id) {
+      cur_s <- nodes$states[[id]][t]
+      cur_a <- policy[cur_s]
+
+      # calc neighbors' average current state
+      nbr_avg_cur_s <- 0
+      for (nbr in nodes$nbrs[[id]]) {
+        nbr_avg_cur_s <- nbr_avg_cur_s + nodes$states[[nbr]][t]
+      }
+      nbr_avg_cur_s <- nbr_avg_cur_s / length(nodes$nbrs[[id]])
+      # factor neighbors' average state into own adjusted current state
+      nbr_slf_cur_s_diff <- nbr_avg_cur_s - cur_s
+      adj_cur_s <- cur_s + .5 * nbr_slf_cur_s_diff * nbr_s_wt
+
+      nxt_s <- sample(1:n_states, 1, prob = P[adj_cur_s, , cur_a])
+      nodes$actions[[id]][t+1] <- cur_a
+      nodes$states[[id]][t+1] <- nxt_s
+      nodes$values[[id]][t+1] <- U[cur_s, cur_a] * discount^(t-1)
+    }
+  }
+  nodes
+}
+
+sim_mdp <- function(P, U, policy, discount, x0, Tmax){
+
+  n_states <- dim(P)[1]
+  state <- action <- value <- numeric(Tmax+1)
+  state[1] <- x0
+  tsteps <- 1:(Tmax+1)
+
+  for(t in tsteps){
+    ## Select action, determine value, transition to next state
+    action[t] <- policy[state[t]]
+    value[t] <- U[state[t], action[t]] * discount^(t-1)
+    state[t+1] <- sample(1:n_states, 1, prob = P[state[t], , action[t]])
+  }
+  data.frame(time = 0:Tmax, state = state[tsteps], action = action[tsteps], value = value[tsteps])
+}
