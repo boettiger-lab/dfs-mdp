@@ -3,9 +3,9 @@ soln_plot <- function(soln_df) {
   ggplot(soln_df, aes(state,action)) +
     geom_point(size = 1) +
     geom_vline(xintercept = .477, linetype="dashed", color = "red", size=.7) +
-    annotate('label', x = .55, y = .35, label = "0.48", hjust = 0, vjust = .5,
-             family = "Roboto", size = 3.25, label.padding = unit(.15, "lines"), label.size = 0, alpha = .8) +
-    annotate("segment", x = .55, xend = .49, y = .35, yend = .35, size=.5, arrow=arrow(length = unit(0.22, "cm"))) +
+    annotate('label', x = .6, y = .375, label = "Tipping point", hjust = 0, vjust = .5,
+             family = "Roboto", size = 3.25, label.padding = unit(.15, "lines"), label.size = 0, alpha = .65) +
+    annotate("segment", x = .6, xend = .52, y = .375, yend = .375, size=.5, arrow=arrow(length = unit(0.22, "cm"))) +
     labs(x="ES state", y="Optimal DP investment") +
     scale_x_continuous(limits = c(0,NA), expand = c(.01,.01)) +
     scale_y_continuous(limits = c(0,1), expand = c(.01,.01)) +
@@ -20,9 +20,8 @@ soln_plot <- function(soln_df) {
 
 # timeseries plot of multiple repetitions
 sim_plot_ts <- function(sims, title = ggtitle(NULL), ytxtoff = FALSE, endcol = pal[1], dnmarmod = 0, upmarmod = 0, lmarmod = 0, rmarmod = 0){
-
   df <- sims %>%
-    select(-obs,-value) %>% # tidy
+    select(-value) %>% # tidy
     mutate(state = states[state], action = actions[action]) # rescale
   Tmax <- max(sims$time)
 
@@ -41,8 +40,8 @@ sim_plot_ts <- function(sims, title = ggtitle(NULL), ytxtoff = FALSE, endcol = p
     ggplot(aes(time, state, group = reps, col = time)) +
     geom_path(alpha = 0.1, show.legend = FALSE) +
     title +
-    labs(x="Time", y="ES state") +
-    scale_x_continuous(breaks = seq(1, Tmax, by=round(Tmax/5)), expand = c(.01,.01)) +
+    labs(x="Sim. Year", y="ES state") +
+    scale_x_continuous(limits = c(0,Tmax), breaks = seq(0, Tmax, by=5), expand = c(.01,.01)) +
     scale_y_continuous(limits = c(0,1.5), expand = c(.02,.02)) +
     scale_color_gradient(low=stcol, high=endcol) +
     theme(axis.text.x=element_text(size=10),
@@ -67,14 +66,14 @@ sim_plot_dens <- function(sims, title = ggtitle(NULL), endcol = pal[1], lab_lo_p
   stcol <- stcol/5
   stcol <- rgb(t(stcol), maxColorValue=255)
 
-  p <- df %>% filter(time %in% c(1, Tmax))  %>%
+  p <- df %>% filter(time %in% c(0, Tmax))  %>%
     ggplot() + geom_density(aes(state, group = time, fill = time, color = time), alpha=0.8) +
     coord_flip() +
     title +
     labs(x="", y="Density", fill="Time") +
     scale_x_continuous(limits = c(0,1.5), expand = c(.02,.02)) +
     scale_y_continuous(breaks = scales::pretty_breaks(n = 2)) +
-    scale_fill_gradient(low=stcol, high=endcol, guide = guide_colorbar(barwidth = .5), breaks=c(1, Tmax)) +
+    scale_fill_gradient(low=stcol, high=endcol, guide = guide_colorbar(barwidth = .5), breaks=c(0, Tmax)) +
     scale_color_gradient(low=stcol, high=endcol, guide = NULL) +
     theme(axis.text.x=element_text(size=10),
           axis.text.y=element_blank(),
@@ -168,7 +167,7 @@ sim_plot_dens_comp <- function(sims1, sims2, sims_base = "init", label1 = "Gp. A
   if (sims_base == "init") {
     df_base <- sims1 %>%
       mutate(state = states[state]) %>% # rescale
-      filter(time %in% 1) %>%
+      filter(time %in% 0) %>%
       select(state) %>%
       add_column(id = label_base)
   } else {
@@ -222,12 +221,12 @@ sim_plot_dens_comp <- function(sims1, sims2, sims_base = "init", label1 = "Gp. A
 # prop decreasing or increasing ES over the run (print txt to console)
 p_up_dn <- function(sims){
   i_state <- sims %>%
-    filter(time == 1) %>%
+    filter(time == 0) %>%
     select(state) %>%
     mutate(state = states[state])
 
   f_state <- sims %>%
-    filter(time == 10) %>%
+    filter(time == 20) %>%
     select(state) %>%
     mutate(state = states[state])
 
@@ -244,8 +243,8 @@ p_up_dn <- function(sims){
 
 # short vs. long tenure bar plot of probability that ES ended up over some threshold
 sim_tenure_thresh_bar <- function(sims_long_tenure, sims_short_tenure, thresh = 0.15, title = ggtitle(NULL)) {
-  lt_p_over <- sims_long_tenure %>% filter(time == 10) %>% mutate(state = states[state]) %>% select(state) %>% dplyr::summarize(p_over_thresh = sum(state > thresh) / n())
-  st_p_over <- sims_short_tenure %>% filter(time == 10) %>% mutate(state = states[state]) %>% select(state) %>% dplyr::summarize(p_over_thresh = sum(state > thresh) / n())
+  lt_p_over <- sims_long_tenure %>% filter(time == 20) %>% mutate(state = states[state]) %>% select(state) %>% dplyr::summarize(p_over_thresh = sum(state > thresh) / n())
+  st_p_over <- sims_short_tenure %>% filter(time == 20) %>% mutate(state = states[state]) %>% select(state) %>% dplyr::summarize(p_over_thresh = sum(state > thresh) / n())
   plot_data <- tibble(cats = c("st", "lt"), vals = c(st_p_over[1,1], lt_p_over[1,1]))
   plot_data$cats <- factor(plot_data$cats, levels = plot_data$cats)
 

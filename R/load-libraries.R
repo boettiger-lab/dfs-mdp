@@ -5,7 +5,7 @@ library(tidyverse)
 library(Hmisc)
 library(dplyr)
 library(MDPtoolbox)
-library(mdplearning)
+
 # plotting libraries
 library(corrplot)
 library(RColorBrewer)
