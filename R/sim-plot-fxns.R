@@ -19,7 +19,7 @@ soln_plot <- function(soln_df) {
 
 
 # timeseries plot of multiple repetitions
-sim_plot_ts <- function(sims, title = ggtitle(NULL), ytxtoff = FALSE, endcol = pal[1], dnmarmod = 0, upmarmod = 0, lmarmod = 0, rmarmod = 0){
+sim_plot_ts <- function(sims, title = ggtitle(NULL), tpos = "plot", ytxtoff = FALSE, endcol = pal[1], annotate = FALSE, an_x = NULL, an_lab = NULL, dnmarmod = 0, upmarmod = 0, lmarmod = 0, rmarmod = 0){
   df <- sims %>%
     select(-value) %>% # tidy
     mutate(state = states[state], action = actions[action]) # rescale
@@ -36,7 +36,7 @@ sim_plot_ts <- function(sims, title = ggtitle(NULL), ytxtoff = FALSE, endcol = p
     ytxtc <- NA
   }
 
-  df %>%
+  p <- df %>%
     ggplot(aes(time, state, group = reps, col = time)) +
     geom_path(alpha = 0.1, show.legend = FALSE) +
     title +
@@ -49,13 +49,23 @@ sim_plot_ts <- function(sims, title = ggtitle(NULL), ytxtoff = FALSE, endcol = p
           axis.title.x=element_text(size=10),
           axis.title.y=element_text(size=10, color = ytitc),
           plot.title = element_text(size = 10, face = "bold"),
+          plot.title.position = tpos,
           panel.grid.minor = element_blank(),
           plot.margin=grid::unit(c(5+upmarmod,5+rmarmod,5+dnmarmod,5+lmarmod), "mm"))
+  if(annotate) {
+    p <- p +
+      geom_vline(xintercept = an_x, linetype="dashed", color = "red", size=.5) +
+      annotate('label', x = an_x + 2, y = 1.3, label = an_lab, hjust = 0, vjust = .5,
+               family = "Roboto", size = 3.25, label.padding = unit(.15, "lines"), label.size = 0, alpha = .6) +
+      annotate("segment", x = an_x + 1.75, xend = an_x + .5, y = 1.3, yend = 1.3, size=.5, arrow=arrow(length = unit(0.22, "cm")))
+  }
+  p
 }
 
 
+
 # density plot showing initial ES distribution and final distribution
-sim_plot_dens <- function(sims, title = ggtitle(NULL), endcol = pal[1], lab_lo_peak = FALSE, lab_hi_peak = FALSE, dnmarmod = 0, upmarmod = 0, lmarmod = 0, rmarmod = 0){
+sim_plot_dens <- function(sims, title = ggtitle(NULL), tpos = "plot", endcol = pal[1], lab_lo_peak = FALSE, lab_hi_peak = FALSE, dnmarmod = 0, upmarmod = 0, lmarmod = 0, rmarmod = 0){
 
   df <- sims %>%
     mutate(state = states[state]) %>% # rescale
@@ -83,6 +93,7 @@ sim_plot_dens <- function(sims, title = ggtitle(NULL), endcol = pal[1], lab_lo_p
           legend.title = element_text(size=10),
           legend.box.margin=margin(0,0,0,-5),
           plot.title = element_text(size = 10, face = "bold"),
+          plot.title.position = tpos,
           panel.grid.minor = element_blank(),
           plot.margin=grid::unit(c(5+upmarmod,5+rmarmod,5+dnmarmod,5+lmarmod), "mm"))
 
@@ -162,7 +173,7 @@ GeomDensity$draw_key = draw_key_polygon3
 
 
 # density plot comparing two simulation results, with initial distribution
-sim_plot_dens_comp <- function(sims1, sims2, sims_base = "init", label1 = "Gp. A Final", label2 = "Gp. B Final", label_base = "Initial", title = ggtitle(NULL), cvec = c(pal[2], pal[1], pal[3]), dnmarmod = 0, upmarmod = 0, lmarmod = 0, rmarmod = 0){
+sim_plot_dens_comp <- function(sims1, sims2, sims_base = "init", label1 = "Gp. A Final", label2 = "Gp. B Final", label_base = "Initial", title = ggtitle(NULL), tpos = "plot", cvec = c(pal[2], pal[1], pal[3]), dnmarmod = 0, upmarmod = 0, lmarmod = 0, rmarmod = 0){
 
   if (sims_base == "init") {
     df_base <- sims1 %>%
@@ -212,6 +223,7 @@ sim_plot_dens_comp <- function(sims1, sims2, sims_base = "init", label1 = "Gp. A
           legend.spacing.x = unit(-3, 'mm'),
           legend.box.margin=margin(0,0,0,-18),
           plot.title = element_text(size = 10, face = "bold"),
+          plot.title.position = tpos,
           panel.grid.minor = element_blank(),
           plot.margin=grid::unit(c(5+upmarmod,5+rmarmod,5+dnmarmod,5+lmarmod), "mm"))
 }
@@ -242,7 +254,7 @@ p_up_dn <- function(sims){
 
 
 # short vs. long tenure bar plot of probability that ES ended up over some threshold
-sim_tenure_thresh_bar <- function(sims_long_tenure, sims_short_tenure, thresh = 0.15, title = ggtitle(NULL)) {
+sim_tenure_thresh_bar <- function(sims_long_tenure, sims_short_tenure, thresh = 0.15, title = ggtitle(NULL), tpos = "plot") {
   lt_p_over <- sims_long_tenure %>% filter(time == 20) %>% mutate(state = states[state]) %>% select(state) %>% dplyr::summarize(p_over_thresh = sum(state > thresh) / n())
   st_p_over <- sims_short_tenure %>% filter(time == 20) %>% mutate(state = states[state]) %>% select(state) %>% dplyr::summarize(p_over_thresh = sum(state > thresh) / n())
   plot_data <- tibble(cats = c("st", "lt"), vals = c(st_p_over[1,1], lt_p_over[1,1]))
@@ -262,7 +274,7 @@ sim_tenure_thresh_bar <- function(sims_long_tenure, sims_short_tenure, thresh = 
           axis.title.x=element_text(size=10),
           axis.title.y=element_text(size=10),
           plot.title = element_text(size = 10, face = "bold"),
-          plot.title.position = "plot",
+          plot.title.position = tpos,
           axis.ticks.x=element_blank(),
           panel.grid.major.x = element_blank(),
           panel.grid.minor.x = element_blank(),

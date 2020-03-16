@@ -14,7 +14,7 @@ dp_counts <- function(caorwa_data) {
 
 
 # histogram of num. dps used by each farmer
-caorwa_dp_count_hst <- function(caorwa_data, title = ggtitle(NULL)) {
+caorwa_dp_count_hst <- function(caorwa_data, title = ggtitle(NULL), tpos = "plot") {
   as.data.frame(table(dp_counts(caorwa_data))) %>%
     ggplot(aes(x=Var1)) +
     geom_bar(aes(y=Freq), color=NA, fill="black", alpha = .8, stat = "identity") +
@@ -30,6 +30,7 @@ caorwa_dp_count_hst <- function(caorwa_data, title = ggtitle(NULL)) {
           axis.title.x=element_text(size=10),
           axis.title.y=element_text(size=10),
           plot.title = element_text(size = 10, face = "bold"),
+          plot.title.position = tpos,
           axis.ticks.x=element_blank(),
           panel.grid.major.y = element_blank(),
           panel.grid.minor.y = element_blank(),
@@ -39,7 +40,7 @@ caorwa_dp_count_hst <- function(caorwa_data, title = ggtitle(NULL)) {
 
 
 # mostly-owned vs. mostly-leased bar plot of probability of using one or more dps
-caorwa_tenure_thresh_bar <- function(caorwa_data, title = ggtitle(NULL)) {
+caorwa_tenure_thresh_bar <- function(caorwa_data, title = ggtitle(NULL), tpos = "plot") {
   prop_owned <- caorwa_data[,"FC1_Owned.ac"] / caorwa_data[,"FC1_Total.ac"]
   ownrshp <- data.frame(prop_owned) %>%
     mutate(mo_ml = case_when(prop_owned >= .5 ~ 'Mostly Owned',
@@ -67,7 +68,7 @@ caorwa_tenure_thresh_bar <- function(caorwa_data, title = ggtitle(NULL)) {
           axis.title.x=element_text(size=10),
           axis.title.y=element_text(size=10),
           plot.title = element_text(size = 10, face = "bold"),
-          plot.title.position = "plot",
+          plot.title.position = tpos,
           axis.ticks.x=element_blank(),
           panel.grid.major.x = element_blank(),
           panel.grid.minor.x = element_blank(),
