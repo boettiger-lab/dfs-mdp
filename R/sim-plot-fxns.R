@@ -281,3 +281,33 @@ sim_tenure_thresh_bar <- function(sims_long_tenure, sims_short_tenure, thresh = 
           legend.position = "none",
           plot.margin=grid::unit(c(5,5,0,2.5), "mm"))
 }
+
+
+# plot benefit sweep experiment results
+plt_sim_b_sweep <- function(sims, title = ggtitle(NULL), ylab = "", tpos = "plot", col = pal[1], lmarmod = 0, rmarmod = 0) {
+
+  dkcol <- col2rgb(col)
+  dkcol <- dkcol/5
+  dkcol <- rgb(t(dkcol), maxColorValue=255)
+
+  sims %>%
+    ggplot(aes(x = state, group = benefit, color = benefit)) +
+    geom_line(stat='density', size=1, alpha=.4) +
+    title +
+    labs(x = "ES state", y = ylab, color = "Benefit") +
+    scale_x_continuous(limits = c(0, 1.5), breaks = scales::pretty_breaks(n = 2), expand = c(.01,.01)) +
+    scale_y_continuous(breaks = scales::pretty_breaks(n = 2), expand = c(.01,.01)) +
+    scale_color_gradient(low = dkcol, high = col, guide = guide_colorbar(barwidth = .5),
+                         breaks=c(min(sims$benefit), max(sims$benefit))) +
+    theme(axis.text.x=element_text(size=10),
+          axis.text.y=element_text(size=10),
+          axis.title.x=element_text(size=10),
+          axis.title.y=element_text(size=10),
+          legend.text = element_text(size=10),
+          legend.title = element_text(size=10),
+          legend.box.margin=margin(0,0,0,-5),
+          plot.title = element_text(size = 10, face = "bold"),
+          plot.title.position = tpos,
+          panel.grid.minor = element_blank(),
+          plot.margin=grid::unit(c(5,0+rmarmod,5,5+lmarmod), "mm"))
+}

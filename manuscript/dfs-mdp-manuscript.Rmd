@@ -280,103 +280,78 @@ ggarrange(
 ```
 
 
-## Importance of coupling human and natural system dynamics
+## Importance of coupled human and natural systems modeling
 
-While the stylized model of agroecological decision-making over time can produce complex results like tipping points if the human and natural system are coupled, these dynamics no longer exist when the systems become decoupled. When ecological processes become increasingly fast, the alternative stable states no longer exist with across parameter values. Similarly, as decisions become temporally myopic, bistability only occurs as the result of complex ecological dynamics (Fig \ref{fig:explore_r}).  
+As we have seen, our stylized model of agroecological decision-making over time produces complex results like tipping points.  Importantly, these complex dynamics disappear when the human and natural systems are decoupled.  Fig \ref{fig:res_b_sweep} shows that, when ecological processes become fast enough that the ecosystem esentially responds directly to farmer actions, it becomes impossible to parameterize the model's cost-benefit ratio for alternative stable states.  Similarly, as decisions become temporally myopic, the potential for bistability within the model also disappears.  It is only when both a gradually-adaptive environment and a forward-looking decision maker are coupled that complex tipping point phenomena emerge in the model (Fig \ref{fig:res_b_sweep}C).  
 
-```{r final_fig, include = FALSE}
-scenarios_r <-
-  tidyr::crossing(# Do all combinations of:
+```{r sim_b_sweep_fxn, include = FALSE}
+sim_b_sweep <- function(scenarios, inf_fin, t_horiz = 2) {
+  
+  sim_b_sweep_scenario <- function(params) {
+  model <- continuous_model(states, actions, params, transition_fn, utility_fn)
+  if(inf_fin == "infinite") {
+    soln <- MDPtoolbox::mdp_value_iteration(model$P, model$U, params$discount)
+  } else if(inf_fin == "finite") {
+    soln <- MDPtoolbox::mdp_finite_horizon(model$P, model$U, discount, N = t_horiz)
+  } else stop('inf_fin must be "infinite" or "finite"')
+  sim(soln, Tmax = params$Tmax) %>% 
+    filter(time == params$Tmax)
+  }
+  
+  scenarios %>%
+  purrr::transpose() %>%
+  furrr::future_map_dfr(sim_b_sweep_scenario, .id = "id") %>%
+  left_join(scenarios, by = "id") %>%
+  mutate(state = states[state])
+}
+
+```
+
+```{r run_b_sweep_sims, include = FALSE}
+# baselines: benefit = 1.57, cost = 1, sigma = 0.1, r = 0.1, discount = 0.97
+fast_r_scenarios <-
+  tidyr::crossing(benefit = seq(1, 2, length.out = 50),
                   cost = 1,
-                  r = 0.5,
-                  benefit = seq(1,1.6, by = 0.05),
                   sigma = 0.1,
-                  Tmax = 20
-  ) %>% tibble::rownames_to_column("id")
+                  r = 0.6,
+                  discount = 0.97,
+                  Tmax = 20) %>% 
+  tibble::rownames_to_column("id")
+fast_r_sims <- sim_b_sweep(fast_r_scenarios, "infinite")
 
-scenarios_d <- tidyr::crossing(# Do all combinations of:
-                  cost = 0.5,
+myopic_d_scenarios <- 
+  tidyr::crossing(benefit = seq(5, 15, length.out = 50),
+                  cost = 1,
+                  sigma = 0.1,
                   r = 0.1,
-                  benefit = seq(2,20, by = 1),
+                  discount = 0.97,
+                  Tmax = 20) %>% 
+  tibble::rownames_to_column("id") 
+myopic_d_sims <- sim_b_sweep(myopic_d_scenarios, "finite", t_horiz = 2)
+
+chans_scenarios <- 
+  tidyr::crossing(benefit = seq(1, 2, length.out = 50),
+                  cost = 1,
                   sigma = 0.1,
-                  Tmax = 20,
-  ) %>% tibble::rownames_to_column("id") 
+                  r = 0.1,
+                  discount = 0.97,
+                  Tmax = 20) %>% 
+  tibble::rownames_to_column("id") 
+chans_sims <- sim_b_sweep(chans_scenarios, "infinite")
 ```
 
-```{r inf_sim, include = FALSE}
-infinite_sim <- function(row) {
-  model <- continuous_model(states, actions, row, transition_fn, utility_fn)
-  soln <- MDPtoolbox::mdp_value_iteration(model$P, model$U, discount)
-  # simulate subsidy period
-  # pad to Tmax with baseline decision rule
-  sim(soln, Tmax = 20) %>% filter(time == 20)
-}
-```
+```{r res_b_sweep, fig.cap = "For each plot, benefit $b$ was varied incrementally across 50 values.  Cost was held constant at $c = 1$, so line shade indicates cost/benefit ratio.  For each $c:b$, replicate simulations were conducted from 500 normally-distributed starting states (mean = 0.5; S.D. = 0.2; truncated at [0,1]) over 20 timesteps.  Density curves of state at $t=20$ are plotted for each $c:b$.  (A) With fast ecological change rate ($r = 0.6$), no bimodality is seen. (B) With a short-term decision strategy (solving the MDP over a 2-year time horizon), no bimodality is seen.  (C) Only when both forward-looking decision making and a slowly-adapting environment are included do complex features such as bimodality emerge.", fig.width = 6, fig.asp = .4}
 
-```{r fin_sim, include = FALSE}
-finite_sim <- function(row) {
-  model <- continuous_model(states, actions, row, transition_fn, utility_fn)
-  soln <- MDPtoolbox::mdp_finite_horizon(model$P, model$U, discount, N = 2)
-  # simulate subsidy period
-  # pad to Tmax with baseline decision rule
-  sim(soln, Tmax = 20) %>% filter(time == 20)
-}
-```
+ggarrange(
+  plt_sim_b_sweep(fast_r_sims, title = ggtitle("A. Fast ecological change rate"), 
+                ylab = "Density", col = pal[4], rmarmod = -6),
+  plt_sim_b_sweep(myopic_d_sims, title = ggtitle("B. Myopic decision-making"), 
+                tpos = "panel", col = pal[7], lmarmod = -3, rmarmod = -3),
+  plt_sim_b_sweep(chans_sims, title = ggtitle("C. Human/enviro. interaction"), 
+                tpos = "panel", col = pal[1], lmarmod = -6),
+  nrow = 1, ncol = 3, widths = c(1,1,1)
+)
 
-```{r fast_r, include = FALSE}
-colfunc <- colorRampPalette(c("#D0F0C0", "#005502"))
-
-fast_r <- scenarios_r %>%
-  purrr::transpose() %>%
-  furrr::future_map_dfr(infinite_sim, .id = "id") %>%
-  left_join(scenarios_r, by = "id") %>%
-  mutate(state = state/100)
-```
-
-
-```{r fast_r_plt}
-plota <- fast_r %>% mutate(benefit = as.factor(benefit)) %>%
-  ggplot(aes(x=state, color = benefit)) +geom_density(alpha=0.2) + 
-  labs(title = "A. Fast ecological process", x = "ES state") +
-  # scale_fill_manual(values = colfunc(13)) +
-  scale_color_manual(values = colfunc(13)) +
-  scale_x_continuous(breaks = seq(0, 1, by = .2)) +
-  theme(axis.text.x=element_text(size=10),
-          axis.text.y=element_blank(),
-          axis.title.x=element_text(size=10),
-          axis.title.y=element_text(size=10),
-          plot.title = element_text(size = 10, face = "bold"),
-          panel.grid.minor = element_blank(),
-          legend.position = "none")
-plota
-
-```
-
-
-```{r, include = FALSE}
-fast_decision <- scenarios_d %>%
-  purrr::transpose() %>%
-  furrr::future_map_dfr(finite_sim, .id = "id") %>%
-  left_join(scenarios_d, by = "id") %>%
-  mutate(state = state/100)
-
-plotb <- fast_decision %>% mutate(benefit = as.factor(benefit)) %>%
-  ggplot(aes(x=state, color = benefit, fill = benefit)) +geom_density(alpha=0.2) +
-  labs(title = "B. Myopic decision", x = "ES state") +
-    scale_fill_manual(values = colfunc(19)) +
-    scale_color_manual(values = colfunc(19)) +
-    scale_x_continuous(breaks = seq(0, 1, by = .2)) +
-    theme(axis.text.x=element_text(size=10),
-          axis.text.y=element_blank(),
-          axis.title.x=element_text(size=10),
-          axis.title.y=element_text(size=10),
-          plot.title = element_text(size = 10, face = "bold"),
-          panel.grid.minor = element_blank(),
-          legend.position = "none")
-```
-
-```{r explore_r,  fig.cap = "Replicate simulations from 500 normally-distributed starting states (mean = 0.5; S.D. = 0.2; truncated at [0,1]) over 20 timesteps. Color of the density corresponds to cost-benefit ratio. (A) shows the effects of fast ecological process simulated through cost-benefit space. No bimodality is seen in any single parameter cases. However, both low and high states are possible under different cost-benefit ratios.  (B) Similar results are seen in the case of decision-making that is not forward looking.", fig.width = 6, fig.asp = .5}
-ggarrange(plota, plotb, nrow = 1, ncol = 2)
 ```
 
 
