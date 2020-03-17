@@ -93,20 +93,23 @@ set.seed(4) # random seed
 ```{r model_def, include = FALSE}
 # set up the MDP
 actions <- seq(0, 1, length = 100)
-# Allow max(state) > max(actions) to avoid creating a hard boundary on ecosystem state
 states <- seq(0, 1.5, length = 100)
-params <- list(benefit = 1.57, cost = 1, sigma = 0.1, r = 0.1)
-discount <- 0.97
+params <- list(
+  benefit = 1.56, #orig. benefit = 1.57, 
+  cost = 1, 
+  sigma = 0.1, 
+  r = 0.1, 
+  discount = 0.97, 
+  Tmax = 20)
 transition_fn <- function(s, a, params) s + params$r * (a - s)
 utility_fn <- function(s, a, params) params$benefit * s - params$cost * a
 model <- continuous_model(states, actions, params, transition_fn, utility_fn)
 
 # solve the MDP
-base_soln <- MDPtoolbox::mdp_value_iteration(model$P, model$U, discount)
+base_soln <- MDPtoolbox::mdp_value_iteration(model$P, model$U, params$discount)
 base_soln_df <- tibble(state = states,
                        action = actions[base_soln$policy])
 
-# soln_plot(base_soln_df)
 #write_csv(base_soln_df, "../model-data/base_soln_df.csv.gz")
 ```
 
@@ -152,10 +155,10 @@ Using the model described above, we observe the behavior of agents' sequential c
 
 ```{r base_case_sim, include = FALSE}
 sim <- function(soln, 
-                Tmax = 20,
+                Tmax = params$Tmax,
                 x0 = init){
   map_dfr(1:length(x0), 
-          function(i) sim_mdp(model$P, model$U, soln$policy, discount, x0 = x0[i], Tmax = Tmax), 
+          function(i) sim_mdp(model$P, model$U, soln$policy, params$discount, x0 = x0[i], Tmax = Tmax), 
           .id = "reps")
 }
 sims_baseline <- sim(base_soln)
@@ -165,7 +168,7 @@ sims_baseline <- sim(base_soln)
 ```
 
 
-```{r res_bimodal, fig.cap = "Simulations of 500 model agents over 20 farming seasons.  Initial ES states follow a truncated normal distribution (mean = 0.5; S.D. = 0.2; truncated at [0,1]).  Agents then utilize decision strategy $\\pi$ as shown in Fig \\ref{fig:res_strategy} until $t = 20$.  (A) shows the state of each agent throughout each run.  (B) shows the initial ES distribution (dark blue) and bimodal density distribution at $t = 20$ (light blue), with peaks annotated. (C) shows the observed bimodal DP adoption distribution in our survey data.", fig.width = 6, fig.asp = .5}
+```{r res_bimodal, fig.cap = "Simulations of 500 model agents over 20 farming seasons.  Initial ES states follow a truncated normal distribution (mean = 0.5; S.D. = 0.2; truncated at [0,1]).  Agents then utilize decision strategy $\\pi$ as shown in Fig \\ref{fig:res_strategy} until $t = 20$.  (A) State of each agent throughout each run.  (B) Initial ES distribution (dark blue) and bimodal density distribution at $t = 20$ (light blue), with peaks annotated. (C) Observed bimodal DP adoption distribution in our survey data.", fig.width = 6, fig.asp = .5}
 
 ggarrange(
   sim_plot_ts(sims_baseline, title = ggtitle("A. ES state over time"), rmarmod = -5), 
@@ -180,15 +183,21 @@ ggarrange(
 ### Optimal decision strategy
 The decision strategy $\pi$ describes the optimal course of action for a given state, with each agent in the simulation above using this strategy to guide their choices over time.  Fig \ref{fig:res_strategy} reveals that there is a critical bifurcation, or tipping point, at a specific ecosystem state, below which the highest expected value is derived by investing little to nothing into diversified farming systems, and above which the optimum action becomes near-full investment into DPs. Over time, this results in a bimodal distribution of ecosystem states, as seen in Fig \ref{fig:res_bimodal}. 
 
-```{r res_strategy, fig.cap = "Optimal decision strategy $\\pi$ as a function of ecosystem state, showing a tipping point at $s \\approx 0.48$.  The upper $x$ axis limit is the 99th percentile of observed states in our simulation results ($s \\approx 1.23$).", fig.width = 3, fig.asp = 1}
+```{r res_strategy, fig.cap = "Optimal decision strategy $\\pi$ as a function of ecosystem state, showing a tipping point at $s \\approx 0.52$.  The upper $x$ axis limit is the 99th percentile of observed states in our simulation results ($s \\approx 1.23$).", fig.width = 3, fig.asp = 1}
 
 state99th <- sims_baseline %>% 
             mutate(state = states[state]) %>% 
             pull(state) %>% 
             quantile(.99) %>% 
             unname()
+tpt <- 0
+for(si in 1:length(states)-1) {
+  if(base_soln_df$action[si] < .1 && base_soln_df$action[si+1] > .9) {
+    tpt <- base_soln_df$state[si] + ((base_soln_df$state[2] - base_soln_df$state[1]) / 2)
+  }
+}
 
-soln_plot(base_soln_df %>% filter(state <= state99th))
+soln_plot(base_soln_df %>% filter(state <= state99th), tpt = tpt)
 
 ```
 
@@ -200,18 +209,18 @@ With 39\% of U.S. farmland under lease [@usda2016], and with widely-varying rent
 Using the same simulation methods and parameters outlined above, we solve the decision model on a finite, two-year time horizon, representing the shorter window within which many tenant farmers may make decisions (Fig \ref{fig:res_tenure}).  Comparing the final state distribution of the baseline model to the short tenure model shows that, as length of land tenure or stability of lease agreements decline, optimal decisions are calculated more myopically and farmers are incentivized to severely limit investment into diversified practives.  This results in degradation of ecosystem state even among farm sites with an initially high value, with 92\% of farmers ending up in the simplified state.  Our model data echoes empirical findings from a recent large-scale survey of U.S. west coast produce growers, which shows that farmers who lease land are roughly 80\% less likely to invest in any diversification practices.  
 
 ```{r short_tenure_sim, include = FALSE}
-short_tenure_soln <- MDPtoolbox::mdp_finite_horizon(model$P, model$U, discount, N = 2)
+short_tenure_soln <- MDPtoolbox::mdp_finite_horizon(model$P, model$U, params$discount, N = 2)
 sims_short_tenure <- sim(short_tenure_soln)
 #write_csv(sims_short_tenure, "../model-data/sims_short_tenure.csv.gz")
 ```
 
-```{r res_tenure, fig.cap = "(A) Result of short land tenure on DEP adoption.  The simulation is identical to that in Fig \\ref{fig:res_bimodal}, but the MDP is solved under a finite, two-year time horizon. (B) Comparison between final state distribution of short- vs. long-tenure model runs.  (C) Probability of ecosystem services state being $\\geq 0.15$ at $t=20$ for the short-tenure simulation vs. the base-case simulation. (D) Impact of land tenure on the probability of a farmer in our survey dataset adopting at least one DP.", fig.width = 6, fig.asp = .5}
+```{r res_tenure, fig.cap = "(A) Result of short land tenure on DEP adoption.  The simulation is identical to that in Fig \\ref{fig:res_bimodal}, but the MDP is solved under a finite, two-year time horizon. (B) Comparison between final state distribution of short- vs. long-tenure model runs.  (C) Probability of ecosystem services state being $\\geq 0.125$ at $t=20$ for the short-tenure simulation vs. the base-case simulation. (D) Impact of land tenure on the probability of a farmer in our survey dataset adopting at least one DP.", fig.width = 6, fig.asp = .5}
 
 ggarrange(
   sim_plot_ts(sims_short_tenure, title = ggtitle("A. Short-tenure timeseries"), endcol = pal[3], rmarmod = -5),
   sim_plot_dens_comp(sims_baseline, sims_short_tenure, label1 = "Long\ntenure\nfinal", label2 = "Short\ntenure\nfinal", title = ggtitle("B. ES state distribution"), tpos = "panel", lmarmod = -5, rmarmod = -5),
   ggarrange(
-    sim_tenure_thresh_bar(sims_baseline, sims_short_tenure, title = ggtitle("C. Simulation data")), 
+    sim_tenure_thresh_bar(sims_baseline, sims_short_tenure, thresh = 0.125, title = ggtitle("C. Simulation data")), 
     caorwa_tenure_thresh_bar(caorwa_data, title = ggtitle("D. Empirical data")), 
     nrow = 2, ncol = 1),
   widths = c(2.5, 2.5, 1.65), nrow = 1, ncol = 3
@@ -240,7 +249,7 @@ Csubs2 <- 1 - 2 / Tsubs2
 # subsidy simulation fxn
 subs_sim <- function(params) {
   subs_model <- continuous_model(states, actions, params, transition_fn, utility_fn)
-  subs_soln <- MDPtoolbox::mdp_value_iteration(subs_model$P, subs_model$U, discount)
+  subs_soln <- MDPtoolbox::mdp_value_iteration(subs_model$P, subs_model$U, params$discount)
   # simulate subsidy period
   start <- sim(subs_soln, Tmax = params$Tsubs, x0 = init)
   xi <- start %>% filter(time == params$Tsubs) %>% pull(state)
@@ -250,15 +259,14 @@ subs_sim <- function(params) {
 }
 
 # run subsidy simulation
-sims_subs_abrupt <- subs_sim(list(benefit = 1.57, cost = Csubs1, sigma = 0.1, r = .1, Tsubs = Tsubs1, Tmax = 20))
-sims_subs_sust <- subs_sim(list(benefit = 1.57, cost = Csubs2, sigma = 0.1, r = .1, Tsubs = Tsubs2, Tmax = 20))
-# sims_subs_v_sust <- subs_sim(list(benefit = 1.57, cost = .9, sigma = 0.1, r = .1, Tsubs = 20, Tmax = 20)) # did a real long one, just to see
+sims_subs_abrupt <- subs_sim(list(benefit = params$benefit, cost = Csubs1, sigma = params$sigma, r = params$r, discount = params$discount, Tsubs = Tsubs1, Tmax = params$Tmax))
+sims_subs_sust <- subs_sim(list(benefit = params$benefit, cost = Csubs2, sigma = params$sigma, r = params$r, discount = params$discount, Tsubs = Tsubs2, Tmax = params$Tmax))
 
 #write_csv(sims_subs_abrupt, "../model-data/sims_subs_abrupt.csv.gz")
 #write_csv(sims_subs_sust, "../model-data/sims_subs_sust.csv.gz")
 ```
 
-```{r res_subsidy, fig.cap = "Replicate simulations from 500 normally-distributed starting states (mean = 0.5; S.D. = 0.2; truncated at [0,1]) over 20 timesteps.  (A) shows the effects of a large, abrupt subsidy (100\\% of adoption expenses are covered during the initial two years).  (B) simulates a smaller, yet more sustained subsidy (adoption cost is 80\\% of baseline during the first 10 years).  Ingoring discounting, subsidies have the same total cost to the funder (the equivalent of 2 years' worth of full adoption cost offsets).  After subsidy is removed, agents adjust their decision rule to that of the base case (i.e. no subsidy) for the remainder of the run.  (C) shows that the sustained subsidy drove more adoption at $t = 20$.", fig.width = 6, fig.asp = .5}
+```{r res_subsidy, fig.cap = "Replicate simulations from 500 normally-distributed starting states (mean = 0.5; S.D. = 0.2; truncated at [0,1]) over 20 timesteps.  (A) Large, abrupt subsidy (100\\% of adoption expenses are covered during the initial two years).  (B) Smaller, more sustained subsidy (adoption cost is 80\\% of baseline during the first 10 years).  Ingoring discounting, subsidies have the same total cost to the funder (the equivalent of 2 years' worth of full adoption cost offsets).  After subsidy is removed, agents adjust their decision rule to that of the base case (i.e. no subsidy) for the remainder of the run.  (C) The sustained subsidy drove more adoption at $t = 20$.", fig.width = 6, fig.asp = .5}
 ggarrange(
   sim_plot_ts(sims_subs_abrupt, title = ggtitle("A. Abrupt subsidy"), 
               annotate = TRUE, an_x = Tsubs1, an_lab = sprintf("%i year\n%i%% off", Tsubs1, round((1-Csubs1)*100)), 
@@ -292,7 +300,7 @@ sim_b_sweep <- function(scenarios, inf_fin, t_horiz = 2) {
   if(inf_fin == "infinite") {
     soln <- MDPtoolbox::mdp_value_iteration(model$P, model$U, params$discount)
   } else if(inf_fin == "finite") {
-    soln <- MDPtoolbox::mdp_finite_horizon(model$P, model$U, discount, N = t_horiz)
+    soln <- MDPtoolbox::mdp_finite_horizon(model$P, model$U, params$discount, N = t_horiz)
   } else stop('inf_fin must be "infinite" or "finite"')
   sim(soln, Tmax = params$Tmax) %>% 
     filter(time == params$Tmax)
@@ -311,31 +319,31 @@ sim_b_sweep <- function(scenarios, inf_fin, t_horiz = 2) {
 # baselines: benefit = 1.57, cost = 1, sigma = 0.1, r = 0.1, discount = 0.97
 fast_r_scenarios <-
   tidyr::crossing(benefit = seq(1, 2, length.out = 50),
-                  cost = 1,
-                  sigma = 0.1,
+                  cost = params$cost,
+                  sigma = params$sigma,
                   r = 0.6,
-                  discount = 0.97,
-                  Tmax = 20) %>% 
+                  discount = params$discount,
+                  Tmax = params$Tmax) %>% 
   tibble::rownames_to_column("id")
 fast_r_sims <- sim_b_sweep(fast_r_scenarios, "infinite")
 
 myopic_d_scenarios <- 
   tidyr::crossing(benefit = seq(5, 15, length.out = 50),
-                  cost = 1,
-                  sigma = 0.1,
-                  r = 0.1,
-                  discount = 0.97,
-                  Tmax = 20) %>% 
+                  cost = params$cost,
+                  sigma = params$sigma,
+                  r = params$r,
+                  discount = params$discount,
+                  Tmax = params$Tmax) %>% 
   tibble::rownames_to_column("id") 
 myopic_d_sims <- sim_b_sweep(myopic_d_scenarios, "finite", t_horiz = 2)
 
 chans_scenarios <- 
   tidyr::crossing(benefit = seq(1, 2, length.out = 50),
-                  cost = 1,
-                  sigma = 0.1,
-                  r = 0.1,
-                  discount = 0.97,
-                  Tmax = 20) %>% 
+                  cost = params$cost,
+                  sigma = params$sigma,
+                  r = params$r,
+                  discount = params$discount,
+                  Tmax = params$Tmax) %>% 
   tibble::rownames_to_column("id") 
 chans_sims <- sim_b_sweep(chans_scenarios, "infinite")
 ```
@@ -408,7 +416,7 @@ We have parameterized the model to illustrate bistability in CHANS resulting fro
 		\hline
 		\textbf{Parameter}			& \textbf{Value} \\
 		\hline
-		Benefit $b$	& 1.57 \\
+		Benefit $b$	& 1.56 \\
 		Cost $c$	& 1.00 \\
 		State transition noise $\sigma$ & 0.1 \\
 		State response rate $r$ & 0.1 \\

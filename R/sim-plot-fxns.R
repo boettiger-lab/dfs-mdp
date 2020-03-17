@@ -1,11 +1,11 @@
 # solution point plot with threshold annotated
-soln_plot <- function(soln_df) {
+soln_plot <- function(soln_df, tpt) {
   ggplot(soln_df, aes(state,action)) +
     geom_point(size = 1) +
-    geom_vline(xintercept = .477, linetype="dashed", color = "red", size=.7) +
-    annotate('label', x = .6, y = .375, label = "Tipping point", hjust = 0, vjust = .5,
+    geom_vline(xintercept = tpt, linetype="dashed", color = "red", size=.7) +
+    annotate('label', x = tpt + .15, y = .375, label = "Tipping point", hjust = 0, vjust = .5,
              family = "Roboto", size = 3.25, label.padding = unit(.15, "lines"), label.size = 0, alpha = .65) +
-    annotate("segment", x = .6, xend = .52, y = .375, yend = .375, size=.5, arrow=arrow(length = unit(0.22, "cm"))) +
+    annotate("segment", x = tpt + .15, xend = tpt + .025, y = .375, yend = .375, size=.5, arrow=arrow(length = unit(0.22, "cm"))) +
     labs(x="ES state", y="Optimal DP investment") +
     scale_x_continuous(limits = c(0,NA), expand = c(.01,.01)) +
     scale_y_continuous(limits = c(0,1), expand = c(.01,.01)) +
@@ -254,7 +254,7 @@ p_up_dn <- function(sims){
 
 
 # short vs. long tenure bar plot of probability that ES ended up over some threshold
-sim_tenure_thresh_bar <- function(sims_long_tenure, sims_short_tenure, thresh = 0.15, title = ggtitle(NULL), tpos = "plot") {
+sim_tenure_thresh_bar <- function(sims_long_tenure, sims_short_tenure, thresh, title = ggtitle(NULL), tpos = "plot") {
   lt_p_over <- sims_long_tenure %>% filter(time == 20) %>% mutate(state = states[state]) %>% select(state) %>% dplyr::summarize(p_over_thresh = sum(state > thresh) / n())
   st_p_over <- sims_short_tenure %>% filter(time == 20) %>% mutate(state = states[state]) %>% select(state) %>% dplyr::summarize(p_over_thresh = sum(state > thresh) / n())
   plot_data <- tibble(cats = c("st", "lt"), vals = c(st_p_over[1,1], lt_p_over[1,1]))
@@ -264,7 +264,7 @@ sim_tenure_thresh_bar <- function(sims_long_tenure, sims_short_tenure, thresh = 
     geom_bar(width = .75, position=position_dodge(width=.84), stat="identity", color=NA, alpha = .8,) +
     geom_text(aes(label=sprintf("%.2f", round(vals,2))), vjust=1.6, color="white", position = position_dodge(0.9), size=3, family = "Roboto Condensed") +
     xlab("") +
-    ylab(expression("p. ES">="0.15")) +
+    ylab(expression("p. ES">="0.125")) +
     title +
     scale_x_discrete(expand = c(0,0), labels = c("Short\ntenure", "Long\ntenure")) +
     scale_y_continuous(expand = c(0,0)) +
