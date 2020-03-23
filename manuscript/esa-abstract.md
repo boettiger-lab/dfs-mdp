@@ -1,4 +1,4 @@
-**Tipping points in diversified agroecosystems**
+**Tipping points in the adoption of agroecological practices**
 
 **Authors:** Melissa Chapman, Serge Wiltshire, Timothy Bowles, Liz Carlisle, Alastair Iles, Fredrico Castillo, Daniel Karp, Elissa Olimpi, Jennifer Thompson, Kathryn De Master, Joanna Ory, Patrick Baur, Kenzo Esquivel, and Carl Boettiger
 
