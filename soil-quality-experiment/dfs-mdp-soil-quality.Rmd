@@ -40,7 +40,8 @@ knitr::opts_chunk$set(echo = TRUE,
 pal <- solarized_pal()(7) # global color pallette
 set.seed(4) # random seed
 ```
-s
+  
+
 ```{r model_params}
 
 actions <- seq(0, 1, length = 100)
@@ -56,9 +57,8 @@ params <- list(
   discount = 0.97, 
   Tmax = 20)
 
-
-
 ```
+
 
 ```{r global_sim_params}
 reps <- 500

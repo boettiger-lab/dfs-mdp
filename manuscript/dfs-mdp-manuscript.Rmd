@@ -318,47 +318,97 @@ sim_b_sweep <- function(scenarios, inf_fin, t_horiz = 2) {
 ```{r run_b_sweep_sims, include = FALSE}
 # baselines: benefit = 1.57, cost = 1, sigma = 0.1, r = 0.1, discount = 0.97
 fast_r_scenarios <-
-  tidyr::crossing(benefit = seq(1, 2, length.out = 50),
+  tidyr::crossing(cbr = seq(.825, .975, length.out = 40),
                   cost = params$cost,
                   sigma = params$sigma,
-                  r = 0.6,
+                  r = 0.95,
                   discount = params$discount,
                   Tmax = params$Tmax) %>% 
-  tibble::rownames_to_column("id")
+  tibble::rownames_to_column("id") %>%
+  mutate(benefit = cost / cbr)
 fast_r_sims <- sim_b_sweep(fast_r_scenarios, "infinite")
 
 myopic_d_scenarios <- 
-  tidyr::crossing(benefit = seq(5, 15, length.out = 50),
+  tidyr::crossing(cbr = seq(.025, .175, length.out = 40),
                   cost = params$cost,
                   sigma = params$sigma,
                   r = params$r,
                   discount = params$discount,
                   Tmax = params$Tmax) %>% 
-  tibble::rownames_to_column("id") 
+  tibble::rownames_to_column("id") %>%
+  mutate(benefit = cost / cbr)
 myopic_d_sims <- sim_b_sweep(myopic_d_scenarios, "finite", t_horiz = 2)
 
 chans_scenarios <- 
-  tidyr::crossing(benefit = seq(1, 2, length.out = 50),
+  tidyr::crossing(cbr = seq(.55, .7, length.out = 40),
                   cost = params$cost,
                   sigma = params$sigma,
                   r = params$r,
                   discount = params$discount,
                   Tmax = params$Tmax) %>% 
-  tibble::rownames_to_column("id") 
+  tibble::rownames_to_column("id") %>%
+  mutate(benefit = cost / cbr)
 chans_sims <- sim_b_sweep(chans_scenarios, "infinite")
 ```
 
-```{r res_b_sweep, fig.cap = "For each plot, benefit $b$ was varied incrementally across 50 values.  Cost was held constant at $c = 1$, so line shade indicates cost/benefit ratio.  For each $c:b$, replicate simulations were conducted from 500 normally-distributed starting states (mean = 0.5; S.D. = 0.2; truncated at [0,1]) over 20 timesteps.  Density curves of state at $t=20$ are plotted for each $c:b$.  (A) With fast ecological change rate ($r = 0.6$), no bimodality is seen. (B) With a short-term decision strategy (solving the MDP over a 2-year time horizon), no bimodality is seen.  (C) Only when both forward-looking decision making and a slowly-adapting environment are included do complex features such as bimodality emerge.", fig.width = 6, fig.asp = .4}
+
+```{r find_b_sweep_density_peaks_fxn, include = FALSE}
+
+b_sweep_peaks <- function(sims, smoothing = 1.5, ythresh = 0.125, output_bizone = FALSE) {
+  bimin = 0
+  bimax = 0
+  peaks <- tibble(cbr = numeric(), peak = numeric())
+  for(this_cbr in unique(sims$cbr)) {
+    dens <- density((sims %>% filter(cbr == this_cbr))$state, adjust = smoothing)
+    dens <- tibble(x = dens$x, y = dens$y) %>% filter(y >= ythresh)
+    ps <- dens$x[findPeaks(dens$y)]
+    for(p in ps) {
+      peaks <- add_row(peaks, cbr = this_cbr, peak = p)
+    }
+    if(output_bizone && length(ps) > 1) {
+      if(bimin == 0) {
+        bimin = this_cbr
+      }
+      bimax = this_cbr
+    }
+  }
+  if(output_bizone) {
+    c(bimin, bimax)
+  } else {
+    peaks 
+  }
+}
+
+```
+
+
+```{r res_b_sweep, fig.cap = "For each category, cost/benefit ratio was varied incrementally over 40 values, indicated by color shade, across a range of width 0.15 encompassing the transition between a ``never invest'' to an ``always invest'' policy.  For each $c:b$, replicate simulations were conducted from 500 normally-distributed starting states (mean = 0.5; S.D. = 0.2; truncated at [0,1]) over 20 timesteps.  Upper plots show density curves of ES state at $t=20$ for each $c:b$.  Lower plots show values of density curve peak(s) for each $c:b$.  (A) With fast ecological change rate ($r = 0.95$), no bimodality is seen. (B) With a short-term decision strategy (solving the MDP over a 2-year time horizon), no bimodality is seen.  (C) Only when both forward-looking decision making and a slowly-adapting environment are included do complex features such as bimodality emerge.", fig.width = 6.5, fig.asp = .6}
 
 ggarrange(
-  plt_sim_b_sweep(fast_r_sims, title = ggtitle("A. Fast ecological change rate"), 
-                ylab = "Density", col = pal[4], rmarmod = -6),
-  plt_sim_b_sweep(myopic_d_sims, title = ggtitle("B. Myopic decision-making"), 
-                tpos = "panel", col = pal[7], lmarmod = -3, rmarmod = -3),
-  plt_sim_b_sweep(chans_sims, title = ggtitle("C. Human/enviro. interaction"), 
-                tpos = "panel", col = pal[1], lmarmod = -6),
+  ggarrange(
+    plt_sim_b_sweep(fast_r_sims, title = ggtitle("A. Fast ecological change rate"), 
+                    ylab = "Density", col = pal[4], rmarmod = -7, dnmarmod = -2.5) + theme(legend.position="none"),
+    plt_b_sweep_peaks(b_sweep_peaks(fast_r_sims), 
+                      ylab = "Cost/benefit ratio", col = pal[4], rmarmod = -7, upmarmod = -2.5), 
+    nrow = 2, ncol = 1, heights = c(1,1), align = "v"
+  ),
+  ggarrange(
+    plt_sim_b_sweep(myopic_d_sims, title = ggtitle("B. Myopic decision-making"), 
+                    tpos = "panel", col = pal[7], lmarmod = -3.5, rmarmod = -3.5, dnmarmod = -2.5) + theme(legend.position="none"),
+    plt_b_sweep_peaks(b_sweep_peaks(myopic_d_sims), 
+                      col = pal[7], lmarmod = -3.5, rmarmod = -3.5, upmarmod = -2.5), 
+    nrow = 2, ncol = 1, heights = c(1,1), align = "v"
+  ),
+  ggarrange(
+    plt_sim_b_sweep(chans_sims, title = ggtitle("C. Human/enviro. interaction"), 
+                    tpos = "panel", col = pal[1], lmarmod = -7, dnmarmod = -2.5) + theme(legend.position="none"),
+    plt_b_sweep_peaks(b_sweep_peaks(chans_sims), bizone = b_sweep_peaks(chans_sims, output_bizone = TRUE),
+                      col = pal[1], lmarmod = -7, upmarmod = -2.5), 
+    nrow = 2, ncol = 1, heights = c(1,1), align = "v"
+  ),
   nrow = 1, ncol = 3, widths = c(1,1,1)
 )
+
 
 ```
 

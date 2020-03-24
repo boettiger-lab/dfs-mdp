@@ -2,7 +2,7 @@
 soln_plot <- function(soln_df, tpt) {
   ggplot(soln_df, aes(state,action)) +
     geom_point(size = 1) +
-    geom_vline(xintercept = tpt, linetype="dashed", color = "red", size=.7) +
+    geom_vline(xintercept = tpt, linetype="dashed", color = "red3", size=.7) +
     annotate('label', x = tpt + .15, y = .375, label = "Tipping point", hjust = 0, vjust = .5,
              family = "Roboto", size = 3.25, label.padding = unit(.15, "lines"), label.size = 0, alpha = .65) +
     annotate("segment", x = tpt + .15, xend = tpt + .025, y = .375, yend = .375, size=.5, arrow=arrow(length = unit(0.22, "cm"))) +
@@ -54,7 +54,7 @@ sim_plot_ts <- function(sims, title = ggtitle(NULL), tpos = "plot", ytxtoff = FA
           plot.margin=grid::unit(c(5+upmarmod,5+rmarmod,5+dnmarmod,5+lmarmod), "mm"))
   if(annotate) {
     p <- p +
-      geom_vline(xintercept = an_x, linetype="dashed", color = "red", size=.5) +
+      geom_vline(xintercept = an_x, linetype="dashed", color = "red3", size=.5) +
       annotate('label', x = an_x + 2, y = 1.3, label = an_lab, hjust = 0, vjust = .5,
                family = "Roboto", size = 3.25, label.padding = unit(.15, "lines"), label.size = 0, alpha = .6) +
       annotate("segment", x = an_x + 1.75, xend = an_x + .5, y = 1.3, yend = 1.3, size=.5, arrow=arrow(length = unit(0.22, "cm")))
@@ -284,21 +284,21 @@ sim_tenure_thresh_bar <- function(sims_long_tenure, sims_short_tenure, thresh, t
 
 
 # plot benefit sweep experiment results
-plt_sim_b_sweep <- function(sims, title = ggtitle(NULL), ylab = "", tpos = "plot", col = pal[1], lmarmod = 0, rmarmod = 0) {
+plt_sim_b_sweep <- function(sims, title = ggtitle(NULL), ylab = "", tpos = "plot", col = pal[1], upmarmod = 0, lmarmod = 0, dnmarmod = 0, rmarmod = 0) {
 
   dkcol <- col2rgb(col)
   dkcol <- dkcol/5
   dkcol <- rgb(t(dkcol), maxColorValue=255)
 
   sims %>%
-    ggplot(aes(x = state, group = benefit, color = benefit)) +
-    geom_line(stat='density', size=1, alpha=.4) +
+    ggplot(aes(x = state, group = cbr, color = cbr)) +
+    geom_line(stat='density', size=.5, alpha=.4) +
     title +
-    labs(x = "ES state", y = ylab, color = "Benefit") +
-    scale_x_continuous(limits = c(0, 1.5), breaks = scales::pretty_breaks(n = 2), expand = c(.01,.01)) +
+    labs(x = "ES state", y = ylab, color = "c:b") +
+    scale_x_continuous(limits = c(0, 1.5), breaks = scales::pretty_breaks(n = 3), expand = c(.01,.01)) +
     scale_y_continuous(breaks = scales::pretty_breaks(n = 2), expand = c(.01,.01)) +
     scale_color_gradient(low = dkcol, high = col, guide = guide_colorbar(barwidth = .5),
-                         breaks=c(min(sims$benefit), max(sims$benefit))) +
+                         breaks=c(min(sims$cbr), max(sims$cbr))) +
     theme(axis.text.x=element_text(size=10),
           axis.text.y=element_text(size=10),
           axis.title.x=element_text(size=10),
@@ -306,8 +306,44 @@ plt_sim_b_sweep <- function(sims, title = ggtitle(NULL), ylab = "", tpos = "plot
           legend.text = element_text(size=10),
           legend.title = element_text(size=10),
           legend.box.margin=margin(0,0,0,-5),
+          # legend.key.height = unit(.02, "npc"),
           plot.title = element_text(size = 10, face = "bold"),
           plot.title.position = tpos,
           panel.grid.minor = element_blank(),
-          plot.margin=grid::unit(c(5,0+rmarmod,5,5+lmarmod), "mm"))
+          plot.margin=grid::unit(c(5+upmarmod,5+rmarmod,5+dnmarmod,5+lmarmod), "mm"))
+}
+
+# plot benefit sweep experiment peaks by cbr
+plt_b_sweep_peaks <- function(peaks, bizone = NULL, title = ggtitle(NULL), ylab = "", tpos = "plot", col = pal[1], upmarmod = 0, lmarmod = 0, dnmarmod = 0, rmarmod = 0) {
+
+  dkcol <- col2rgb(col)
+  dkcol <- dkcol/5
+  dkcol <- rgb(t(dkcol), maxColorValue=255)
+
+  p <- peaks %>%
+    ggplot(aes(x = peak, y = cbr, color = cbr)) +
+    geom_point(size=1) +
+    title +
+    labs(x = "ES state density peak(s)", y = ylab) +
+    scale_x_continuous(limits = c(0, 1.5), breaks = scales::pretty_breaks(n = 3), expand = c(.01,.01)) +
+    scale_y_continuous(limits = c(min(peaks$cbr), max(peaks$cbr)), breaks = scales::pretty_breaks(n = 3), expand = c(.01,.01)) +
+    scale_color_gradient(low = dkcol, high = col, guide = NULL) +
+    theme(axis.text.x=element_text(size=10),
+          axis.text.y=element_text(size=10),
+          axis.title.x=element_text(size=10),
+          axis.title.y=element_text(size=10),
+          plot.title = element_text(size = 10, face = "bold"),
+          plot.title.position = tpos,
+          panel.grid.minor = element_blank(),
+          plot.margin=grid::unit(c(5+upmarmod,5+rmarmod,5+dnmarmod,5+lmarmod), "mm"))
+
+  if(!is.null(bizone)) {
+    p <- p +
+      geom_hline(yintercept = bizone[1], linetype="dashed", color = "red3", size=.5) +
+      geom_hline(yintercept = bizone[2], linetype="dashed", color = "red3", size=.5) +
+      annotate('label', x = .55, y = mean(bizone), label = "Bimodal\nregion", hjust = .5, vjust = .5,
+               family = "Roboto", size = 3, label.padding = unit(.15, "lines"), label.size = 0, alpha = .65)
+  }
+
+  p
 }

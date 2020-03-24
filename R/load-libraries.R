@@ -4,6 +4,7 @@
 library(tidyverse)
 library(Hmisc)
 library(dplyr)
+library(quantmod) # for findPeaks fxn
 library(MDPtoolbox)
 
 # plotting libraries

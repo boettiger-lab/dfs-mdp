@@ -157,3 +157,29 @@ sub_results %>% rename(state = `mean(state)`) %>%
   mutate(delta = state-no_sub_state)%>% ggplot(aes(x = Tsubs, y = r, fill = state)) + geom_tile()
 
 ```
+
+
+
+```{r indiv_fig_6}
+# ggarrange(
+#   plt_sim_b_sweep(fast_r_sims, title = ggtitle("A. Fast ecological change rate"), 
+#                 ylab = "Density", col = pal[4], rmarmod = -5),
+#   plt_sim_b_sweep(myopic_d_sims, title = ggtitle("B. Myopic decision-making"), 
+#                 tpos = "panel", col = pal[7], lmarmod = -2.5, rmarmod = -2.5),
+#   plt_sim_b_sweep(chans_sims, title = ggtitle("C. Human/enviro. interaction"), 
+#                 tpos = "panel", col = pal[1], lmarmod = -5),
+#   nrow = 1, ncol = 3, widths = c(1,1,1)
+# )
+
+# ggarrange(
+#   plt_b_sweep_peaks(b_sweep_peaks(fast_r_sims), title = ggtitle("A. Fast ecological change rate"),
+#                     ylab = "ES state density peak(s)", col = pal[4], rmarmod = -5),
+#   plt_b_sweep_peaks(b_sweep_peaks(myopic_d_sims), title = ggtitle("B. Myopic decision-making"),
+#                     tpos = "panel", col = pal[7], lmarmod = -2.5, rmarmod = -2.5),
+#   plt_b_sweep_peaks(b_sweep_peaks(chans_sims), title = ggtitle("C. Human/enviro. interaction"),
+#                     tpos = "panel", col = pal[1], lmarmod = -5),
+#   nrow = 1, ncol = 3, widths = c(1,1,1)
+# )
+```
+
+
