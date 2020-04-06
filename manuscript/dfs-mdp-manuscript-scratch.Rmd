@@ -3,6 +3,10 @@ title: "dfs-med manuscript scratchpad"
 output: pdf_document
 ---
 
+
+While much of the research on agricultural management continues to rely on traditional disciplinary approaches (e.g. sociology and agronomiic fields)[@francis2008transdisciplinary], researchers are increasingly experimenting with novel computational methods like agent-based modeling, network analytics, and machine learning to try to capture and understand this systems behavior  [@lippe2019using; @wiltshire2018using; @wiltshire2019network].  Yet these tools still often rely on predefined and fixed decision rules, removing the dynamic and responsive nature of agent decision-making, and thus limiting the capacity to explore levers of change that stem from interactions between adaptive agents and a changing environment. Our work attempts to model agent decision-making as interactive ....
+
+
 ##pulled out of intro, didn't seem to fit
 For example, community composition of birds and soil microbes jointly influence food safety through the incidence and suppression of foodborne pathogens, and are impacted by farm level decisions about practices. 
 
