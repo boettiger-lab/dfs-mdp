@@ -6,9 +6,9 @@ soln_plot <- function(soln_df, tpt) {
     annotate('label', x = tpt + .15, y = .375, label = "Tipping point", hjust = 0, vjust = .5,
              family = "Roboto", size = 3.25, label.padding = unit(.15, "lines"), label.size = 0, alpha = .65) +
     annotate("segment", x = tpt + .15, xend = tpt + .025, y = .375, yend = .375, size=.5, arrow=arrow(length = unit(0.22, "cm"))) +
-    labs(x="ES state", y="Optimal DP investment") +
+    labs(x="ES state", y="Optimal DP adoption") +
     scale_x_continuous(limits = c(0,NA), expand = c(.01,.01)) +
-    scale_y_continuous(limits = c(0,1), expand = c(.01,.01)) +
+    scale_y_continuous(limits = c(0,1), expand = c(.01,.01), labels = scales::percent_format(accuracy = 1)) +
     theme(axis.text.x=element_text(size=10),
           axis.text.y=element_text(size=10),
           axis.title.x=element_text(size=10),

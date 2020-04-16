@@ -236,7 +236,7 @@ ggarrange(
 
 While land tenure is intertwined with land use decisions, agricultural incentives have also become an integral part of farming over the past half-century, and policymakers are continually called upon to weigh farm viability against food affordability and environmental sustainability to design effective incentive packages [@graddy2017supply]. Agricultural incentives and subsidies have a range of goals, one of which is the promotion of sustainable management practices. We explore the impact of incentive duration on policy efficacy by implementing two competing incentive structures: a short-term (two-year) incentive which completely covers the cost of diversification practice adoption, versus a longer-term (ten-year) incentive which only marginally offests the transition cost.  Within the model, agents adapt their decision strategy during the subsidy period, and at its conclusion they revert to the subsidy-free strategy.  Formally, the cost of each incentive package to the taxpayer is equal, and in fact the short-term subsidy is technically more valuable if economic discounting is applied.  
 
-Fig \ref{fig:res_subsidy] shows that longer, more sustained incentive programs may be more effective at nudging behavior over the critical threshold toward more sustainable systems.  Comparing the subsidy simulations to the base case, non-subsidy results, we find that, while both incentive packages worked to some extent, the sustained incentive was much more effective at moving the needle.  Due to the tipping point dynamic, once an agent has crossed the threshold to the diversified state, it becomes much less likely that they will fall back toward the "simplified" state.  Since ecosystem state change in the model is somewhat stochastic, as it is in real-world ecosystems, it may take a series of investent actions over several years before the ecosystem reacts.  Due to this time delay, longer-term subsidy packages have a higher chance of nudging behavior beyond the critical threshold, ultimately resulting in more agroecological practice adoption.  
+Fig \ref{fig:res_subsidy} shows that longer, more sustained incentive programs may be more effective at nudging behavior over the critical threshold toward more sustainable systems.  Comparing the subsidy simulations to the base case, non-subsidy results, we find that, while both incentive packages worked to some extent, the sustained incentive was much more effective at moving the needle.  Due to the tipping point dynamic, once an agent has crossed the threshold to the diversified state, it becomes much less likely that they will fall back toward the "simplified" state.  Since ecosystem state change in the model is somewhat stochastic, as it is in real-world ecosystems, it may take a series of investent actions over several years before the ecosystem reacts.  Due to this time delay, longer-term subsidy packages have a higher chance of nudging behavior beyond the critical threshold, ultimately resulting in more agroecological practice adoption.  
 
 
 ```{r subsidies_sim, include = FALSE}
@@ -442,7 +442,7 @@ The action space is a continuous vector from 0 to 1, with $a=0$ representing no 
 
 The time step $t$ corresponds to a single growing season.  At each time step, the agent chooses an action based on their current state by following decision strategy $\pi$.  This strategy is calculated by maximizing expected utility for each state/action pair over the full time horizon using a Stochastic Dynamic Programming (SDP) approach [@marescot2013complex], with the discount rate $\gamma$ determining how much the agent values current rewards relative to future rewards.
 
-### Model mathematical description
+## Model mathematical description
 
 The farmer's decision model can be expressed as
 
@@ -450,9 +450,9 @@ $$\max_{\lbrace a_t \rbrace} \mathbb{E} \left[ \sum_t^T u(s_t, a_t) \gamma^t \ri
 
 where $\lbrace a_t \rbrace$ is the set of available actions to be taken at each point in time $t$, $\mathbb{E}$ the expected utility operator, $u(s_t, a_t)$ the utility which the farmer associates with being in state $s_t$ and taking action $a_t$ at time $t$, and $\gamma$ the myopic discount factor. $T$ is the land tenure of the farm ($T \to \infty$ if the farmer owns the land or has a long lease).
 
-We assume a simple model of the farmer's perceived utility, $u(s_t, a_t)$, as a function of the costs $c$ associated with diversification practice investment action $a$, versus benefits $b$ derived from achieved ecosystem state $s$:
+We assume a simple model of the farmer's perceived utility, $u(s_t, a_t)$, as a function of the costs $c_a$ associated with diversification practice investment action $a_t$ at time $t$, versus benefits $b_s$ derived from ecosystem state $s_t$ at time $t$:
 
-$$u(s_t, a_t) = b s_t  - c a_t$$
+$$u(s_t, a_t) = b_s s_t  - c_a a_t$$
 
 The ecosystem state is also dynamic, evolving according to the transition probability function $p(s_t, a_t)$, such that
 
@@ -483,11 +483,11 @@ We have parameterized the model to illustrate bistability in CHANS resulting fro
 
 To ground-truth this modeling work, our interdisciplinary research team began by investigating real-world drivers of farmers' management practices using qualitative observations of trends within a relatively-small sample.  We then test hypotheses using data from a larger-scale survey.
 
-## Original interviews
+### Original interviews
 
 We conducted interviews and on-farm observational studies of 20 organic lettuce growers and 8 technical assistance providers in California's Salinas Valley.  The sample was stratified to include growers across the spectrum of scale and market outlet.  Echoing previous research in this area, we find that adoption of diversification practices tends to be bimodal; that is, growers are likely to either intensively-adopt many DPs, or to adopt them minimally.  Participants cited decision factors including limited capital availability to implement practices with high up-front costs, food safety stipulations based on market outlet, risk attitude, and economic discounting.  Both length of time on the land and whether land is leased versus owned also emerged as salient decision criteria.
 
-## Survey dataset
+### Survey dataset
 
 To evaluate the extent to which these observed adoption distributions hold quantitatively, we leverage a dataset of survey responses from 295 vegetable growers in Washington, Oregon, and California *CITE DATA SOURCE*.  Table \ref{tab:dps_in_survey} shows the set of DPs queried in the survey, with their adoption rates across the entire sample.  A histogram plotting the number of diversification practices used by each grower (Fig \ref{fig:res_bimodal}C) shows a bimodal distribution, with growers generally tending to either adopt zero DPs---the most likely case---or else to adopt many, with six practices being the next-most-likely.  To investigate the effect of land tenure on DEP adoption, we partition the dataset into growers who primarily own their land versus those who primarily lease.  Figure \ref{fig:res_tenure}D shows that owners in our sample are about 20\% more likely than leasers to invest in at least one diversification practice.
 

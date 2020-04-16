@@ -18,7 +18,7 @@ caorwa_dp_count_hst <- function(caorwa_data, title = ggtitle(NULL), tpos = "plot
   as.data.frame(table(dp_counts(caorwa_data))) %>%
     ggplot(aes(x=Var1)) +
     geom_bar(aes(y=Freq), color=NA, fill="black", alpha = .8, stat = "identity") +
-    geom_text(aes(y = Freq, label=Freq), hjust=1.6, color="white", position = position_dodge(0.9), size=3, family = "Roboto Condensed") +
+    geom_text(aes(y = Freq, label=Freq), hjust=1.2, color="white", position = position_dodge(0.9), size=3, family = "Roboto Condensed") +
     coord_flip() +
     xlab("Num. DPs adopted") +
     ylab("Frequency") +
