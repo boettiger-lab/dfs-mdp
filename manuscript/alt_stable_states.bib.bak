@@ -1,5 +1,59 @@
 % Encoding: UTF-8
-
+@article{jackson200950,
+  title={The 50-Year farm bill-a long-term plan for sustainable land use across America},
+  author={Jackson, Wes},
+  year={2009},
+  publisher={Kansas State University}
+}
+@article{foley2011solutions,
+  title={Solutions for a cultivated planet},
+  author={Foley, Jonathan A and Ramankutty, Navin and Brauman, Kate A and Cassidy, Emily S and Gerber, James S and Johnston, Matt and Mueller, Nathaniel D and O’Connell, Christine and Ray, Deepak K and West, Paul C and others},
+  journal={Nature},
+  volume={478},
+  number={7369},
+  pages={337--342},
+  year={2011},
+  publisher={Nature Publishing Group}
+}
+@article{foley2005global,
+  title={Global consequences of land use},
+  author={Foley, Jonathan A and DeFries, Ruth and Asner, Gregory P and Barford, Carol and Bonan, Gordon and Carpenter, Stephen R and Chapin, F Stuart and Coe, Michael T and Daily, Gretchen C and Gibbs, Holly K and others},
+  journal={science},
+  volume={309},
+  number={5734},
+  pages={570--574},
+  year={2005},
+  publisher={American Association for the Advancement of Science}
+}
+@article{rosa2019ecological,
+  title={Ecological-economic trade-offs of Diversified Farming Systems--A review},
+  author={Rosa-Schleich, Julia and Loos, Jacqueline and Mu{\ss}hoff, Oliver and Tscharntke, Teja},
+  journal={Ecological economics},
+  volume={160},
+  pages={251--263},
+  year={2019},
+  publisher={Elsevier}
+}
+@article{blaauw2014flower,
+  title={Flower plantings increase wild bee abundance and the pollination services provided to a pollination-dependent crop},
+  author={Blaauw, Brett R and Isaacs, Rufus},
+  journal={Journal of Applied Ecology},
+  volume={51},
+  number={4},
+  pages={890--898},
+  year={2014},
+  publisher={Wiley Online Library}
+}
+@article{morandin2016pest,
+  title={Pest control and pollination cost--benefit analysis of hedgerow restoration in a simplified agricultural landscape},
+  author={Morandin, LA and Long, RF and Kremen, C},
+  journal={Journal of Economic Entomology},
+  volume={109},
+  number={3},
+  pages={1020--1027},
+  year={2016},
+  publisher={Entomological Society of America}
+}
 @article{downey2016european,
   title={European Neolithic societies showed early warning signals of population collapse},
   author={Downey, Sean S and Haas, W Randall and Shennan, Stephen J},
@@ -412,6 +466,32 @@
   volume    = {50},
   pages     = {70--83},
   publisher = {Elsevier},
+}
+
+@Manual{RCT2019,
+  title        = {R: A Language and Environment for Statistical Computing},
+  author       = {{R Core Team}},
+  organization = {R Foundation for Statistical Computing},
+  address      = {Vienna, Austria},
+  year         = {2019},
+  url          = {https://www.R-project.org/},
+}
+
+@Manual{Chades2017,
+  title  = {MDPtoolbox: Markov Decision Processes Toolbox},
+  author = {Iadine Chades and Guillaume Chapron and Marie-Josee Cros and Frederick Garcia and Regis Sabbadin},
+  year   = {2017},
+  note   = {R package version 4.0.3},
+  url    = {https://CRAN.R-project.org/package=MDPtoolbox},
+}
+
+@Book{Wickham2016,
+  title     = {ggplot2: Elegant Graphics for Data Analysis},
+  publisher = {Springer-Verlag New York},
+  year      = {2016},
+  author    = {Hadley Wickham},
+  isbn      = {978-3-319-24277-4},
+  url       = {https://ggplot2.tidyverse.org},
 }
 
 @Comment{jabref-meta: databaseType:bibtex;}
