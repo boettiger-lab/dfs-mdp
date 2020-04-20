@@ -480,6 +480,12 @@ Even with no inherent complexity in the ecological model, and decision-making ag
 Several limitations of this model should be considered. We do not draw distinctions between diversification practices that have different cost structures or ecological outcomes. Additionally, our model does not capture market dynamics resulting from feedbacks between production and consumption, but rather conceives of the system as a commodity market within which an individual grower's production does not influence the market price.  We also do not consider ecosystem services or deleterious environmental effects that spillover from neighboring farms. However, these can all be integrated into the presented framework and offer potential avenues for future research.  
 
 
+# Acknowledgements
+
+- National Science Foundation #CNH-1824871
+
+
+
 # Methods
 
 We developed a Markov Decision Process model to represent a farmer's agroecological adoption choices over time.  The model's state space is a vector with a lower bound of 0 and a soft upper bound of 1, with the system state $s_t$ representing the degree to which the agent derives ecosystem service benefits $b_s$ from the diversification practices they have implemented on their farm.  Actions to increase investments in diversification practices probabilistically increase or decrease the future system state, with $r$ defining the rate at which the ecosystem responds to change.  While agents may stochastically transition to $s>1$, investments into diversification practices do not positively correlate with the probability of upward state transitions beyond $s=1$.
