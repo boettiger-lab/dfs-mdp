@@ -50,7 +50,7 @@ address:
   - code: organic
     address: "The Organic Center, Washington, DC, USA"
     
-abstract: The emergence and impact of tipping points are of immense interest in both social and ecological research. Yet despite widespread recognition of feedbacks between the two domains, it is often assumed that the underlying forces that lead to nonlinear behaviors rest within either human or natural processes. Our work shows how tipping points can arise in a stylized coupled human and natural systems (CHANS) model representing adoption of agroecological diversification practices.  Even when neither system alone has complex dynamics, a farmer's adoption choice, based on their perceived utility over a given time horizon, together with ecological services derived from stochastic environmental change, can drive systems into alternate stable states. Because ecosystem services take years to accrue, farmers on degraded land, or those operating under a shorter time horizon, are disincentivized to invest in agroecology, while others are more likely to bolster ecosystem services further by adopting additional agroecological practices. This path dependency leads to a bifurcation into either a more-simplified (conventional) or more-diversified (agroecological) farming approach, which echoes empirical findings. We show that this tipping point need not be an inherent feature of either ecological or decision dynamics, but can emerge as a general pattern when a simple ecosystem model and a rational decision process are dynamically coupled over time. We suggest that this finding has important implications for agricultural and land use policy design across a range of domains, including land tenure and agroecological subsidies.
+abstract: The existence and impact of tipping points are of immense interest in both social and ecological research. Despite widespread recognition of feedbacks between the two domains, it is often assumed that the underlying forces that lead to nonlinear behaviors rest within either human or natural processes. Our work shows how tipping points can arise in a stylized coupled human and natural systems (CHANS) model representing adoption of agroecological diversification practices.  Even when neither system alone has complex dynamics, a farmer's adoption choice, based on their perceived utility over a given time horizon, together with ecological services derived from stochastic environmental change, can drive systems into alternate stable states. Because ecosystem services take years to accrue, farmers on degraded land, or those operating under a shorter time horizon, are disincentivized to invest in agroecology, while others are more likely to bolster ecosystem services further by adopting additional agroecological practices. This path dependency leads to a bifurcation into either a more-simplified (conventional) or more-diversified (agroecological) farming approach, which echoes empirical findings. We show that this tipping point need not be an inherent feature of either ecological or decision dynamics, but can emerge as a general pattern when a simple ecosystem model and a rational decision process are dynamically coupled over time. We suggest that this finding has important implications for agricultural and land use policy design across a range of domains, including land tenure and agroecological subsidies.
 
 keywords:
   - agriculture,
@@ -136,16 +136,52 @@ init <- truncnorm::rtruncnorm(reps, 0, 1, 0.5, 0.2) %>%
 
 # Introduction
 
-Both ecosystems and social systems have been observed to change states abruptly as the result of crossing a critical threshold or "tipping point". Theories of ecological multistability have long described this phenomenon [@scheffer2003catastrophic] and explored how ecological management impacts stability landscapes [@Horan7333], with tipping points assumed to stem from complex ecological processes like population dynamics. Similarly, examples from social science---from the collapse of societies [@downey2016european], to social network dynamics such as the spread of innovations [@kuehn2014critical]---suggest that tipping points may result from complex features of human systems. Despite widespread interest in the causes and location of tipping points in integrated socio-ecological systems, it has generally been assumed that the underlying dynamical complexity can be ascribed to either social processes *or* natural phenomena.
+<!-- 
+outline:
+
+para 1: tipping points
+para 2: CHANS
+para 3: Ag + DFS
+para 4: This paper ... stylized model
+-->
+
+
+Both ecosystems and social systems have been observed to change states abruptly as the result of crossing a critical threshold or "tipping point". Theories of ecological multistability have long described this phenomenon [@scheffer2003catastrophic] and explored how ecological management impacts stability landscapes [@Horan7333], with tipping points assumed to stem from complex ecological processes like population dynamics. Similarly, examples from social science--from the collapse of societies [@downey2016european], to social network dynamics such as the spread of innovations [@kuehn2014critical]--suggest that tipping points may result from complex features of human systems. Despite widespread interest in the causes and location of tipping points in integrated socio-ecological systems, it has generally been assumed that the underlying dynamical complexity can be ascribed to either social processes *or* natural phenomena.
+
+<!-- so what?  I think the relevant implication here is that tipping points would be 
+     more common than expected, appearing even when not anticipated by studying eco or 
+     social in isolation.  Thus the real take-home here is a need for more CNHS
+     research, particularly that which uses fully dynamic and truly coupled modeling.-->
+
 
 Empirically exploring tightly coupled dynamic systems presents numerous research challenges [@kline2017integrating].  In such systems, human decisions impact ecological processes, and the resultant changes create feedbacks that alter the scope and efficacy of future decisions [@ostrom2009general; @walker2004resilience; @liu2007complexity].  For example, agricultural management choices can enhance or degrade ecological services that affect the long-term productive capacity of the land, impacting future financial returns, and limiting future decision possibilites [@zhang2007ecosystem].  A complicating factor is that the temporal dynamics of ecological processes do not always align with the temporal scale of human decision-making.  For example, land management to promote ecosystem services may require sequential investments over time and/or take years to accrue [@morandin2016pest; @blaauw2014flower], meaning adoption of these practices requires decisionmakers to be forward looking, adaptive, and cognizant of environmental and economic uncertainty. 
+<!-- I think the point of this paragraph is answering "why hasn't this coupling been done"
+     by stating "it's hard".  That's good, but we should probably be more blunt about it. 
+     maybe could start with the rhetorical question, or simply extend first sentence:
+     "... which frequently lead researchers to focus on the dynamics of either the 
+     ecological or social component in isolation, and thus miss the tipping point"
+     
+     Also, not sure if this is the second paragraph, I think it might be better as the
+     third paragraph?
+-->
 
-Agriculture is a fundamental driver of anthropogenic ecological change [@stoate2009ecological; @foley2005global; @foley2011solutions], providing a valuable context to examine how social and ecological systems interact.  Agriculture influences both human and ecosystem well-being, while production practices vary in their environmental impacts, long-term sustainability, financial viability, and climate resilience.  It is increasingly recognized that effective policies to address environmental issues like the long-term sustainability of agricultural practices require interdisciplinary approaches which consider both human decision-making and ecology as a coupled human-and-natural system (CHANS) [@liu2007complexity; @alberti2011research].  
 
+
+Agriculture is a fundamental driver of anthropogenic ecological change [@stoate2009ecological; @foley2005global; @foley2011solutions], providing a valuable context to examine how social and ecological systems interact.  
+<!-- Good, but stay with/tie back to the theme: "yet tightly coupled dynamical 
+     models of this coupling are rare."  (or something like that)-->
+~~Agriculture influences both human and ecosystem well-being, while production practices vary in their environmental impacts, long-term sustainability, financial viability, and climate resilience.~~<!--cut? this is self-evident? or can we say it more succiently with a citation?-->
+<!-- We need to move introducing the CHANS acronym and citation into paragraph 1 (or 2) -- otherwise reader will think we are talking about CHANS without being aware that it's already 'a thing'-->
+It is increasingly recognized that effective policies to address environmental issues like the long-term sustainability of agricultural practices require interdisciplinary approaches which consider both human decision-making and ecology as a coupled human-and-natural system (CHANS) [@liu2007complexity; @alberti2011research].  
+
+<!--  I think we need this next paragraph to move up into the previous one.  We could
+      go right into this after the first sentence of the previous paragraph.  -->
 Here we focus on Diversified Farming Systems (DFS), which use agricultural practices that promote beneficial biodiversity and bolster ecosystem services, simultaneously enhancing farm- and landscape-scale productivity  [@kremen2012diversified].  While existing research has increased our understanding of how diversification practices affect ecological and financial outcomes [@rosa2019ecological], an integrated approach requires consideration of the feedback loop between adoption of a given practice, resultant ecological change, and future decision landscapes. Such an approach provides a framework to analyze the potential synergies and tradeoffs inherent to how diversified farming systems affect and are affected by ecosystem processes. 
 
+<!-- Intro sentence isn't that strong here.  Point of this paragraph is to cite previous work that might appear similar but really isn't.  Possibly, we can roll this into the previous paragraph.  Message here is actually similar to what is currently paragraph 2.-->
 Computational approaches to explore structural attributes of human-environment systems can illuminate core dynamics, suggest levers of change, and highlight important assumptions to explore empirically.  However, much of the existing literature in this area focuses either on human decision-making (with ecological processes being exogenous to the model), or explores the complexity of ecological processes without sufficiently considering the role of adaptive human agents  [@vandermeer2012syndromes].  Further, those techniques that do investigate dynamic processes and responsive decision-making don't generally allow for forward looking agents [@lippe2019using], ultimately misrepresenting the complex coupling of these systems.  
 
+<!-- excellent -->
 This paper presents a stylized model of agroecological diversification practice adoption to explore the complex dynamical properties that result specifically from interactions between adaptive decision-making and an ever-changing environment.  We find a novel mechanism for bistability that is the result not of complex structural assumptions within either the human or natural system, but simply the rates at which the two systems interact over time.  While our model necessarily simplifies both decision-making and environmental processes, it provides a platform to integrate empirical findings and explore emergent properties of CHANS.  Additionally, we suggest important implications of such tipping point dynamics for agroecological policy design.
 
 
