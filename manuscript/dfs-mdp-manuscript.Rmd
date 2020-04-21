@@ -70,7 +70,7 @@ header-includes:
 
 ---
 
-```{r render_to_word_doc, eval = FALSE}
+```{r render_to_word_doc, include = FALSE, eval = FALSE}
 
 # run this to generate a word doc
 # not perfect, will have to format word doc after, but best I could come up with
@@ -85,11 +85,11 @@ rm(list = ls(all.names = TRUE)) # clean environment
 
 # load external scripts
 source("../R/load-libraries.R")
-source("../R/continuous-model.R")
+source("../R/dfs-mdp-model.R")
 source("../R/sim-plot-fxns.R")
 source("../R/caorwa-plot-fxns.R")
 # load CA_OR_WA farmer survey dataset
-caorwa_data <- read.csv("../external-data/ADAPT_CA-OR-WA_2_2020.csv")
+caorwa_data <- read.csv("./external-data/ADAPT_CA-OR-WA_2_2020.csv")
 
 knitr::opts_chunk$set(echo = FALSE,
                       cache = FALSE,
@@ -108,7 +108,7 @@ set.seed(4) # random seed
 actions <- seq(0, 1, length = 100)
 states <- seq(0, 1.5, length = 100)
 params <- list(
-  benefit = 1.56, #orig. benefit = 1.57, 
+  benefit = 1.56, 
   cost = 1, 
   sigma = 0.1, 
   r = 0.1, 
@@ -123,7 +123,6 @@ base_soln <- MDPtoolbox::mdp_value_iteration(model$P, model$U, params$discount)
 base_soln_df <- tibble(state = states,
                        action = actions[base_soln$policy])
 
-#write_csv(base_soln_df, "../model-data/base_soln_df.csv.gz")
 ```
 
 ```{r global_sim_params, include = FALSE}
@@ -155,8 +154,8 @@ We explore the transition to and from diversified farming systems using a Markov
 
 \begin{figure}
 \centering 
-\includegraphics[width=.75\textwidth]{external-figs/dfs_mdp_conceptual_fig_8.png}
-\caption{Conceptual diagram of the DFS-MDP model.  The farmer's choice of how much to invest (time and/or money) into diversification practices (DP) adoption is shown in blue, and the resulting ecosystem services (ES) state in green, with a more diversified state at the top, and a more simplified state at bottom.  Each year $t$, the farmer evaluates which action they judge to have the highest expected utility based on the perceived utility function $(u)$ and the ecosystem state transition probability function $(p)$.  $(p)$ describes how, for a given state and action at year $t$, the ecosystem responds stochastically at year $t+1$.  The updated ecosystem state then feeds back to influence the farmer's future choices.  This leads to complex tradeoffs arising from the coupling of ecological processes with the series of DP adoption decisions made by the farmer.}
+\includegraphics[width=.75\textwidth]{external-figs/dfs_mdp_conceptual_fig.png}
+\caption{Conceptual diagram of the DFS-MDP model.  The farmer's choice of how much to invest (time and/or money) into diversification practices (DP) adoption is shown in blue, and the resulting ecosystem services (ES) state in green, with a more diversified state at the top, and a more simplified state at bottom.  Each year, the farmer chooses the optimal action for their current ES state based on the perceived utility function $(u)$ and the state transition probability function $(p)$.  $(p)$ describes how, for a given ES state and action at year $t$, the ecosystem responds stochastically at $t+1$.  The updated ES state then feeds back to influence the farmer's future choices, leading to complex tradeoffs arising from the coupling of ecological processes with consecutive DP adoption decisions over time.}
 \label{fig:res_conceptual}
 \end{figure}
 
@@ -177,15 +176,15 @@ sim <- function(soln,
 sims_baseline <- sim(base_soln)
 
 # p_up_dn(sims_baseline)
-#write_csv(sims_baseline, "../model-data/sims_baseline.csv.gz")
 ```
 
 
-```{r res_bimodal, fig.cap = "Simulations of 500 model agents over 20 farming seasons.  Initial ES states follow a truncated normal distribution (mean = 0.5; S.D. = 0.2; truncated at [0,1]).  Agents then utilize decision strategy $\\pi$ as shown in Fig \\ref{fig:res_strategy} until $t = 20$.  (A) State of each agent throughout each run.  (B) Initial ES distribution (dark blue) and bimodal density distribution at $t = 20$ (light blue), with peaks annotated. (C) Observed bimodal DP adoption distribution in our survey data.", fig.width = 6, fig.asp = .5}
+```{r res_bimodal, fig.cap = "Replicate simulations of 500 model agents.  Initial ES states are distributed normally (mean = 0.5; S.D. = 0.2; truncated at [0,1]).  Agents follow decision strategy $\\pi$ as shown in Fig \\ref{fig:res_strategy} until $t = 20$.  (A) ES state of each agent over time.  (B) Initial ES distribution (dark blue) and final bimodal distribution at $t = 20$ (light blue). (C) Empirical bimodal DP adoption distribution from our survey data.", fig.width = 6, fig.asp = .5}
 
 ggarrange(
   sim_plot_ts(sims_baseline, title = ggtitle("A. ES state over time"), rmarmod = -5), 
-  sim_plot_dens(sims_baseline, title = ggtitle("B. Init. and final state"), tpos = "panel", lab_lo_peak = TRUE, lab_hi_peak = TRUE, lmarmod = -5), 
+  sim_plot_dens(sims_baseline, title = ggtitle("B. Init. and final state"), 
+                tpos = "panel", lab_lo_peak = TRUE, lab_hi_peak = TRUE, lmarmod = -5), 
   caorwa_dp_count_hst(caorwa_data, title = ggtitle("C. Empirical distribution")), 
   widths = c(2.75, 2, 1.75), nrow = 1, ncol = 3
 )
@@ -196,13 +195,13 @@ ggarrange(
 ## Optimal decision strategy
 The decision strategy $\pi$ describes the optimal course of action for a given state and is the same for all agents in the simulation.  Fig \ref{fig:res_strategy} reveals that there is a critical bifurcation, or tipping point, at a specific ecosystem state, below which the highest expected value is derived by investing little to nothing into diversified farming systems, and above which the optimum action becomes near-full investment. Over time, this results in the bimodal distribution of ecosystem states in Fig \ref{fig:res_bimodal}. 
 
-```{r res_strategy, fig.cap = "Optimal decision strategy $\\pi$ as a function of ecosystem state, showing a tipping point at $s \\approx 0.52$.  The upper $x$ axis limit is the 99th percentile of observed states in our simulation results ($s \\approx 1.23$).", fig.width = 3, fig.asp = 1}
+```{r res_strategy, fig.cap = "Optimal decision strategy $\\pi$ as a function of ES state, showing a tipping point at $s \\approx 0.52$.  The upper $x$ axis limit is the 99th percentile of observed states in our simulation results ($s \\approx 1.3$).", fig.width = 3, fig.asp = 1}
 
 state99th <- sims_baseline %>% 
-            mutate(state = states[state]) %>% 
-            pull(state) %>% 
-            quantile(.99) %>% 
-            unname()
+  mutate(state = states[state]) %>% 
+  pull(state) %>% 
+  quantile(.99) %>% 
+  unname()
 tpt <- 0
 for(si in 1:length(states)-1) {
   if(base_soln_df$action[si] < .1 && base_soln_df$action[si+1] > .9) {
@@ -224,17 +223,24 @@ Using the same parameters outlined above, we solve the MDP on a finite two-year 
 ```{r short_tenure_sim, include = FALSE}
 short_tenure_soln <- MDPtoolbox::mdp_finite_horizon(model$P, model$U, params$discount, N = 2)
 sims_short_tenure <- sim(short_tenure_soln)
-#write_csv(sims_short_tenure, "../model-data/sims_short_tenure.csv.gz")
+
 ```
 
-```{r res_tenure, fig.cap = "(A) Result of short land tenure on DP adoption.  The simulation is identical to that in Fig \\ref{fig:res_bimodal}, but the MDP is solved under a finite, two-year time horizon. (B) Comparison between final state distribution of short- vs. long-tenure model runs.  (C) Probability of ecosystem services state being $\\geq 0.125$ at $t=20$ for the short-tenure simulation vs. the base-case simulation. (D) Impact of land tenure on the probability of a farmer in our survey dataset adopting at least one DP.", fig.width = 6, fig.asp = .5}
+```{r res_tenure, fig.cap = "The simulation is identical to that in Fig \\ref{fig:res_bimodal}, but the MDP is solved under a finite, two-year time horizon. (A) Result of short land tenure on ES state over time.  (B) Comparison between final state distribution of short- vs. long-tenure model runs.  (C) Probability of ecosystem services state being $\\geq 0.125$ at $t=20$ for the short- vs. long-tenure simulations. (D) Impact of land tenure on the probability of a farmer in our survey dataset adopting at least one DP.", fig.width = 6, fig.asp = .5}
 
 ggarrange(
-  sim_plot_ts(sims_short_tenure, title = ggtitle("A. Short-tenure timeseries"), endcol = pal[3], rmarmod = -5),
-  sim_plot_dens_comp(sims_baseline, sims_short_tenure, label1 = "Long\ntenure\nfinal", label2 = "Short\ntenure\nfinal", title = ggtitle("B. ES state distribution"), tpos = "panel", lmarmod = -5, rmarmod = -5),
+  sim_plot_ts(sims_short_tenure, title = ggtitle("A. Short-tenure timeseries"), 
+              endcol = pal[3], rmarmod = -5),
+  sim_plot_dens_comp(sims_baseline, sims_short_tenure, 
+                     label1 = "Long\ntenure\nfinal", 
+                     label2 = "Short\ntenure\nfinal", 
+                     title = ggtitle("B. ES state distribution"), 
+                     tpos = "panel", lmarmod = -5, rmarmod = -5),
   ggarrange(
-    sim_tenure_thresh_bar(sims_baseline, sims_short_tenure, thresh = 0.125, title = ggtitle("C. Simulation data")), 
-    caorwa_tenure_thresh_bar(caorwa_data, title = ggtitle("D. Empirical data")), 
+    sim_tenure_thresh_bar(sims_baseline, sims_short_tenure, thresh = 0.125, 
+                          title = ggtitle("C. Simulation data")), 
+    caorwa_tenure_thresh_bar(caorwa_data, 
+                             title = ggtitle("D. Empirical data")), 
     nrow = 2, ncol = 1),
   widths = c(2.5, 2.5, 1.65), nrow = 1, ncol = 3
 )
@@ -267,19 +273,30 @@ subs_sim <- function(params) {
   start <- sim(subs_soln, Tmax = params$Tsubs, x0 = init)
   xi <- start %>% filter(time == params$Tsubs) %>% pull(state)
   # pad to Tmax with baseline decision rule
-  rest <- sim(base_soln, Tmax = params$Tmax - params$Tsubs, x0 = xi) %>% filter(time!=0) %>% mutate(time = time + params$Tsubs)
+  rest <- sim(base_soln, Tmax = params$Tmax - params$Tsubs, x0 = xi) %>% 
+    filter(time!=0) %>% mutate(time = time + params$Tsubs)
   bind_rows(start, rest) 
 }
 
 # run subsidy simulation
-sims_subs_abrupt <- subs_sim(list(benefit = params$benefit, cost = Csubs1, sigma = params$sigma, r = params$r, discount = params$discount, Tsubs = Tsubs1, Tmax = params$Tmax))
-sims_subs_sust <- subs_sim(list(benefit = params$benefit, cost = Csubs2, sigma = params$sigma, r = params$r, discount = params$discount, Tsubs = Tsubs2, Tmax = params$Tmax))
+sims_subs_abrupt <- subs_sim(list(benefit = params$benefit, 
+                                  cost = Csubs1, 
+                                  sigma = params$sigma, 
+                                  r = params$r, 
+                                  discount = params$discount, 
+                                  Tsubs = Tsubs1, Tmax = params$Tmax))
+sims_subs_sust <- subs_sim(list(benefit = params$benefit, 
+                                cost = Csubs2, 
+                                sigma = params$sigma, 
+                                r = params$r, 
+                                discount = params$discount, 
+                                Tsubs = Tsubs2, Tmax = params$Tmax))
 
-#write_csv(sims_subs_abrupt, "../model-data/sims_subs_abrupt.csv.gz")
-#write_csv(sims_subs_sust, "../model-data/sims_subs_sust.csv.gz")
 ```
 
-```{r res_subsidy, fig.cap = "Replicate simulations from 500 normally-distributed starting states (mean = 0.5; S.D. = 0.2; truncated at [0,1]) over 20 timesteps.  (A) Large, abrupt subsidy (100\\% of adoption expenses are covered during the initial two years).  (B) Smaller, more sustained subsidy (adoption cost is 80\\% of baseline during the first 10 years).  Ignoring discounting, subsidies have the same total cost to the funder (the equivalent of 2 years' worth of full adoption cost offsets).  After subsidy is removed, agents adjust their decision rule to that of the base case (i.e. no subsidy) for the remainder of the run.  (C) The sustained subsidy drove more adoption at $t = 20$.", fig.width = 6, fig.asp = .5}
+
+```{r res_subsidy, fig.cap = "Starting from the same initial states as Fig \\ref{fig:res_bimodal}, ES state timeseries are shown for (A) a large, abrupt subsidy (100\\% of adoption expenses are covered for two years) vs. (B) a smaller, more sustained subsidy (adoption cost is 80\\% of baseline for 10 years).  Ignoring discounting, subsidies have the same total cost to the funder (the equivalent of 2 years' worth of full adoption cost offsets).  After the subsidy period, agents adjust their decision rules to that of the base case (i.e. no subsidy) until $t = 20$.  (C) Shows that the sustained subsidy ultimately drove more DP adoption.", fig.width = 6, fig.asp = .5}
+
 ggarrange(
   sim_plot_ts(sims_subs_abrupt, title = ggtitle("A. Abrupt subsidy"), 
               annotate = TRUE, an_x = Tsubs1, an_lab = sprintf("%i year\n%i%% off", Tsubs1, round((1-Csubs1)*100)), 
@@ -311,21 +328,21 @@ Fig \ref{fig:res_b_sweep} shows that, with human/environment interaction, there 
 sim_b_sweep <- function(scenarios, inf_fin, t_horiz = 2) {
   
   sim_b_sweep_scenario <- function(params) {
-  model <- continuous_model(states, actions, params, transition_fn, utility_fn)
-  if(inf_fin == "infinite") {
-    soln <- MDPtoolbox::mdp_value_iteration(model$P, model$U, params$discount)
-  } else if(inf_fin == "finite") {
-    soln <- MDPtoolbox::mdp_finite_horizon(model$P, model$U, params$discount, N = t_horiz)
-  } else stop('inf_fin must be "infinite" or "finite"')
-  sim(soln, Tmax = params$Tmax) %>% 
-    filter(time == params$Tmax)
+    model <- continuous_model(states, actions, params, transition_fn, utility_fn)
+    if(inf_fin == "infinite") {
+      soln <- MDPtoolbox::mdp_value_iteration(model$P, model$U, params$discount)
+    } else if(inf_fin == "finite") {
+      soln <- MDPtoolbox::mdp_finite_horizon(model$P, model$U, params$discount, N = t_horiz)
+    } else stop('inf_fin must be "infinite" or "finite"')
+    sim(soln, Tmax = params$Tmax) %>% 
+      filter(time == params$Tmax)
   }
   
   scenarios %>%
-  purrr::transpose() %>%
-  furrr::future_map_dfr(sim_b_sweep_scenario, .id = "id") %>%
-  left_join(scenarios, by = "id") %>%
-  mutate(state = states[state])
+    purrr::transpose() %>%
+    furrr::future_map_dfr(sim_b_sweep_scenario, .id = "id") %>%
+    left_join(scenarios, by = "id") %>%
+    mutate(state = states[state])
 }
 
 ```
@@ -364,6 +381,7 @@ chans_scenarios <-
   tibble::rownames_to_column("id") %>%
   mutate(benefit = cost / cbr)
 chans_sims <- sim_b_sweep(chans_scenarios, "infinite")
+
 ```
 
 
@@ -397,33 +415,35 @@ b_sweep_peaks <- function(sims, smoothing = 1.5, ythresh = 0.125, output_bizone 
 ```
 
 
-```{r res_b_sweep, fig.cap = "For each scenario (fast ecological process, temporally-myopic decisions, and coupled system), cost/benefit ratio was varied incrementally over 40 values, indicated by color shade, across a range of width 0.15 encompassing the transition between a ``never invest'' to an ``always invest'' policy.  For each $c:b$, replicate simulations were conducted from 500 normally-distributed starting states (mean = 0.5; S.D. = 0.2; truncated at [0,1]) over 20 timesteps.  Upper plots show density curves of ES state at $t=20$ for each $c:b$.  Lower plots show values of density curve peak(s) for each $c:b$.  (A) With fast ecological change rate ($r = 0.95$), no bimodality is seen. (B) With a short-term decision strategy (solving the MDP over a 2-year time horizon), no bimodality is seen.  (C) Only when both forward-looking decision-making and a slowly-adapting environment are included do complex features such as bimodality emerge.", fig.width = 6.5, fig.asp = .6}
+```{r res_b_sweep, fig.cap = "For three scenarios (fast ecological process, temporally-myopic decisions, and coupled system), cost/benefit ratio was varied incrementally over 40 values, indicated by color shade, across a $c:b$ range of width 0.15, encompassing the transition between a ``never invest'' to an ``always invest'' policy.  For each $c:b$, 500 replicate simulations were conducted as in Fig \\ref{fig:res_bimodal}.  Upper plots show distribution of ES state at $t=20$ for each $c:b$.  Lower plots show values of density curve peak(s) for each $c:b$.  With (A) a fast ecological change rate ($r = 0.95$) or (B) a short-term decision strategy (solving the MDP over a 2-year time horizon) no bimodality is seen.  (C) Only by coupling a forward-looking decision-maker and a slowly-adapting environment do complex dynamics like bimodality emerge.", fig.width = 6.5, fig.asp = .6}
 
 ggarrange(
   ggarrange(
     plt_sim_b_sweep(fast_r_sims, title = ggtitle("A. Fast ecological change rate"), 
-                    ylab = "Density", col = pal[4], rmarmod = -7, dnmarmod = -2.5) + theme(legend.position="none"),
+                    ylab = "Density", col = pal[4], rmarmod = -7, dnmarmod = -2.5) + 
+      theme(legend.position="none"),
     plt_b_sweep_peaks(b_sweep_peaks(fast_r_sims), 
                       ylab = "Cost/benefit ratio", col = pal[4], rmarmod = -7, upmarmod = -2.5), 
     nrow = 2, ncol = 1, heights = c(1,1), align = "v"
   ),
   ggarrange(
     plt_sim_b_sweep(myopic_d_sims, title = ggtitle("B. Myopic decision-making"), 
-                    tpos = "panel", col = pal[7], lmarmod = -3.5, rmarmod = -3.5, dnmarmod = -2.5) + theme(legend.position="none"),
+                    tpos = "panel", col = pal[7], lmarmod = -3.5, rmarmod = -3.5, dnmarmod = -2.5) + 
+      theme(legend.position="none"),
     plt_b_sweep_peaks(b_sweep_peaks(myopic_d_sims), 
                       col = pal[7], lmarmod = -3.5, rmarmod = -3.5, upmarmod = -2.5), 
     nrow = 2, ncol = 1, heights = c(1,1), align = "v"
   ),
   ggarrange(
     plt_sim_b_sweep(chans_sims, title = ggtitle("C. Human/enviro. interaction"), 
-                    tpos = "panel", col = pal[1], lmarmod = -7, dnmarmod = -2.5) + theme(legend.position="none"),
+                    tpos = "panel", col = pal[1], lmarmod = -7, dnmarmod = -2.5) + 
+      theme(legend.position="none"),
     plt_b_sweep_peaks(b_sweep_peaks(chans_sims), bizone = b_sweep_peaks(chans_sims, output_bizone = TRUE),
                       col = pal[1], lmarmod = -7, upmarmod = -2.5), 
     nrow = 2, ncol = 1, heights = c(1,1), align = "v"
   ),
   nrow = 1, ncol = 3, widths = c(1,1,1)
 )
-
 
 ```
 
@@ -457,7 +477,7 @@ The time step $t$ corresponds to a single growing season.  At each time step, th
 
 The farmer's decision model can be expressed as
 
-$$\max_{\lbrace a_t \rbrace} \mathbb{E} \left[ \sum_t^T u(s_t, a_t) \gamma^t \right] $$
+$$\max_{\lbrace a_t \rbrace} \mathbb{E} \left[ \sum_t^T u(s_t, a_t) \gamma^t \right]$$
 
 where $\lbrace a_t \rbrace$ is the set of available actions to be taken at each point in time $t$, $\mathbb{E}$ the expected utility operator, $u(s_t, a_t)$ the utility which the farmer associates with being in state $s_t$ and taking action $a_t$ at time $t$, and $\gamma$ the myopic discount factor. $T$ is the land tenure of the farm ($T \to \infty$ if the farmer owns the land or has a long lease).
 
@@ -473,60 +493,51 @@ This provides a minimal state transition model in which the parameter $r$ sets t
 
 ## Model implementation
 
-The model was developed in the *R* programming language [@RCT2019].  The *MDPtoolbox* library was leveraged to set up and solve the MDP [@Chades2017], *tidyverse* for data analysis [@Wickham2019], and *ggplot2* to generate all figures [@Wickham2016].  Code for our model and the experiments conducted in this paper is available freely at [https://github.com/boettiger-lab/diversified-farming-systems](https://github.com/boettiger-lab/diversified-farming-systems).  
+The model was developed in the *R* programming language [@RCT2019].  The *MDPtoolbox* library was leveraged to set up and solve the MDP [@Chades2017], *tidyverse* for data analysis [@Wickham2019], and *ggplot2* to generate all figures [@Wickham2016].  Code for our model and the experiments conducted in this paper is available freely at [https://github.com/boettiger-lab/dfs-mdp](https://github.com/boettiger-lab/dfs-mdp).  
 
 ## Parameterization
 
 We have parameterized the model to illustrate the emergence of bistability in CHANS resulting from agroecological investment decision-making given stochastic ecological responses over time.  Parameter values appear in Table \ref{tab:baseline_params}.
 
 \begin{table}
-	\centering
-	\caption{Baseline parameter values}
-	\begin{tabular}{lc}
-		\hline
-		\textbf{Parameter}			& \textbf{Value} \\
-		\hline
-		Benefit $b$	& 1.56 \\
-		Cost $c$	& 1.00 \\
-		State transition noise $\sigma$ & 0.1 \\
-		State response rate $r$ & 0.1 \\
-		Discount factor $\gamma$ & 0.97 \\
-		\hline
-	\end{tabular}
-	\label{tab:baseline_params}
+\centering
+\caption{Baseline parameter values}
+\begin{tabular}{lc}
+\hline
+\textbf{Parameter} & \textbf{Value} \\
+\hline
+Benefit $b$	& 1.56 \\
+Cost $c$	& 1.00 \\
+State transition noise $\sigma$ & 0.1 \\
+State response rate $r$ & 0.1 \\
+Discount factor $\gamma$ & 0.97 \\
+\hline
+\end{tabular}
+\label{tab:baseline_params}
 \end{table}
 
+## Empirical dataset
 
-## Field observations and empirical data
-
-To ground-truth the modeling work, our interdisciplinary research team began by investigating real-world drivers of farmers' management practices using qualitative observations of trends within a relatively-small sample.  We then evaluated these initial hypotheses using data from a larger-scale survey.
-
-### Original interviews
-
-We conducted interviews and on-farm observational studies of 20 organic lettuce growers and 8 technical assistance providers in California's Salinas Valley.  The sample was stratified to include growers across the spectrum of scale and market outlet.  Echoing previous research in this area, we find that adoption of diversification practices tends to be bimodal; that is, growers are likely to either intensively-adopt many DPs, or to adopt them minimally.  Participants cited decision factors including limited capital availability to implement practices with high up-front costs, food safety stipulations based on market outlet, risk attitude, and economic discounting.  Both length of time on the land and whether land is leased versus owned also emerged as salient decision criteria.
-
-### Survey dataset
-
-To evaluate the extent to which these observed adoption distributions hold quantitatively, we leverage a dataset of survey responses from 295 vegetable growers in Washington, Oregon, and California *CITE DATA SOURCE*.  Table \ref{tab:dps_in_survey} shows the set of DPs queried in the survey, with their adoption rates across the entire sample.  A histogram plotting the number of diversification practices used by each grower (Fig \ref{fig:res_bimodal}C) shows a bimodal distribution, with growers generally tending to either adopt zero DPs---the most likely case---or else to adopt many, with six practices being the next-most-likely.  To investigate the effect of land tenure on DP adoption, we partition the dataset into growers who primarily own their land versus those who primarily lease.  Figure \ref{fig:res_tenure}D shows that owners in our sample are about 20\% more likely than leasers to invest in at least one diversification practice.
+To groud-truth our modeling work, we examine farmers' sustainable management practice adoption distributions using a dataset of survey responses from 295 vegetable growers in Washington, Oregon, and California *CITE DATA SOURCE*.  Table \ref{tab:dps_in_survey} gives the set of diversification practices queried in the survey, with their adoption rates across the entire sample.  A histogram plotting the number of DPs used by each grower (Fig \ref{fig:res_bimodal}C) shows a bimodal distribution, with growers generally tending to either adopt zero DPs---the most likely case---or else to adopt many, with six practices being the next-most-likely.  To investigate the effect of land tenure on DP adoption, we partition the dataset into growers who primarily own their land versus those who primarily lease.  Figure \ref{fig:res_tenure}D shows that owners in our sample are about 20\% more likely than leasers to invest in at least one diversification practice.
 
 \begin{table}
-	\centering
-	\caption{Diversification practices and adoption rates in the survey data}
-	\begin{tabular}{lc}
-		\hline
-		\textbf{DP Name}			& \textbf{Adoption rate} \\
-		\hline
-		Crop Rotation (3 or more)	& 63\% \\
-		Cover Cropping				& 68\% \\
-		Intercropping				& 52\% \\
-		Insectary Plantings			& 61\% \\
-		Riparian Buffers			& 84\% \\
-		Border Plantings			& 45\% \\
-		Compost or Manure			& 75\% \\
-		Reduced Tillage				& 69\% \\
-		\hline
-	\end{tabular}
-	\label{tab:dps_in_survey}
+\centering
+\caption{Diversification practices and adoption rates in the survey data}
+\begin{tabular}{lc}
+\hline
+\textbf{DP Name} & \textbf{Adoption rate} \\
+\hline
+Crop Rotation (3 or more)	& 63\% \\
+Cover Cropping & 68\% \\
+Intercropping & 52\% \\
+Insectary Plantings & 61\% \\
+Riparian Buffers & 84\% \\
+Border Plantings & 45\% \\
+Compost or Manure & 75\% \\
+Reduced Tillage & 69\% \\
+\hline
+\end{tabular}
+\label{tab:dps_in_survey}
 \end{table}
 
 
