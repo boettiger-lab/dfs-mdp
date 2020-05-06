@@ -193,6 +193,7 @@ ggarrange(
 ```
 
 ## Optimal decision strategy
+
 The decision strategy $\pi$ describes the optimal course of action for a given state and is the same for all agents in the simulation.  Fig \ref{fig:res_strategy} reveals that there is a critical bifurcation, or tipping point, at a specific ecosystem state, below which the highest expected value is derived by investing little to nothing into diversified farming systems, and above which the optimum action becomes near-full investment. Over time, this results in the bimodal distribution of ecosystem states in Fig \ref{fig:res_bimodal}. 
 
 ```{r res_strategy, fig.cap = "Optimal decision strategy $\\pi$ as a function of ES state, showing a tipping point at $s \\approx 0.52$.  The upper $x$ axis limit is the 99th percentile of observed states in our simulation results ($s \\approx 1.3$).", fig.width = 3, fig.asp = 1}
@@ -450,12 +451,20 @@ ggarrange(
 
 # Discussion
 
+<!-- Para 1. bistable mechanism-->
+
 Our analysis suggests a mechanism for bistability in coupled human and natural systems that is not the result of complex structural assumptions about either system alone, but rather the temporal interactions between forward-looking decisions and ecological processes. While the concepts of regime shifts and tipping points within coupled human and natural systems [@lade2013regime] have been previously explored, our results cast light on temporal mechanisms that might help to explain this phenomenon. We suggest this knowledge provides novel considerations not only for coupled human and natural systems research but also agricultural policy. 
+
+<!-- Para 2. Different from existing stuff, Vandemeer Syndromes bc different mechanism-->
 
 By representing diversified agroecological adoption as a coupled system, we find that the empirically-observed bistability may be the result of tipping points in the optimal sequence of decisions regarding slow ecological processes, rather than tipping points inherent in the ecological dynamics or the cognitive/social predispositions of human agents alone.  
 
+<!-- Para 3. Matters bc it has policy implications -->
+
 In light of historical agricultural catastrophes like the Dust Bowl, the importance of informed policy action in response to stressors like climate change and soil degradation is imperative. Offering incentives and encourage the adoption of agroecological diversification practices is important for increasing food system resilience to global change [CITE]. Existing case studies emphasize that policy mechanisms designed to promote agricultural sustainability have complex ramifications [@ipes2018breaking]. Policy design must take into account the likely case of thresholds at which particular farming practices become more or less viable. 
 We suggest that the temporal component of decision-making and  feedbacks is an important consideration for incentive and land tenure agricultural policies aiming to promote more resilient food systems. Compared to short-term subsidies, longer-term incentives were found to be more successful in moving farmers who started in the simplified ecological states to  diversified states.  A ramification of this finding is that the perceived stability of subsidy programs over time may be an important driver of their efficacy. Since the transitional barrier between the two stable states represents a precarious economic position, if a subsidy is not guaranteed for a long enough period to get significant benefits from the ecological feedbacks, the farmer may be incentivized to simply continue in their initial state.  With U.S. Farm Bills being overhauled every five years, a farmer may have limited confidence that a critical subsidy program will be sufficiently long-lived, suggesting that a policy lever may be to extend the sunsetting of agroecological policy bills [@jackson200950].  
+
+<!-- Para 4. Limitations / future work -->
 
 Land tenure is known to affect sustainable agricultural practice adoption [@soule2000land; @fraser2004land; @richardson2015land; @long2017hedgerow]. For example, landowners or long-term lease holders have a larger stake in the productive quality of their soil ecology. By coupling the rate of ecological change with the time horizon of decision-making under different tenure situations we illustrate why secure land tenure is integral to the adoption of diversified agroecological practices. Policies that increase land tenure duration, such as regulating lease agreement terms, providing low interest loans, or promoting stable farm succession plans, may therefore represent a key lever to nudge farmers toward more diversified agroecological systems.
 
