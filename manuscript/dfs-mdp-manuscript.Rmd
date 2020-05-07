@@ -88,8 +88,10 @@ source("../R/load-libraries.R")
 source("../R/dfs-mdp-model.R")
 source("../R/sim-plot-fxns.R")
 source("../R/caorwa-plot-fxns.R")
+
 # load CA_OR_WA farmer survey dataset
 caorwa_data <- read.csv("./external-data/ADAPT_CA-OR-WA_2_2020.csv")
+caorwa_data <- filter_caorwa(caorwa_data)
 
 knitr::opts_chunk$set(echo = FALSE,
                       cache = FALSE,
