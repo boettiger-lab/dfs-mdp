@@ -282,6 +282,31 @@ sim_tenure_thresh_bar <- function(sims_long_tenure, sims_short_tenure, thresh, t
           plot.margin=grid::unit(c(5,5,0,2.5), "mm"))
 }
 
+# find peaks fxn for benefit sweep experiment
+b_sweep_peaks <- function(sims, smoothing = 1.5, ythresh = 0.125, output_bizone = FALSE) {
+  bimin = 0
+  bimax = 0
+  peaks <- tibble(cbr = numeric(), peak = numeric())
+  for(this_cbr in unique(sims$cbr)) {
+    dens <- density((sims %>% filter(cbr == this_cbr))$state, adjust = smoothing)
+    dens <- tibble(x = dens$x, y = dens$y) %>% filter(y >= ythresh)
+    ps <- dens$x[findPeaks(dens$y)]
+    for(p in ps) {
+      peaks <- add_row(peaks, cbr = this_cbr, peak = p)
+    }
+    if(output_bizone && length(ps) > 1) {
+      if(bimin == 0) {
+        bimin = this_cbr
+      }
+      bimax = this_cbr
+    }
+  }
+  if(output_bizone) {
+    c(bimin, bimax)
+  } else {
+    peaks
+  }
+}
 
 # plot benefit sweep experiment results
 plt_sim_b_sweep <- function(sims, title = ggtitle(NULL), ylab = "", tpos = "plot", col = pal[1], upmarmod = 0, lmarmod = 0, dnmarmod = 0, rmarmod = 0) {

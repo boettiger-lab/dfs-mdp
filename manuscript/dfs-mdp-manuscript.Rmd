@@ -50,7 +50,7 @@ address:
   - code: organic
     address: "The Organic Center, Washington, DC, USA"
     
-abstract: The emergence and impact of tipping points are of immense interest in both social and ecological research. Yet despite widespread recognition of feedbacks between the two domains, it is often assumed that the underlying forces that lead to nonlinear behaviors rest within either human or natural processes. Our work shows how tipping points can arise in a stylized coupled human and natural systems (CHANS) model representing adoption of agroecological diversification practices.  Even when neither system alone has complex dynamics, a farmer's adoption choice, based on their perceived utility over a given time horizon, together with ecological services derived from stochastic environmental change, can drive systems into alternate stable states. Because ecosystem services take years to accrue, farmers on degraded land, or those operating under a shorter time horizon, are disincentivized to invest in agroecology, while others are more likely to bolster ecosystem services further by adopting additional agroecological practices. This path dependency leads to a bifurcation into either a more-simplified (conventional) or more-diversified (agroecological) farming approach, which echoes empirical findings. We show that this tipping point need not be an inherent feature of either ecological or decision dynamics, but can emerge as a general pattern when a simple ecosystem model and a rational decision process are dynamically coupled over time. We suggest that this finding has important implications for agricultural and land use policy design across a range of domains, including land tenure and agroecological subsidies.
+abstract: The emergence and impact of tipping points are of immense interest in both social and ecological research. Yet despite widespread recognition of feedbacks between the two domains, it is often assumed that the underlying forces that lead to nonlinear behaviors rest within either human or natural processes. Our work shows how tipping points can arise in a stylized coupled human and natural systems (CHANS) model representing adoption of agroecological diversification practices.  Even when neither system alone has complex dynamics, a farmer's adoption choice, based on their perceived utility over a given time horizon, together with ecological services derived from stochastic environmental change, can drive systems into alternate stable states. Because ecosystem services take years to accrue, farmers on degraded land, or those operating under a shorter time horizon, are disincentivized to invest in agroecology, while others are more likely to bolster ecosystem services further by adopting additional agroecological practices. This path dependency leads to a bifurcation into either a more-simplified (conventional) or more-diversified (agroecological) farming approach, which echoes empirical findings. We show that this tipping point need not be an inherent feature of either ecological or decision dynamics, but can emerge as a general pattern when a simple ecosystem model and a rational decision process are dynamically coupled over time. We suggest that this finding has important implications for agricultural and land use policy design across a range of domains, including land tenure and agroecological incentives.
 
 keywords:
   - agriculture,
@@ -150,7 +150,7 @@ This paper presents a stylized model of agroecological diversification practice 
 
 # Conceptual model description
 
-We explore the transition to and from diversified farming systems using a Markov Decision Process (MDP) in which a produce farmer makes a series of agroecological choices over time (\ref{fig:res_conceptual}).  Each year the agent chooses an "action" of 0\% to 100\% investment in adopting or maintaining diversification practices.  A "system state" represents the degree of beneficial ecosystem services derived from those decisions.  More investment corresponds to a greater probability of transitioning to a higher (more beneficial) ecological state the next year.  While higher ecological states benefit the agent, higher investment actions also come with a greater associated cost.  By defining parameter values for cost, benefit, transition stochastiticity, ecological change rate, and discounting (values given in Methods, Tab \ref{tab:baseline_params}), we can calculate the optimal action strategy based on the agent's expected rewards over a defined time horizon.  
+We explore the transition to and from diversified farming systems using a Markov Decision Process (MDP) in which a fruit/vegetable farmer makes a series of agroecological choices over time (\ref{fig:res_conceptual}).  Each year the agent chooses an "action" of 0\% to 100\% investment in adopting or maintaining diversification practices.  The "system state" coresponds to the level of benefit derived from the ecosystem services that result from those adoption decisions, and can include financial, social, ideological, and aesthetic considerations.  More investment corresponds to a greater probability of transitioning to a higher (more beneficial) ecological state the next year.  While higher ecological states benefit the agent, higher investment actions also come with a greater associated cost.  By defining parameter values for cost, benefit, transition stochastiticity, ecological change rate, and temporal discounting (values given in Methods, Tab \ref{tab:baseline_params}), we can calculate the optimal action strategy based on the agent's expected rewards over a defined time horizon.  
 
 \begin{figure}
 \centering 
@@ -162,7 +162,7 @@ We explore the transition to and from diversified farming systems using a Markov
 
 # Results
 
-Using this model, we observe the behavior of agents' sequential choices and resultant environmental outcomes over time.  For each experiment, we conduct 500 runs, with agents' initial ecosystem states distributed normally around a mean of $\bar{s} = 0.5$.  Fig \ref{fig:res_bimodal} shows that, after having followed the optimal decision strategy for 19 years, at $t = 20$ agents have largely settled into two groups, with some farms transitioning to more simplfied (conventional) farming systems, and others to more diversified (agroecological) systems.  Further, we find strong path dependency, with only 17\% of agents who started in a simplified ($s < 0.5$) state concluding in a diversified ($s > 0.5$) state, and only 7\% initially in the diversified state transitioning to simplified.
+Using this model, we observe the behavior of agents' sequential choices and resultant environmental outcomes over time.  For each experiment, we conduct 500 runs, with agents' initial ecosystem states distributed normally around a mean of $\bar{s} = 0.5$.  Fig \ref{fig:res_bimodal} shows that, after having followed the optimal decision strategy for 20 years, agents have largely settled into two groups, with some farms transitioning to more simplfied (conventional) farming systems, and others to more diversified (agroecological) systems.  Further, we find strong path dependency, with only 17\% of agents who started in a simplified ($s < 0.5$) state concluding in a diversified ($s > 0.5$) state, and only 7\% initially in the diversified state transitioning to simplified.
 
 
 ```{r base_case_sim, include = FALSE}
@@ -217,9 +217,9 @@ soln_plot(base_soln_df %>% filter(state <= state99th), tpt = tpt)
 
 ## Land tenure
 
-With 39\% of U.S. farmland under lease [@usda2016], and with widely-varying rental agreements, the impact of land tenure on best management practice adoption has been increasingly scrutinized.  For example, a study of U.S. corn producers found that cash renters were less likely than land owners to implement grassed waterways, strip cropping, contour farming, or conservation tillage [@soule2000land].  A study conducted in British Columbia found that tenant farmers planted fewer perennial crops than land owners [@fraser2004land].  Our own ongoing research with produce farmers in California's Salinas Valley suggests that land tenure is an important factor in decisions about cover cropping and crop rotation.  In addition, investments in agroecology may require access to credit, which often also hinges on secure land tenure as collateral [@richardson2015land].
+With 39\% of U.S. farmland under lease [@usda2016], and with widely-varying rental agreements, the impact of land tenure on best management practice adoption has been increasingly scrutinized.  For example, a study of U.S. corn farmers found that cash renters were less likely than land owners to implement grassed waterways, strip cropping, contour farming, or conservation tillage [@soule2000land].  A study conducted in British Columbia found that tenant farmers planted fewer perennial crops than land owners [@fraser2004land].  Our own ongoing research with fruit and vegetable farmers in California's Salinas Valley suggests that land tenure is an important factor in decisions about cover cropping and crop rotation.  In addition, investments in agroecology may require access to credit, which often also hinges on secure land tenure as collateral [@richardson2015land].
 
-Using the same parameters outlined above, we solve the MDP on a finite two-year time horizon, representing the shorter window within which tenant farmers often make decisions (Fig \ref{fig:res_tenure}).  Comparing the final state distribution of the baseline versus the short tenure model shows that, as expected land tenure duration decreases, it becomes optimal to curtail agroecological adoption.  This results in ecosystem state degradation even among farm sites with an initially high value, with 92\% of farmers ending up in the simplified state.  These results echo empirical findings from a recent large-scale survey of U.S. west coast produce growers, which show that farmers who lease land are roughly 20\% less likely to invest in at least one diversification practice.  
+Using the same parameters outlined above, we solve the MDP on a finite two-year time horizon, representing the shorter window within which tenant farmers often make decisions (Fig \ref{fig:res_tenure}).  Comparing the final state distribution of the baseline versus the short tenure model shows that, as expected land tenure duration decreases, it becomes optimal to curtail agroecological adoption.  This results in ecosystem state degradation even among farm sites with an initially high value, with 92\% of farmers ending up in the simplified state.  These results echo empirical findings from a recent large-scale survey of U.S. west coast produce farmers, which show that farmers who lease land are roughly 20\% less likely to invest in at least one diversification practice.  
 
 ```{r short_tenure_sim, include = FALSE}
 short_tenure_soln <- MDPtoolbox::mdp_finite_horizon(model$P, model$U, params$discount, N = 2)
@@ -252,70 +252,70 @@ ggarrange(
 
 ## Agroecological incentives
 
-While land tenure is intertwined with land use decisions, agricultural incentives have also become an integral part of farming over the past half-century, and policymakers are continually called upon to weigh farm viability against food affordability and environmental sustainability to design effective incentive packages [@graddy2017supply]. Agricultural incentives and subsidies have a range of goals, one of which is to promote sustainable management practices. We explore the impact of incentive duration on policy efficacy by implementing two competing incentive structures: a short-term (two-year) incentive which completely covers the cost of diversification practice adoption, versus a longer-term (ten-year) incentive which only partially offsets the transition cost.  Within the model, agents adapt their decision strategy during the subsidy period, and at its conclusion they revert to the baseline strategy.  Formally, the cost of each incentive package to the taxpayer is equal, and in fact the short-term subsidy is technically more valuable if economic discounting is applied.  
+While land tenure is intertwined with land use decisions, agricultural incentives have also become an integral part of farming over the past half-century, and policymakers are continually called upon to weigh farm viability against food affordability and environmental sustainability to design effective incentive packages [@graddy2017supply]. Agricultural incentives like cost-sharing and reimbursement programs have a range of goals, one of which is to promote sustainable management practices. We explore the impact of incentive duration on policy efficacy by implementing two competing incentive structures: a short-term (two-year) incentive which completely covers the cost of diversification practice adoption, versus a longer-term (ten-year) incentive which only partially offsets the transition cost.  Within the model, agents adapt their decision strategy during the incentive period, and at its conclusion they revert to the baseline strategy.  Formally, the cost of each incentive package to the taxpayer is equal, and in fact the short-term package is technically more valuable if economic discounting is applied.  
 
-Fig \ref{fig:res_subsidy} shows that longer, more sustained incentive programs may be more effective at nudging behavior over the critical threshold toward more sustainable systems.  Comparing the subsidy simulations to the base case, non-subsidy results, we find that, while both incentive packages worked to some extent, the sustained incentive was much more effective at moving the needle.  Due to the tipping point dynamic, once an agent has crossed the threshold to the diversified state, it becomes much less likely that they will fall back toward the simplified state.  Since ecosystem state change in the model is somewhat stochastic, as it is in real-world ecosystems, it may take a series of investment actions before the ecosystem reacts.  Due to this time delay, longer-term subsidy packages have a higher chance of nudging behavior beyond the critical threshold, ultimately resulting in more agroecological practice adoption.  
+Fig \ref{fig:res_incentive} shows that longer, more sustained incentive programs may be more effective at nudging behavior over the critical threshold toward more sustainable systems.  Comparing the incentive simulations to the base case, incentive-free results, we find that, while both incentive packages worked to some extent, the sustained incentive was much more effective at moving the needle.  Due to the tipping point dynamic, once an agent has crossed the threshold to the diversified state, it becomes much less likely that they will fall back toward the simplified state.  Since ecosystem state change in the model is somewhat stochastic, as it is in real-world ecosystems, it may take a series of investment actions before the ecosystem reacts.  Due to this time delay, longer-term incentives have a higher chance of nudging behavior beyond the critical threshold, ultimately resulting in more agroecological practice adoption.  
 
 
-```{r subsidies_sim, include = FALSE}
-# set subsidy simulation parameters
-Tsubs1 <- 2
-Tsubs2 <- 10
+```{r incentives_sim, include = FALSE}
+# set incentive simulation parameters
+T_incent_1 <- 2
+T_incent_2 <- 10
 
-# calc modified cost during subsidy = 1 - 2 / Tsubs
-Csubs1 <- 1 - 2 / Tsubs1
-Csubs2 <- 1 - 2 / Tsubs2
+# calc modified cost during incentive = 1 - 2 / T_incent
+C_incent_1 <- 1 - 2 / T_incent_1
+C_incent_2 <- 1 - 2 / T_incent_2
 
-# subsidy simulation fxn
-subs_sim <- function(params) {
-  subs_model <- continuous_model(states, actions, params, transition_fn, utility_fn)
-  subs_soln <- MDPtoolbox::mdp_value_iteration(subs_model$P, subs_model$U, params$discount)
-  # simulate subsidy period
-  start <- sim(subs_soln, Tmax = params$Tsubs, x0 = init)
-  xi <- start %>% filter(time == params$Tsubs) %>% pull(state)
+# incentive simulation fxn
+incent_sim <- function(params) {
+  incent_model <- continuous_model(states, actions, params, transition_fn, utility_fn)
+  incent_soln <- MDPtoolbox::mdp_value_iteration(incent_model$P, incent_model$U, params$discount)
+  # simulate incentive period
+  start <- sim(incent_soln, Tmax = params$T_incent, x0 = init)
+  xi <- start %>% filter(time == params$T_incent) %>% pull(state)
   # pad to Tmax with baseline decision rule
-  rest <- sim(base_soln, Tmax = params$Tmax - params$Tsubs, x0 = xi) %>% 
-    filter(time!=0) %>% mutate(time = time + params$Tsubs)
+  rest <- sim(base_soln, Tmax = params$Tmax - params$T_incent, x0 = xi) %>% 
+    filter(time!=0) %>% mutate(time = time + params$T_incent)
   bind_rows(start, rest) 
 }
 
-# run subsidy simulation
-sims_subs_abrupt <- subs_sim(list(benefit = params$benefit, 
-                                  cost = Csubs1, 
-                                  sigma = params$sigma, 
-                                  r = params$r, 
-                                  discount = params$discount, 
-                                  Tsubs = Tsubs1, Tmax = params$Tmax))
-sims_subs_sust <- subs_sim(list(benefit = params$benefit, 
-                                cost = Csubs2, 
-                                sigma = params$sigma, 
-                                r = params$r, 
-                                discount = params$discount, 
-                                Tsubs = Tsubs2, Tmax = params$Tmax))
+# run incentive simulation
+sims_incent_abrupt <- incent_sim(list(benefit = params$benefit, 
+                                      cost = C_incent_1, 
+                                      sigma = params$sigma, 
+                                      r = params$r, 
+                                      discount = params$discount, 
+                                      T_incent = T_incent_1, Tmax = params$Tmax))
+sims_incent_sust <- incent_sim(list(benefit = params$benefit, 
+                                    cost = C_incent_2, 
+                                    sigma = params$sigma, 
+                                    r = params$r, 
+                                    discount = params$discount, 
+                                    T_incent = T_incent_2, Tmax = params$Tmax))
 
 ```
 
 
-```{r res_subsidy, fig.cap = "Starting from the same initial states as Fig \\ref{fig:res_bimodal}, ES state timeseries are shown for (A) a large, abrupt subsidy (100\\% of adoption expenses are covered for two years) vs. (B) a smaller, more sustained subsidy (adoption cost is 80\\% of baseline for 10 years).  Ignoring discounting, subsidies have the same total cost to the funder (the equivalent of 2 years' worth of full adoption cost offsets).  After the subsidy period, agents adjust their decision rules to that of the base case (i.e. no subsidy) until $t = 20$.  (C) Shows that the sustained subsidy ultimately drove more DP adoption.", fig.width = 6, fig.asp = .5}
+```{r res_incentive, fig.cap = "Starting from the same initial states as Fig \\ref{fig:res_bimodal}, ES state timeseries are shown for (A) a large, abrupt incentive (100\\% of adoption expenses are covered for two years) vs. (B) a smaller, more sustained incentive (adoption cost is 80\\% of baseline for 10 years).  Ignoring discounting, both packages have the same total cost to the funder (the equivalent of 2 years' worth of full adoption cost offsets).  After the incentive period, agents adjust their decision rules to that of the base case (i.e. no incentive) until $t = 20$.  (C) Shows that the sustained incentive ultimately drove more DP adoption.", fig.width = 6, fig.asp = .5}
 
 ggarrange(
-  sim_plot_ts(sims_subs_abrupt, title = ggtitle("A. Abrupt subsidy"), 
-              annotate = TRUE, an_x = Tsubs1, an_lab = sprintf("%i year\n%i%% off", Tsubs1, round((1-Csubs1)*100)), 
+  sim_plot_ts(sims_incent_abrupt, title = ggtitle("A. Abrupt incentive"), 
+              annotate = TRUE, an_x = T_incent_1, an_lab = sprintf("%i year\n%i%% off", T_incent_1, round((1-C_incent_1)*100)), 
               rmarmod = -10, endcol = pal[5]),
-  sim_plot_ts(sims_subs_sust, title = ggtitle("B. Sustained subsidy"), 
-              annotate = TRUE, an_x = Tsubs2, an_lab = sprintf("%i year\n%i%% off", Tsubs2, round((1-Csubs2)*100)), 
+  sim_plot_ts(sims_incent_sust, title = ggtitle("B. Sustained incentive"), 
+              annotate = TRUE, an_x = T_incent_2, an_lab = sprintf("%i year\n%i%% off", T_incent_2, round((1-C_incent_2)*100)), 
               tpos = "panel", ytxtoff = T, endcol = pal[6], rmarmod = -5, lmarmod = -5),
-  sim_plot_dens_comp(sims_subs_abrupt, sims_subs_sust, sims_base = sims_baseline, 
-                     label1 = "Abrupt\nsubsidy", label2 = "Sustained\nsubsidy", label_base = "No\nsubsidy", 
+  sim_plot_dens_comp(sims_incent_abrupt, sims_incent_sust, sims_base = sims_baseline, 
+                     label1 = "Abrupt\nincentive", label2 = "Sustained\nincentive", label_base = "No\nincentive", 
                      title = ggtitle("C. Final ES state distribution"), tpos = "panel", 
                      cvec = c(pal[2], pal[5], pal[6]), lmarmod = -5, rmarmod = -5),
   nrow = 1, ncol = 3, widths = c(1,1,1)
 )
 
 # print("abrupt: ")
-# p_up_dn(sims_subs_abrupt)
+# p_up_dn(sims_incent_abrupt)
 # print("sustained: ")
-# p_up_dn(sims_subs_sust)
+# p_up_dn(sims_incent_sust)
 ```
 
 
@@ -350,6 +350,17 @@ sim_b_sweep <- function(scenarios, inf_fin, t_horiz = 2) {
 
 ```{r run_b_sweep_sims, include = FALSE}
 # baselines: benefit = 1.57, cost = 1, sigma = 0.1, r = 0.1, discount = 0.97
+chans_scenarios <- 
+  tidyr::crossing(cbr = seq(.55, .7, length.out = 40),
+                  cost = params$cost,
+                  sigma = params$sigma,
+                  r = params$r,
+                  discount = params$discount,
+                  Tmax = params$Tmax) %>% 
+  tibble::rownames_to_column("id") %>%
+  mutate(benefit = cost / cbr)
+chans_sims <- sim_b_sweep(chans_scenarios, "infinite")
+
 fast_r_scenarios <-
   tidyr::crossing(cbr = seq(.825, .975, length.out = 40),
                   cost = params$cost,
@@ -372,76 +383,35 @@ myopic_d_scenarios <-
   mutate(benefit = cost / cbr)
 myopic_d_sims <- sim_b_sweep(myopic_d_scenarios, "finite", t_horiz = 2)
 
-chans_scenarios <- 
-  tidyr::crossing(cbr = seq(.55, .7, length.out = 40),
-                  cost = params$cost,
-                  sigma = params$sigma,
-                  r = params$r,
-                  discount = params$discount,
-                  Tmax = params$Tmax) %>% 
-  tibble::rownames_to_column("id") %>%
-  mutate(benefit = cost / cbr)
-chans_sims <- sim_b_sweep(chans_scenarios, "infinite")
-
 ```
 
 
-```{r find_b_sweep_density_peaks_fxn, include = FALSE}
-
-b_sweep_peaks <- function(sims, smoothing = 1.5, ythresh = 0.125, output_bizone = FALSE) {
-  bimin = 0
-  bimax = 0
-  peaks <- tibble(cbr = numeric(), peak = numeric())
-  for(this_cbr in unique(sims$cbr)) {
-    dens <- density((sims %>% filter(cbr == this_cbr))$state, adjust = smoothing)
-    dens <- tibble(x = dens$x, y = dens$y) %>% filter(y >= ythresh)
-    ps <- dens$x[findPeaks(dens$y)]
-    for(p in ps) {
-      peaks <- add_row(peaks, cbr = this_cbr, peak = p)
-    }
-    if(output_bizone && length(ps) > 1) {
-      if(bimin == 0) {
-        bimin = this_cbr
-      }
-      bimax = this_cbr
-    }
-  }
-  if(output_bizone) {
-    c(bimin, bimax)
-  } else {
-    peaks 
-  }
-}
-
-```
-
-
-```{r res_b_sweep, fig.cap = "For three scenarios (fast ecological process, temporally-myopic decisions, and coupled system), cost/benefit ratio was varied incrementally over 40 values, indicated by color shade, across a $c:b$ range of width 0.15, encompassing the transition between a ``never invest'' to an ``always invest'' policy.  For each $c:b$, 500 replicate simulations were conducted as in Fig \\ref{fig:res_bimodal}.  Upper plots show distribution of ES state at $t=20$ for each $c:b$.  Lower plots show values of density curve peak(s) for each $c:b$.  With (A) a fast ecological change rate ($r = 0.95$) or (B) a short-term decision strategy (solving the MDP over a 2-year time horizon) no bimodality is seen.  (C) Only by coupling a forward-looking decision-maker and a slowly-adapting environment do complex dynamics like bimodality emerge.", fig.width = 6.5, fig.asp = .6}
+```{r res_b_sweep, fig.cap = "For three scenarios (coupled human/natural system, overly-myopic decision maker, and overly-fast ecological change), cost/benefit ratio was varied incrementally over 40 values, indicated by color shade, across a $c:b$ range of width 0.15, encompassing the transition between a ``never invest'' to an ``always invest'' policy.  For each $c:b$, 500 replicate simulations were conducted as in Fig \\ref{fig:res_bimodal}.  Upper plots show distribution of ES state at $t=20$ for each $c:b$.  Lower plots show density curve peak(s).  (A) By coupling a forward-looking decision-maker and a slowly-adapting environment, complex dynamics like alternate stable states can emerge.  However, with (B) a short-term decision strategy (solving the MDP over a 2-year time horizon), or (C) a fast ecological change rate ($r = 0.95$), no bimodality is observed.", fig.width = 6.5, fig.asp = .6}
 
 ggarrange(
   ggarrange(
-    plt_sim_b_sweep(fast_r_sims, title = ggtitle("A. Fast ecological change rate"), 
-                    ylab = "Density", col = pal[4], rmarmod = -7, dnmarmod = -2.5) + 
-      theme(legend.position="none"),
-    plt_b_sweep_peaks(b_sweep_peaks(fast_r_sims), 
-                      ylab = "Cost/benefit ratio", col = pal[4], rmarmod = -7, upmarmod = -2.5), 
-    nrow = 2, ncol = 1, heights = c(1,1), align = "v"
-  ),
-  ggarrange(
-    plt_sim_b_sweep(myopic_d_sims, title = ggtitle("B. Myopic decision-making"), 
-                    tpos = "panel", col = pal[7], lmarmod = -3.5, rmarmod = -3.5, dnmarmod = -2.5) + 
-      theme(legend.position="none"),
-    plt_b_sweep_peaks(b_sweep_peaks(myopic_d_sims), 
-                      col = pal[7], lmarmod = -3.5, rmarmod = -3.5, upmarmod = -2.5), 
-    nrow = 2, ncol = 1, heights = c(1,1), align = "v"
-  ),
-  ggarrange(
-    plt_sim_b_sweep(chans_sims, title = ggtitle("C. Human/enviro. interaction"), 
-                    tpos = "panel", col = pal[1], lmarmod = -7, dnmarmod = -2.5) + 
+    plt_sim_b_sweep(chans_sims, title = ggtitle("A. Forward-looking decision-maker\n     and adaptive ecological system"), 
+                    ylab = "Density", col = pal[1], rmarmod = -7, dnmarmod = -2.5) + 
       theme(legend.position="none"),
     plt_b_sweep_peaks(b_sweep_peaks(chans_sims), bizone = b_sweep_peaks(chans_sims, output_bizone = TRUE),
-                      col = pal[1], lmarmod = -7, upmarmod = -2.5), 
-    nrow = 2, ncol = 1, heights = c(1,1), align = "v"
+                      ylab = "Cost/benefit ratio", col = pal[1], rmarmod = -7, upmarmod = -2.5), 
+    nrow = 2, ncol = 1, heights = c(1.2,1), align = "v"
+  ),
+  ggarrange(
+    plt_sim_b_sweep(myopic_d_sims, title = ggtitle("B. Unrealistically short-term\n     decision strategy"), 
+                    tpos = "panel", col = pal[4], lmarmod = -3.5, rmarmod = -3.5, dnmarmod = -2.5) + 
+      theme(legend.position="none"),
+    plt_b_sweep_peaks(b_sweep_peaks(myopic_d_sims), 
+                      col = pal[4], lmarmod = -3.5, rmarmod = -3.5, upmarmod = -2.5), 
+    nrow = 2, ncol = 1, heights = c(1.2,1), align = "v"
+  ),
+  ggarrange(
+    plt_sim_b_sweep(fast_r_sims, title = ggtitle("C. Unrealistically fast\n     ecological change rate"), 
+                    tpos = "panel", col = pal[7], lmarmod = -7, dnmarmod = -2.5) + 
+      theme(legend.position="none"),
+    plt_b_sweep_peaks(b_sweep_peaks(fast_r_sims), 
+                      col = pal[7], lmarmod = -7, upmarmod = -2.5), 
+    nrow = 2, ncol = 1, heights = c(1.2,1), align = "v"
   ),
   nrow = 1, ncol = 3, widths = c(1,1,1)
 )
@@ -462,7 +432,7 @@ By representing diversified agroecological adoption as a coupled system, we find
 <!-- Para 3. Matters bc it has policy implications -->
 
 In light of historical agricultural catastrophes like the Dust Bowl, the importance of informed policy action in response to stressors like climate change and soil degradation is imperative. Offering incentives and encourage the adoption of agroecological diversification practices is important for increasing food system resilience to global change [CITE]. Existing case studies emphasize that policy mechanisms designed to promote agricultural sustainability have complex ramifications [@ipes2018breaking]. Policy design must take into account the likely case of thresholds at which particular farming practices become more or less viable. 
-We suggest that the temporal component of decision-making and  feedbacks is an important consideration for incentive and land tenure agricultural policies aiming to promote more resilient food systems. Compared to short-term subsidies, longer-term incentives were found to be more successful in moving farmers who started in the simplified ecological states to  diversified states.  A ramification of this finding is that the perceived stability of subsidy programs over time may be an important driver of their efficacy. Since the transitional barrier between the two stable states represents a precarious economic position, if a subsidy is not guaranteed for a long enough period to get significant benefits from the ecological feedbacks, the farmer may be incentivized to simply continue in their initial state.  With U.S. Farm Bills being overhauled every five years, a farmer may have limited confidence that a critical subsidy program will be sufficiently long-lived, suggesting that a policy lever may be to extend the sunsetting of agroecological policy bills [@jackson200950].  
+We suggest that the temporal component of decision-making and  feedbacks is an important consideration for incentive and land tenure agricultural policies aiming to promote more resilient food systems. Compared to short-term incentives, longer-term packages were found to be more successful in moving farmers who started in the simplified ecological states to  diversified states.  A ramification of this finding is that the perceived stability of incentive programs over time may be an important driver of their efficacy. Since the transitional barrier between the two stable states represents a precarious economic position, if a program is not guaranteed for a long enough period to get significant benefits from the ecological feedbacks, the farmer may be incentivized to simply continue in their initial state.  With U.S. Farm Bills being overhauled every five years, a farmer may have limited confidence that a critical incentive program will be sufficiently long-lived, suggesting that a policy lever may be to extend the sunsetting of agroecological policy bills [@jackson200950].  
 
 <!-- Para 4. Limitations / future work -->
 
@@ -470,7 +440,7 @@ Land tenure is known to affect sustainable agricultural practice adoption [@soul
 
 Even with no inherent complexity in the ecological model, and decision-making agents that simply optimize their expected utility based on current conditions, our model generates the bimodal distribution of agroecological practice adoption and ecological outcomes.  By conceiving of sustainable agricultural through this lens, we offer new insights into some agricultural policy conundrums.  
 
-Several limitations of this model should be considered. We do not draw distinctions between diversification practices that have different cost structures or ecological outcomes. Additionally, our model does not capture market dynamics resulting from feedbacks between production and consumption, but rather conceives of the system as a commodity market within which an individual grower's production does not influence the market price.  We also do not consider ecosystem services or deleterious environmental effects that spillover from neighboring farms. However, these can all be integrated into the presented framework and offer potential avenues for future research.  
+Several limitations of this model should be considered. We do not draw distinctions between diversification practices that have different cost structures or ecological outcomes. Additionally, our model does not capture market dynamics resulting from feedbacks between production and consumption, but rather conceives of the system as a commodity market within which an individual farmer's production does not influence the market price.  We also do not consider ecosystem services or deleterious environmental effects that spillover from neighboring farms. However, these can all be integrated into the presented framework and offer potential avenues for future research.  
 
 
 # Methods
@@ -527,7 +497,7 @@ Discount factor $\gamma$ & 0.97 \\
 
 ## Empirical dataset
 
-To groud-truth our modeling work, we examine farmers' sustainable management practice adoption distributions using a dataset of survey responses from 295 vegetable growers in Washington, Oregon, and California *CITE DATA SOURCE*.  Table \ref{tab:dps_in_survey} gives the set of diversification practices queried in the survey, with their adoption rates across the entire sample.  A histogram plotting the number of DPs used by each grower (Fig \ref{fig:res_bimodal}C) shows a bimodal distribution, with growers generally tending to either adopt zero DPs---the most likely case---or else to adopt many, with six practices being the next-most-likely.  To investigate the effect of land tenure on DP adoption, we partition the dataset into growers who primarily own their land versus those who primarily lease.  Figure \ref{fig:res_tenure}D shows that owners in our sample are about 20\% more likely than leasers to invest in at least one diversification practice.
+To groud-truth our modeling work, we examine farmers' sustainable management practice adoption distributions using a dataset of survey responses from 295*update* specialty crops farmers across the U.S. *CITE DATA SOURCE*.  Table \ref{tab:dps_in_survey} gives the set of diversification practices queried in the survey, with their adoption rates across the entire sample.  A histogram plotting the number of DPs used by each farmer (Fig \ref{fig:res_bimodal}C) shows a bimodal distribution, with farmers generally tending to either adopt zero DPs---the most likely case---or else to adopt many, with six practices being the next-most-likely.  To investigate the effect of land tenure on DP adoption, we partition the dataset into farmers who primarily own their land versus those who primarily lease.  Figure \ref{fig:res_tenure}D shows that owners in our sample are about 20\% more likely than leasers to invest in at least one diversification practice.
 
 \begin{table}
 \centering
