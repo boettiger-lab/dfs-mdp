@@ -1,45 +1,47 @@
 # functions returning vars of interest and dp use vars
-caorwa_vars_of_intrst <- function() {
-  c("CR1_binomial",
-    "CC1_binomial",
-    "IC1_binomial",
-    "IP1_binomial",
-    "RB1_binomial",
-    "BP1_binomial",
-    "CM1_binomial",
-    "RT1_binomial",
+cornell_vars_of_intrst <- function() {
+  c("CR1_binary",
+    "CC1_binary",
+    "IC1_binary",
+    "IP1_binary",
+    "RB1_binary",
+    "BP1_binary",
+    "CM1_binary",
+    "RT1_binary",
     "FC1_Owned.ac",
-    "FC1_Total.ac")
+    "FC1_Total.ac",
+    "FC6_Mngt.3t",
+    "FC8_Csys_3type")
 }
 
-caorwa_dp_vars <- function() {
-  c("CR1_binomial",
-    "CC1_binomial",
-    "IC1_binomial",
-    "IP1_binomial",
-    "RB1_binomial",
-    "BP1_binomial",
-    "CM1_binomial",
-    "RT1_binomial")
+cornell_dp_vars <- function() {
+  c("CR1_binary",
+    "CC1_binary",
+    "IC1_binary",
+    "IP1_binary",
+    "RB1_binary",
+    "BP1_binary",
+    "CM1_binary",
+    "RT1_binary")
 }
 
 # filter dataset and remove rows where all dp vars are na
-filter_caorwa <- function(caorwa_data) {
-  caorwa_data <- caorwa_data %>% filter(FC8_Csys.3t == "Specialty crops") # filter by farm type
-  caorwa_data <- caorwa_data[, caorwa_vars_of_intrst()] # filter out vars of interest
-  caorwa_data[rowSums(is.na(caorwa_data)) <= length(caorwa_dp_vars()) - 1,] # include only if all dp vars are not NA
+filter_cornell <- function(cornell_data) {
+  cornell_data <- cornell_data %>% filter(FC8_Csys_3type == "Specialty") # filter by farm type
+  cornell_data <- cornell_data[, cornell_vars_of_intrst()] # filter out vars of interest
+  # cornell_data[rowSums(is.na(cornell_data)) <= length(cornell_dp_vars()) - 1,] # include only if all dp vars are not NA
 }
 
 # generate counts of num. dps used by each farmer in the ca_or_wa dataset
-dp_counts <- function(caorwa_data) {
-  caorwa_data[, caorwa_dp_vars()] %>% # select binary DP vars
+dp_counts <- function(cornell_data) {
+  cornell_data[, cornell_dp_vars()] %>% # select binary DP vars
     rowSums(na.rm = T) # count use
 }
 
 
 # histogram of num. dps used by each farmer
-caorwa_dp_count_hst <- function(caorwa_data, title = ggtitle(NULL), tpos = "plot") {
-  as.data.frame(table(dp_counts(caorwa_data))) %>%
+cornell_dp_count_hst <- function(cornell_data, title = ggtitle(NULL), tpos = "plot") {
+  as.data.frame(table(dp_counts(cornell_data))) %>%
     ggplot(aes(x=Var1)) +
     geom_bar(aes(y=Freq), color=NA, fill="black", alpha = .8, stat = "identity") +
     geom_text(aes(y = Freq, label=Freq), hjust=1.2, color="white", position = position_dodge(0.9), size=3, family = "Roboto Condensed") +
@@ -62,32 +64,32 @@ caorwa_dp_count_hst <- function(caorwa_data, title = ggtitle(NULL), tpos = "plot
           plot.margin=grid::unit(c(5,5,5,0), "mm"))
 }
 
-# prop_owned <- caorwa_data[,"FC1_Owned.ac"] / caorwa_data[,"FC1_Total.ac"]
+# prop_owned <- cornell_data[,"FC1_Owned.ac"] / cornell_data[,"FC1_Total.ac"]
 # ownrshp <- data.frame(prop_owned) %>%
 #   # mutate(mo_ml = case_when(prop_owned >= .75 ~ 'Mostly Owned',
 #   #                          prop_owned <= .25 ~ 'Mostly Leased',
 #   #                          TRUE ~ 'Neither'))
 # mutate(mo_ml = case_when(prop_owned >= .5 ~ 'Mostly Owned',
 #                          TRUE ~ 'Mostly Leased'))
-# caorwa_data$mo_ml <- ownrshp$mo_ml
-# caorwa_data$dp_count <- dp_counts(caorwa_data)
-# caorwa_dp_count_avg <- caorwa_data %>% group_by(mo_ml) %>% dplyr::summarise(mean_dp_count = mean(dp_count))
+# cornell_data$mo_ml <- ownrshp$mo_ml
+# cornell_data$dp_count <- dp_counts(cornell_data)
+# cornell_dp_count_avg <- cornell_data %>% group_by(mo_ml) %>% dplyr::summarise(mean_dp_count = mean(dp_count))
 
 
 # mostly-owned vs. mostly-leased bar plot of probability of using one or more dps
-caorwa_tenure_thresh_bar <- function(caorwa_data, title = ggtitle(NULL), tpos = "plot") {
-  prop_owned <- caorwa_data[,"FC1_Owned.ac"] / caorwa_data[,"FC1_Total.ac"]
+cornell_tenure_thresh_bar <- function(cornell_data, title = ggtitle(NULL), tpos = "plot") {
+  prop_owned <- cornell_data[,"FC1_Owned.ac"] / cornell_data[,"FC1_Total.ac"]
   ownrshp <- data.frame(prop_owned) %>%
-    mutate(mo_ml = case_when(prop_owned >= .75 ~ 'Mostly Owned',
-                             prop_owned <= .25 ~ 'Mostly Leased',
-                             TRUE ~ 'Neither'))
-    # mutate(mo_ml = case_when(prop_owned >= .5 ~ 'Mostly Owned',
-    #                          TRUE ~ 'Mostly Leased'))
+    # mutate(mo_ml = case_when(prop_owned >= .75 ~ 'Mostly Owned',
+    #                          prop_owned <= .25 ~ 'Mostly Leased',
+    #                          TRUE ~ 'Neither'))
+    mutate(mo_ml = case_when(prop_owned >= .5 ~ 'Mostly Owned',
+                             TRUE ~ 'Mostly Leased'))
   mo_ml <- ownrshp$mo_ml
 
-  caorwa_dp_counts <- dp_counts(caorwa_data)
-  dp_count_cum_probs <- data.frame(caorwa_dp_counts) %>%
-    mutate(over_thresh = case_when(caorwa_dp_counts >= 3 ~ 1, TRUE ~ 0))
+  cornell_dp_counts <- dp_counts(cornell_data)
+  dp_count_cum_probs <- data.frame(cornell_dp_counts) %>%
+    mutate(over_thresh = case_when(cornell_dp_counts >= 3 ~ 1, TRUE ~ 0))
 
   moml_dp_thresh <- data.frame(mo_ml, dp_count_cum_probs$over_thresh) %>%
     filter(mo_ml != "Neither")

@@ -87,11 +87,36 @@ rm(list = ls(all.names = TRUE)) # clean environment
 source("../R/load-libraries.R")
 source("../R/dfs-mdp-model.R")
 source("../R/sim-plot-fxns.R")
-source("../R/caorwa-plot-fxns.R")
+source("../R/cornell-plot-fxns.R")
 
 # load CA_OR_WA farmer survey dataset
-caorwa_data <- read.csv("./external-data/ADAPT_CA-OR-WA_2_2020.csv")
-caorwa_data <- filter_caorwa(caorwa_data)
+cornell_data <- read.csv("./external-data/cornell_survey_data.csv")
+cornell_data <- filter_cornell(cornell_data)
+cornell_data <- cornell_data %>% mutate(organic = recode(FC6_Mngt.3t, "Organic" = 1, "Conventional" = 0))
+cornell_data$organic <- as.factor(cornell_data$organic)
+cornell_data$dp_count <- dp_counts(cornell_data)
+
+# from https://www.nass.usda.gov/Publications/AgCensus/2017/Full_Report/Volume_1,_Chapter_1_US/st99_1_0075_0075.pdf
+# Total organic product sales, Vegetable and melon farming, number of farms = 3,424
+# Total sales, Vegetable and melon farming, number of farms = 45,165
+prop_org <- 3424 / 45165 
+cornell_data <- cornell_data %>% mutate(org_weight = recode(organic, "1" = prop_org, "0" = 1 - prop_org))
+# cornell_data <- cornell_data[complete.cases(cornell_data), ]
+
+# wt_sum <- sum(cornell_data$weight, na.rm = T)
+# cornell_data <- cornell_data %>% mutate(weight = weight/wt_sum)
+
+mean_dp_counts <- cornell_data %>% group_by(organic) %>% dplyr::summarize(mean_dp_count = mean(dp_count, na.rm = T))
+mean_dp_counts_w <- cornell_data %>% group_by(organic) %>% dplyr::summarize(mean_dp_count = weighted.mean(dp_count, org_weight, na.rm = T))
+
+cornell_data %>% filter(!is.na(organic)) %>% ggplot(aes(x = dp_count)) +
+  geom_density()
+
+cornell_data %>% filter(!is.na(organic)) %>% ggplot(aes(x = dp_count, weight = org_weight)) +
+  geom_density(adjust = 1.1)
+
+# library(survey)
+
 
 knitr::opts_chunk$set(echo = FALSE,
                       cache = FALSE,
@@ -187,7 +212,7 @@ ggarrange(
   sim_plot_ts(sims_baseline, title = ggtitle("A. ES state over time"), rmarmod = -5), 
   sim_plot_dens(sims_baseline, title = ggtitle("B. Init. and final state"), 
                 tpos = "panel", lab_lo_peak = TRUE, lab_hi_peak = TRUE, lmarmod = -5), 
-  caorwa_dp_count_hst(caorwa_data, title = ggtitle("C. Empirical distribution")), 
+  cornell_dp_count_hst(cornell_data, title = ggtitle("C. Empirical distribution")), 
   widths = c(2.75, 2, 1.75), nrow = 1, ncol = 3
 )
 
@@ -241,7 +266,7 @@ ggarrange(
   ggarrange(
     sim_tenure_thresh_bar(sims_baseline, sims_short_tenure, thresh = 0.125, 
                           title = ggtitle("C. Simulation data")), 
-    caorwa_tenure_thresh_bar(caorwa_data, 
+    cornell_tenure_thresh_bar(cornell_data, 
                              title = ggtitle("D. Empirical data")), 
     nrow = 2, ncol = 1),
   widths = c(2.5, 2.5, 1.65), nrow = 1, ncol = 3
