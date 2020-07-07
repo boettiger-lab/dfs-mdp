@@ -13,7 +13,7 @@ Authors@R: c(person("Carl", "Boettiger",
                     email = "cboettig@gmail.com", 
                     role = c("aut", "cre", "cph"),
                     comment=c(ORCID = "0000-0002-1642-628X")))
-RoxygenNote: 6.1.1
+RoxygenNote: 7.0.2
 Encoding: UTF-8
 VignetteBuilder: knitr
 Remotes: boettiger-lab/mdplearning, thomasp85/patchwork, clauswilke/ggtext
