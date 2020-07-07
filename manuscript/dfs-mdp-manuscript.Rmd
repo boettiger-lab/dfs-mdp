@@ -304,7 +304,7 @@ ggarrange(
               tpos = "panel", ytxtoff = T, endcol = pal[6], rmarmod = -5, lmarmod = -5),
   sim_plot_dens_comp(sims_incent_abrupt, sims_incent_sust, sims_base = sims_baseline, 
                      label1 = "Abrupt\nincentive", label2 = "Sustained\nincentive", label_base = "No\nincentive", 
-                     title = ggtitle("C. Final ES state distribution"), tpos = "panel", 
+                     title = ggtitle("C. Final distribution"), tpos = "panel", 
                      cvec = c(pal[2], pal[5], pal[6]), lmarmod = -5, rmarmod = -5),
   nrow = 1, ncol = 3, widths = c(1,1,1)
 )
@@ -383,7 +383,7 @@ myopic_d_sims <- sim_b_sweep(myopic_d_scenarios, "finite", t_horiz = 2)
 ```
 
 
-```{r res_b_sweep, fig.cap = "For three scenarios (coupled human/natural system, overly-myopic decision maker, and overly-fast ecological change), cost/benefit ratio was varied incrementally over 40 values, indicated by color shade, across a $c:b$ range of width 0.15, encompassing the transition between a ``never invest'' to an ``always invest'' policy.  For each $c:b$, 500 replicate simulations were conducted as in Fig \\ref{fig:res_bimodal}.  Upper plots show distribution of ES state at $t=20$ for each $c:b$.  Lower plots show density curve peak(s).  (A) By coupling a forward-looking decision-maker and a slowly-adapting environment, complex dynamics like alternate stable states can emerge.  However, with (B) a short-term decision strategy (solving the MDP over a 2-year time horizon), or (C) a fast ecological change rate ($r = 0.95$), no bimodality is observed.", fig.width = 6.5, fig.asp = .6}
+```{r res_b_sweep, fig.cap = "For three scenarios (coupled human/natural system, overly-myopic decision maker, and overly-fast ecological change), cost/benefit ratio was varied incrementally over 40 values, indicated by color shade, across a $c:b$ range of width 0.15, encompassing the transition between a ``never invest'' to an ``always invest'' policy.  For each $c:b$, 500 replicate simulations were conducted as in Fig \\ref{fig:res_bimodal}.  Upper plots show distribution of ES state at $t=20$ for each $c:b$.  Lower plots show density curve peak(s).  (A) By coupling a forward-looking decision-maker and a slowly-adapting environment, complex dynamics like alternate stable states can emerge.  However, with (B) a short-term decision strategy (solving the MDP over a 2-year time horizon), or (C) a fast ecological change rate ($r = 0.95$), no bimodality is observed.", fig.width = 8, fig.asp = .6}
 
 ggarrange(
   ggarrange(
@@ -395,7 +395,7 @@ ggarrange(
     nrow = 2, ncol = 1, heights = c(1.1,1), align = "v"
   ),
   ggarrange(
-    plt_sim_b_sweep(myopic_d_sims, title = ggtitle("B. Unrealistically short-term\n     decision strategy"), 
+    plt_sim_b_sweep(myopic_d_sims, title = ggtitle("B. very short-term\n     decision strategy"), 
                     tpos = "panel", col = pal[4], lmarmod = -3.5, rmarmod = -3.5, dnmarmod = -2.75) + 
       theme(legend.position="none"),
     plt_b_sweep_peaks(b_sweep_peaks(myopic_d_sims), 
@@ -403,7 +403,7 @@ ggarrange(
     nrow = 2, ncol = 1, heights = c(1.1,1), align = "v"
   ),
   ggarrange(
-    plt_sim_b_sweep(fast_r_sims, title = ggtitle("C. Unrealistically fast\n     ecological change rate"), 
+    plt_sim_b_sweep(fast_r_sims, title = ggtitle("C. very fast\n     ecological dynamics"), 
                     tpos = "panel", col = pal[7], lmarmod = -7, dnmarmod = -2.75) + 
       theme(legend.position="none"),
     plt_b_sweep_peaks(b_sweep_peaks(fast_r_sims), 
