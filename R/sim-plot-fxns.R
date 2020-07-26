@@ -6,14 +6,16 @@ soln_plot <- function(soln_df, tpt) {
     annotate('label', x = tpt + .15, y = .375, label = "Tipping point", hjust = 0, vjust = .5,
              family = "Roboto", size = 3.25, label.padding = unit(.15, "lines"), label.size = 0, alpha = .65) +
     annotate("segment", x = tpt + .15, xend = tpt + .025, y = .375, yend = .375, size=.5, arrow=arrow(length = unit(0.22, "cm"))) +
-    labs(x="ES state", y="Optimal DP adoption") +
-    scale_x_continuous(limits = c(0,NA), expand = c(.01,.01)) +
+    labs(x="Ecosystem service state", y="Optimal action", title = "A. Decision strategy") +
+    scale_x_continuous(limits = c(0,NA), expand = c(.01,.01), breaks=c(0, 0.5,1)) +
     scale_y_continuous(limits = c(0,1), expand = c(.01,.01), labels = scales::percent_format(accuracy = 1)) +
     theme(axis.text.x=element_text(size=10),
           axis.text.y=element_text(size=10),
           axis.title.x=element_text(size=10),
           axis.title.y=element_text(size=10),
           panel.grid.minor = element_blank(),
+          plot.title = element_text(size = 10, face = "bold"),
+          plot.title.position = "plot",
           plot.margin=grid::unit(c(5,5,5,5), "mm"))
 }
 
@@ -40,7 +42,7 @@ sim_plot_ts <- function(sims, title = ggtitle(NULL), tpos = "plot", ytxtoff = FA
     ggplot(aes(time, state, group = reps, col = time)) +
     geom_path(alpha = 0.1, show.legend = FALSE) +
     title +
-    labs(x="Sim. year", y="ES state") +
+    labs(x="Decision cycle", y="Ecosystem service state") +
     scale_x_continuous(limits = c(0,Tmax), breaks = seq(0, Tmax, by=5), expand = c(.01,.01)) +
     scale_y_continuous(limits = c(0,1.5), expand = c(.02,.02)) +
     scale_color_gradient(low=stcol, high=endcol) +
@@ -319,7 +321,7 @@ plt_sim_b_sweep <- function(sims, title = ggtitle(NULL), ylab = "", tpos = "plot
     ggplot(aes(x = state, group = cbr, color = cbr)) +
     geom_line(stat='density', size=.5, alpha=.4) +
     title +
-    labs(x = "ES state", y = ylab, color = "c:b") +
+    labs(x = "Ecosystem service state", y = ylab, color = "c:b") +
     scale_x_continuous(limits = c(0, 1.5), breaks = scales::pretty_breaks(n = 3), expand = c(.01,.01)) +
     scale_y_continuous(breaks = scales::pretty_breaks(n = 2), expand = c(.01,.01)) +
     scale_color_gradient(low = dkcol, high = col, guide = guide_colorbar(barwidth = .5),
@@ -349,7 +351,7 @@ plt_b_sweep_peaks <- function(peaks, bizone = NULL, title = ggtitle(NULL), ylab 
     ggplot(aes(x = peak, y = cbr, color = cbr)) +
     geom_point(size=1) +
     title +
-    labs(x = "ES state density peak(s)", y = ylab) +
+    labs(x = "State density peak(s)", y = ylab) +
     scale_x_continuous(limits = c(0, 1.5), breaks = scales::pretty_breaks(n = 3), expand = c(.01,.01)) +
     scale_y_continuous(limits = c(min(peaks$cbr), max(peaks$cbr)), breaks = scales::pretty_breaks(n = 3), expand = c(.01,.01)) +
     scale_color_gradient(low = dkcol, high = col, guide = NULL) +

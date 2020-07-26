@@ -1,31 +1,8 @@
 ---
-title: "Tipping points in diversified farming systems"
-subtitle: "Supplementary materials: Full code base for simulations and figures"
-author: 
-  - "Melissa Chapman"
-  - "Serge Wiltshire"
-  - "Timothy Bowles"
-  - "Liz Carlisle"
-  - "Fredrico Castillo"
-  - "David Gonthier"
-  - "Alastair Iles"
-  - "Daniel Karp"
-  - "Claire Kremen"
-  - "Jeff Liebert"
-  - "Elissa Olimpi"
-  - "Matthew Ryan"
-  - "Amber Sciligo"
-  - "Jennifer Thompson"
-  - "Hannah Waterhouse"
-  - "Kenzo Eszquivel"
-  - "Sasha Gennet"
-  - "Carl Boettiger"
-
-    
-# abstract: This document gives the full codebase used to define and parameterize the DFS-MDP model, run all simulations, and produce the final plots that appear in the accompanying manuscript.
-
+title: "Supplementary materials: Full code base for simulations and figures"
+abstract: This document gives the full codebase used to define and parameterize the DFS-MDP model, run all simulations, and produce the final plots that appear in the accompanying manuscript.
 date: "`r Sys.Date()`"
-output: pdf_document
+output: rticles::elsevier_article
 layout: 3p # review = doublespace, 3p = singlespace, 5p = two-column
 header-includes:
   - \usepackage{float}
@@ -239,7 +216,7 @@ sim_plot_ts <- function(sims, title = ggtitle(NULL), tpos = "plot", ytxtoff = FA
     ggplot(aes(time, state, group = reps, col = time)) +
     geom_path(alpha = 0.1, show.legend = FALSE) +
     title +
-    labs(x="Sim. year", y="ES state") +
+    labs(x="Decision cycle", y="Ecosystem service state") +
     scale_x_continuous(limits = c(0,Tmax), breaks = seq(0, Tmax, by=5), 
                        expand = c(.01,.01)) +
     scale_y_continuous(limits = c(0,1.5), expand = c(.02,.02)) +
@@ -355,7 +332,7 @@ sim_plot_dens <- function(sims, title = ggtitle(NULL), tpos = "plot", endcol = p
 ## Generate base-case simulation figure
 ```{r res_bimodal, fig.cap = "Initial ecosystem states are distributed normally (mean = 0.5; S.D. = 0.2; truncated at [0,1]).  Agents follow decision strategy $\\pi$ as shown in Fig \\ref{fig:res_strategy} until $t = 20$.  (A) Ecosystem state of each agent over time (500 simulations).  (B) Initial ES distribution (dark blue) and final bimodal distribution at $t = 20$ (light blue).", fig.width = 5, fig.asp = .6}
 ggarrange(
-  sim_plot_ts(sims_baseline, title = ggtitle("A. ES state timeseries"), rmarmod = -5), 
+  sim_plot_ts(sims_baseline, title = ggtitle("A. State timeseries"), rmarmod = -5), 
   sim_plot_dens(sims_baseline, title = ggtitle("B. Initial and final state"), 
                 tpos = "panel", lab_lo_peak = TRUE, lab_hi_peak = TRUE, lmarmod = -5), 
   widths = c(2.75, 2), nrow = 1, ncol = 2
@@ -374,7 +351,7 @@ soln_plot <- function(soln_df, tpt) {
              label.padding = unit(.15, "lines"), label.size = 0, alpha = .65) +
     annotate("segment", x = tpt + .15, xend = tpt + .025, y = .375, yend = .375, 
              size=.5, arrow=arrow(length = unit(0.22, "cm"))) +
-    labs(x="ES state", y="Optimal DP adoption") +
+    labs(x="Ecosystem service state", y="Optimal adoption") +
     scale_x_continuous(limits = c(0,NA), expand = c(.01,.01)) +
     scale_y_continuous(limits = c(0,1), expand = c(.01,.01), 
                        labels = scales::percent_format(accuracy = 1)) +
@@ -493,12 +470,12 @@ sim_plot_dens_comp <- function(sims1, sims2, sims_base = "init",
 ```{r res_tenure, fig.cap = "The simulation is identical to that in Fig \\ref{fig:res_bimodal}, but the MDP is solved under a finite, 20-year time horizon. (A) Result of short land tenure on ES state over time.  (B) Comparison between final state distribution of short- vs. long-tenure model runs.", fig.width = 5, fig.asp = .6}
 ggarrange(
   sim_plot_ts(sims_short_tenure, 
-              title = ggtitle("A. Short-tenure ES state timeseries"), 
+              title = ggtitle("A. Short-tenure state timeseries"), 
               endcol = pal[3], rmarmod = -5),
   sim_plot_dens_comp(sims_baseline, sims_short_tenure, 
                      label1 = "Long\ntenure\nfinal", 
                      label2 = "Short\ntenure\nfinal", 
-                     title = ggtitle("B. ES state distribution"), 
+                     title = ggtitle("B. State distribution"), 
                      tpos = "panel", lmarmod = -5),
   widths = c(2.75, 2), nrow = 1, ncol = 2
 )
@@ -550,20 +527,20 @@ sims_incent_sust <- incent_sim(list(benefit = params$benefit,
 ## Plot incentive simulation 
 ```{r res_incentive, fig.cap = "Starting from the same initial states as Fig \\ref{fig:res_bimodal}, ES state timeseries are shown for (A) a large, abrupt incentive (100\\% of adoption expenses are covered for two years) vs. (B) a smaller, more sustained incentive (adoption cost is 80\\% of baseline for 10 years).  Ignoring discounting, both packages have the same total cost to the funder (the equivalent of 2 years' worth of full adoption cost offsets).  After the incentive period, agents adjust their decision rules to that of the base case (i.e. no incentive) until $t = 20$.  (C) Shows that the sustained incentive ultimately drove more DP adoption.", fig.width = 6, fig.asp = .5}
 ggarrange(
-  sim_plot_ts(sims_incent_abrupt, title = ggtitle("A. Abrupt incentive"), 
+  sim_plot_ts(sims_incent_abrupt, title = ggtitle("A. Concentrated incentive"), 
               annotate = TRUE, an_x = T_incent_1, 
-              an_lab = sprintf("%i year\n%i%% off", T_incent_1, 
+              an_lab = sprintf("%i cycles\n%i%% off", T_incent_1, 
                                round((1-C_incent_1)*100)), 
               rmarmod = -10, endcol = pal[5]),
   sim_plot_ts(sims_incent_sust, title = ggtitle("B. Sustained incentive"), 
               annotate = TRUE, an_x = T_incent_2, 
-              an_lab = sprintf("%i year\n%i%% off", T_incent_2, 
+              an_lab = sprintf("%i cycles\n%i%% off", T_incent_2, 
                                round((1-C_incent_2)*100)), 
               tpos = "panel", ytxtoff = T, endcol = pal[6], rmarmod = -5, lmarmod = -5),
   sim_plot_dens_comp(sims_incent_abrupt, sims_incent_sust, sims_base = sims_baseline, 
-                     label1 = "Abrupt\nincentive", label2 = "Sustained\nincentive", 
+                     label1 = "Concentrated \nincentive", label2 = "Sustained\nincentive", 
                      label_base = "No\nincentive", 
-                     title = ggtitle("C. Final ES state distribution"), tpos = "panel", 
+                     title = ggtitle("C. Final state distribution"), tpos = "panel", 
                      cvec = c(pal[2], pal[5], pal[6]), lmarmod = -5, rmarmod = -5),
   nrow = 1, ncol = 3, widths = c(1,1,1)
 )
@@ -698,7 +675,7 @@ plt_b_sweep_peaks <- function(peaks, bizone = NULL, title = ggtitle(NULL), ylab 
     ggplot(aes(x = peak, y = cbr, color = cbr)) +
     geom_point(size=1) +
     title +
-    labs(x = "ES state density peak(s)", y = ylab) +
+    labs(x = "state density peak(s)", y = ylab) +
     scale_x_continuous(limits = c(0, 1.5), 
                        breaks = scales::pretty_breaks(n = 3), expand = c(.01,.01)) +
     scale_y_continuous(limits = c(min(peaks$cbr), max(peaks$cbr)), 
@@ -741,7 +718,7 @@ ggarrange(
   ),
   ggarrange(
     plt_sim_b_sweep(myopic_d_sims, 
-                    title = ggtitle("B. Unrealistically short-term
+                    title = ggtitle("B. Short-term
                                     \n     decision strategy"), 
                     tpos = "panel", col = pal[4], 
                     lmarmod = -3.5, rmarmod = -3.5, dnmarmod = -2.75) + 
@@ -752,7 +729,7 @@ ggarrange(
   ),
   ggarrange(
     plt_sim_b_sweep(fast_r_sims, 
-                    title = ggtitle("C. Unrealistically fast
+                    title = ggtitle("C. fast
                                     \n     ecological change rate"), 
                     tpos = "panel", col = pal[7], lmarmod = -7, dnmarmod = -2.75) + 
       theme(legend.position="none"),

@@ -181,10 +181,13 @@ sims_baseline <- sim(base_soln)
 ```
 
 
+
+
+
 ```{r res_bimodal, fig.cap = "Initial ecosystem states are distributed normally (mean = 0.5; S.D. = 0.2; truncated at [0,1]).  Agents follow decision strategy $\\pi$ as shown in Fig \\ref{fig:res_strategy} until $t = 20$.  (A) Ecosystem state of each agent over time (500 simulations).  (B) Initial ES distribution (dark blue) and final bimodal distribution at $t = 20$ (light blue).", fig.width = 5, fig.asp = .6}
 
 ggarrange(
-  sim_plot_ts(sims_baseline, title = ggtitle("A. ES state timeseries"), rmarmod = -5), 
+  sim_plot_ts(sims_baseline, title = ggtitle("A. Timeseries"), rmarmod = -5), 
   sim_plot_dens(sims_baseline, title = ggtitle("B. Initial and final state"), 
                 tpos = "panel", lab_lo_peak = TRUE, lab_hi_peak = TRUE, lmarmod = -5), 
   widths = c(2.75, 2), nrow = 1, ncol = 2
@@ -233,12 +236,12 @@ sims_short_tenure <- sim(short_tenure_soln)
 ```{r res_tenure, fig.cap = "The simulation is identical to that in Fig \\ref{fig:res_bimodal}, but the MDP is solved under a finite, 20-year time horizon. (A) Result of short land tenure on ES state over time.  (B) Comparison between final state distribution of short- vs. long-tenure model runs.", fig.width = 5, fig.asp = .6}
 
 ggarrange(
-  sim_plot_ts(sims_short_tenure, title = ggtitle("A. Short-tenure ES state timeseries"), 
+  sim_plot_ts(sims_short_tenure, title = ggtitle("A. Short-tenure \n state timeseries"), 
               endcol = pal[3], rmarmod = -5),
   sim_plot_dens_comp(sims_baseline, sims_short_tenure, 
                      label1 = "Long\ntenure\nfinal", 
                      label2 = "Short\ntenure\nfinal", 
-                     title = ggtitle("B. ES state distribution"), 
+                     title = ggtitle("B. State distribution"), 
                      tpos = "panel", lmarmod = -5),
   widths = c(2.75, 2), nrow = 1, ncol = 2
 )
@@ -296,14 +299,14 @@ sims_incent_sust <- incent_sim(list(benefit = params$benefit,
 ```{r res_incentive, fig.cap = "Starting from the same initial states as Fig \\ref{fig:res_bimodal}, ES state timeseries are shown for (A) a large, abrupt incentive (100\\% of adoption expenses are covered for two years) vs. (B) a smaller, more sustained incentive (adoption cost is 80\\% of baseline for 10 years).  Ignoring discounting, both packages have the same total cost to the funder (the equivalent of 2 years' worth of full adoption cost offsets).  After the incentive period, agents adjust their decision rules to that of the base case (i.e. no incentive) until $t = 20$.  (C) Shows that the sustained incentive ultimately drove more DP adoption.", fig.width = 6, fig.asp = .5}
 
 ggarrange(
-  sim_plot_ts(sims_incent_abrupt, title = ggtitle("A. Abrupt incentive"), 
-              annotate = TRUE, an_x = T_incent_1, an_lab = sprintf("%i year\n%i%% off", T_incent_1, round((1-C_incent_1)*100)), 
+  sim_plot_ts(sims_incent_abrupt, title = ggtitle("A. Concentrated incentive"), 
+              annotate = TRUE, an_x = T_incent_1, an_lab = sprintf("%i cycles\n%i%% off", T_incent_1, round((1-C_incent_1)*100)), 
               rmarmod = -10, endcol = pal[5]),
   sim_plot_ts(sims_incent_sust, title = ggtitle("B. Sustained incentive"), 
-              annotate = TRUE, an_x = T_incent_2, an_lab = sprintf("%i year\n%i%% off", T_incent_2, round((1-C_incent_2)*100)), 
+              annotate = TRUE, an_x = T_incent_2, an_lab = sprintf("%i cycles\n%i%% off", T_incent_2, round((1-C_incent_2)*100)), 
               tpos = "panel", ytxtoff = T, endcol = pal[6], rmarmod = -5, lmarmod = -5),
   sim_plot_dens_comp(sims_incent_abrupt, sims_incent_sust, sims_base = sims_baseline, 
-                     label1 = "Abrupt\nincentive", label2 = "Sustained\nincentive", label_base = "No\nincentive", 
+                     label1 = "Concentrated\nincentive", label2 = "Sustained\nincentive", label_base = "No\nincentive", 
                      title = ggtitle("C. Final distribution"), tpos = "panel", 
                      cvec = c(pal[2], pal[5], pal[6]), lmarmod = -5, rmarmod = -5),
   nrow = 1, ncol = 3, widths = c(1,1,1)
@@ -348,7 +351,7 @@ sim_b_sweep <- function(scenarios, inf_fin, t_horiz = 2) {
 ```{r run_b_sweep_sims, include = FALSE}
 # baselines: benefit = 1.57, cost = 1, sigma = 0.1, r = 0.1, discount = 0.97
 chans_scenarios <- 
-  tidyr::crossing(cbr = seq(.55, .7, length.out = 40),
+  tidyr::crossing(cbr = seq(.575, .725, length.out = 40),
                   cost = params$cost,
                   sigma = params$sigma,
                   r = params$r,
@@ -395,7 +398,7 @@ ggarrange(
     nrow = 2, ncol = 1, heights = c(1.1,1), align = "v"
   ),
   ggarrange(
-    plt_sim_b_sweep(myopic_d_sims, title = ggtitle("B. very short-term\n     decision strategy"), 
+    plt_sim_b_sweep(myopic_d_sims, title = ggtitle("B. short-term\n     decision strategy"), 
                     tpos = "panel", col = pal[4], lmarmod = -3.5, rmarmod = -3.5, dnmarmod = -2.75) + 
       theme(legend.position="none"),
     plt_b_sweep_peaks(b_sweep_peaks(myopic_d_sims), 
@@ -403,7 +406,7 @@ ggarrange(
     nrow = 2, ncol = 1, heights = c(1.1,1), align = "v"
   ),
   ggarrange(
-    plt_sim_b_sweep(fast_r_sims, title = ggtitle("C. very fast\n     ecological dynamics"), 
+    plt_sim_b_sweep(fast_r_sims, title = ggtitle("C. fast\n     ecological dynamics"), 
                     tpos = "panel", col = pal[7], lmarmod = -7, dnmarmod = -2.75) + 
       theme(legend.position="none"),
     plt_b_sweep_peaks(b_sweep_peaks(fast_r_sims), 
