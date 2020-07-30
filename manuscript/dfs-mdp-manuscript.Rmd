@@ -182,24 +182,6 @@ sims_baseline <- sim(base_soln)
 
 
 
-
-
-```{r res_bimodal, fig.cap = "Initial ecosystem states are distributed normally (mean = 0.5; S.D. = 0.2; truncated at [0,1]).  Agents follow decision strategy $\\pi$ as shown in Fig \\ref{fig:res_strategy} until $t = 20$.  (A) Ecosystem state of each agent over time (500 simulations).  (B) Initial ES distribution (dark blue) and final bimodal distribution at $t = 20$ (light blue).", fig.width = 5, fig.asp = .6}
-
-ggarrange(
-  sim_plot_ts(sims_baseline, title = ggtitle("A. Timeseries"), rmarmod = -5), 
-  sim_plot_dens(sims_baseline, title = ggtitle("B. Initial and final state"), 
-                tpos = "panel", lab_lo_peak = TRUE, lab_hi_peak = TRUE, lmarmod = -5), 
-  widths = c(2.75, 2), nrow = 1, ncol = 2
-)
-
-# p_up_dn(sims_baseline)
-```
-
-## Optimal decision strategy
-
-The decision strategy $\pi$ describes the optimal course of action for a given state and is used by all agents across replicate simulations.  For the parameterization given in Tab \ref{tab:baseline_params}, and with an infinite time horizon, the resultant $\pi$ is shown in Fig \ref{fig:res_strategy}.  This reveals a tipping point at a specific ecosystem state, below which the highest expected value is derived by investing little to nothing into diversified farming systems, and above which the optimum action becomes near-full investment. Over time, this results in the bimodal distribution of ecosystem states seen in Fig \ref{fig:res_bimodal}. 
-
 ```{r res_strategy, fig.cap = "Optimal decision strategy $\\pi$ as a function of ES state, showing a tipping point at $s \\approx 0.52$.  The upper $x$ axis limit is the 99th percentile of observed states in our simulation results ($s \\approx 1.3$).", fig.width = 3, fig.asp = 1}
 
 state99th <- sims_baseline %>% 
@@ -219,6 +201,26 @@ soln_plot(base_soln_df %>% filter(state <= state99th), tpt = tpt)
 ```
 
 
+
+
+```{r res_bimodal, fig.cap = "Initial ecosystem states are distributed normally (mean = 0.5; S.D. = 0.2; truncated at [0,1]).  Agents follow decision strategy $\\pi$ as shown in Fig \\ref{fig:res_strategy} until $t = 20$.  (A) Ecosystem state of each agent over time (500 simulations).  (B) Initial ES distribution (dark blue) and final bimodal distribution at $t = 20$ (light blue).", fig.width = 8, fig.asp = .5, dpi=500}
+
+ggarrange(
+  soln_plot(base_soln_df %>% filter(state <= state99th), tpt = tpt),
+
+  sim_plot_ts(sims_baseline, title = ggtitle("B. Timeseries"), rmarmod = -5), 
+  sim_plot_dens(sims_baseline, title = ggtitle("C. State distributions"), 
+                tpos = "panel", lab_lo_peak = TRUE, lab_hi_peak = TRUE, lmarmod = -5), 
+  widths = c(3,2.75,2.2), nrow = 1, ncol = 3
+)
+
+# p_up_dn(sims_baseline)
+```
+
+## Optimal decision strategy
+
+The decision strategy $\pi$ describes the optimal course of action for a given state and is used by all agents across replicate simulations.  For the parameterization given in Tab \ref{tab:baseline_params}, and with an infinite time horizon, the resultant $\pi$ is shown in Fig \ref{fig:res_strategy}.  This reveals a tipping point at a specific ecosystem state, below which the highest expected value is derived by investing little to nothing into diversified farming systems, and above which the optimum action becomes near-full investment. Over time, this results in the bimodal distribution of ecosystem states seen in Fig \ref{fig:res_bimodal}. 
+
 ## Land tenure
 
 With 39\% of U.S. farmland under lease [@usda2016], the impact of land tenure on agricultural management has been increasingly scrutinized.  For example, a study of U.S. corn farmers found that renters were less likely than land owners to implement grassed waterways, strip cropping, contour farming, and conservation tillage [@soule2000land]. Similarly, a study conducted in British Columbia found that tenant farmers planted fewer perennial crops than land owners [@fraser2004land].  In addition, investments in agroecology may require access to credit, which often also hinges on secure land tenure as collateral [@richardson2015land].
@@ -233,17 +235,17 @@ sims_short_tenure <- sim(short_tenure_soln)
 
 ```
 
-```{r res_tenure, fig.cap = "The simulation is identical to that in Fig \\ref{fig:res_bimodal}, but the MDP is solved under a finite, 20-year time horizon. (A) Result of short land tenure on ES state over time.  (B) Comparison between final state distribution of short- vs. long-tenure model runs.", fig.width = 5, fig.asp = .6}
+```{r res_tenure, fig.cap = "The simulation is identical to that in Fig \\ref{fig:res_bimodal}, but the MDP is solved under a finite, 20-year time horizon. (A) Result of short land tenure on ES state over time.  (B) Comparison between final state distribution of short- vs. long-tenure model runs.", fig.width = 5.5, fig.asp = .5,dpi=500}
 
 ggarrange(
-  sim_plot_ts(sims_short_tenure, title = ggtitle("A. Short-tenure \n state timeseries"), 
+  sim_plot_ts(sims_short_tenure, title = ggtitle("A. Short-tenure state timeseries"), 
               endcol = pal[3], rmarmod = -5),
   sim_plot_dens_comp(sims_baseline, sims_short_tenure, 
                      label1 = "Long\ntenure\nfinal", 
                      label2 = "Short\ntenure\nfinal", 
-                     title = ggtitle("B. State distribution"), 
+                     title = ggtitle("B. State distributions"), 
                      tpos = "panel", lmarmod = -5),
-  widths = c(2.75, 2), nrow = 1, ncol = 2
+  widths = c(3, 2), nrow = 1, ncol = 2
 )
 
 # p_up_dn(sims_short_tenure)
@@ -296,7 +298,7 @@ sims_incent_sust <- incent_sim(list(benefit = params$benefit,
 ```
 
 
-```{r res_incentive, fig.cap = "Starting from the same initial states as Fig \\ref{fig:res_bimodal}, ES state timeseries are shown for (A) a large, abrupt incentive (100\\% of adoption expenses are covered for two years) vs. (B) a smaller, more sustained incentive (adoption cost is 80\\% of baseline for 10 years).  Ignoring discounting, both packages have the same total cost to the funder (the equivalent of 2 years' worth of full adoption cost offsets).  After the incentive period, agents adjust their decision rules to that of the base case (i.e. no incentive) until $t = 20$.  (C) Shows that the sustained incentive ultimately drove more DP adoption.", fig.width = 6, fig.asp = .5}
+```{r res_incentive, fig.cap = "Starting from the same initial states as Fig \\ref{fig:res_bimodal}, ES state timeseries are shown for (A) a large, abrupt incentive (100\\% of adoption expenses are covered for two years) vs. (B) a smaller, more sustained incentive (adoption cost is 80\\% of baseline for 10 years).  Ignoring discounting, both packages have the same total cost to the funder (the equivalent of 2 years' worth of full adoption cost offsets).  After the incentive period, agents adjust their decision rules to that of the base case (i.e. no incentive) until $t = 20$.  (C) Shows that the sustained incentive ultimately drove more DP adoption.", fig.width = 8, fig.asp = .5, dpi=500}
 
 ggarrange(
   sim_plot_ts(sims_incent_abrupt, title = ggtitle("A. Concentrated incentive"), 
@@ -307,9 +309,9 @@ ggarrange(
               tpos = "panel", ytxtoff = T, endcol = pal[6], rmarmod = -5, lmarmod = -5),
   sim_plot_dens_comp(sims_incent_abrupt, sims_incent_sust, sims_base = sims_baseline, 
                      label1 = "Concentrated\nincentive", label2 = "Sustained\nincentive", label_base = "No\nincentive", 
-                     title = ggtitle("C. Final distribution"), tpos = "panel", 
+                     title = ggtitle("C. Final distributions"), tpos = "panel", 
                      cvec = c(pal[2], pal[5], pal[6]), lmarmod = -5, rmarmod = -5),
-  nrow = 1, ncol = 3, widths = c(1,1,1)
+  nrow = 1, ncol = 3, widths = c(1,1,1.2)
 )
 
 # print("abrupt: ")
@@ -398,7 +400,7 @@ ggarrange(
     nrow = 2, ncol = 1, heights = c(1.1,1), align = "v"
   ),
   ggarrange(
-    plt_sim_b_sweep(myopic_d_sims, title = ggtitle("B. short-term\n     decision strategy"), 
+    plt_sim_b_sweep(myopic_d_sims, title = ggtitle("B. Short-term decision \n strategy "), 
                     tpos = "panel", col = pal[4], lmarmod = -3.5, rmarmod = -3.5, dnmarmod = -2.75) + 
       theme(legend.position="none"),
     plt_b_sweep_peaks(b_sweep_peaks(myopic_d_sims), 
@@ -406,7 +408,7 @@ ggarrange(
     nrow = 2, ncol = 1, heights = c(1.1,1), align = "v"
   ),
   ggarrange(
-    plt_sim_b_sweep(fast_r_sims, title = ggtitle("C. fast\n     ecological dynamics"), 
+    plt_sim_b_sweep(fast_r_sims, title = ggtitle("C. Fast ecological \n dynamics"), 
                     tpos = "panel", col = pal[7], lmarmod = -7, dnmarmod = -2.75) + 
       theme(legend.position="none"),
     plt_b_sweep_peaks(b_sweep_peaks(fast_r_sims), 

@@ -1,6 +1,61 @@
 ---
 title: "Supplementary materials: Full code base for simulations and figures"
 abstract: This document gives the full codebase used to define and parameterize the DFS-MDP model, run all simulations, and produce the final plots that appear in the accompanying manuscript.
+author:
+  - name: Melissa Chapman
+    affiliation: espm
+  - name: Serge Wiltshire
+    affiliation: espm
+  - name: Timothy Bowles
+    affiliation: espm
+  - name: Liz Carlisle
+    affiliation: ucsb
+  - name: Fredrico Castillo
+    affiliation: espm
+  - name: David Gonthier
+    affiliation: ky
+  - name: Alastair Iles
+    affiliation: espm
+  - name: Daniel Karp
+    affiliation: davis
+  - name: Claire Kremen
+    affiliation: espm, ucb
+  - name: Jeff Liebert
+    affiliation: cornell
+  - name: Elissa Olimpi
+    affiliation: davis
+  - name: Matthew Ryan
+    affiliation: cornell
+  - name: Amber Sciligo
+    affiliation: organic
+  - name: Jennifer Thompson
+    affiliation: espm
+  - name: Hannah Waterhouse
+    affiliation: espm
+  - name: Kenzo Eszquivel
+    affiliation: espm
+  - name: Sasha Gennet
+    affiliation: tnc
+  - name: Carl Boettiger
+    affiliation: espm
+    footnote: Corresponding Author
+address:
+  - code: espm
+    address: "Dept. of Environmental Science, Policy, and Management, University of California Berkeley, Berkeley, CA, USA"
+  - code: ubc
+    address: "Institute of Resources, Environment and Sustainability, University of British Columbia, Vancouver, BC, Canada"
+  - code: ucsb
+    address: "Environmental Studies, University of California Santa Barbara, Santa Barbara, CA, USA"
+  - code: davis
+    address: "Wildlife, Fish, and Conservation Biology, University of California Davis, Davis, CA, USA"
+  - code: ky
+    address: "Dept. of Entomology, University of Kentucky, Lexington, KY, USA"
+  - code: cornell
+    address: "School of Integrated Plant Science, Cornell University, Cornell, NY, USA"
+  - code: organic
+    address: "The Organic Center, Washington, DC, USA"
+  - code: tnc
+    address: "The Nature Conservancy, Arlington, VA, USA" # added location of TNC HQ to match other entries
 date: "`r Sys.Date()`"
 output: rticles::elsevier_article
 layout: 3p # review = doublespace, 3p = singlespace, 5p = two-column

@@ -235,7 +235,7 @@ soln_plot(base_soln_df %>% filter(state <= state99th), tpt = tpt)
 
 
 
-```{r res_bimodal2, fig.cap = "Initial ecosystem states are distributed normally (mean = 0.5; S.D. = 0.2; truncated at [0,1]).  Agents follow decision strategy $\\pi$ as shown in Fig \\ref{fig:res_strategy} until $t = 20$.  (A) Ecosystem state of each agent over time (500 simulations).  (B) Initial ES distribution (dark blue) and final bimodal distribution at $t = 20$ (light blue).", fig.width = 7.5, fig.height=3}
+```{r res_bimodal2, fig.cap = "Initial ecosystem states are distributed normally (mean = 0.5; S.D. = 0.2; truncated at [0,1]).  Agents follow decision strategy $\\pi$ as shown in Fig \\ref{fig:res_strategy} until $t = 20$.  (A) Ecosystem state of each agent over time (500 simulations).  (B) Initial ES distribution (dark blue) and final bimodal distribution at $t = 20$ (light blue).", fig.width = 7.5, fig.height=3, dpi=500}
 
 ggarrange(
   soln_plot(base_soln_df %>% filter(state <= state99th), tpt = tpt),
