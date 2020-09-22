@@ -235,15 +235,14 @@ soln_plot(base_soln_df %>% filter(state <= state99th), tpt = tpt)
 
 
 
-```{r res_bimodal2, fig.cap = "Initial ecosystem states are distributed normally (mean = 0.5; S.D. = 0.2; truncated at [0,1]).  Agents follow decision strategy $\\pi$ as shown in Fig \\ref{fig:res_strategy} until $t = 20$.  (A) Ecosystem state of each agent over time (500 simulations).  (B) Initial ES distribution (dark blue) and final bimodal distribution at $t = 20$ (light blue).", fig.width = 7.5, fig.height=3, dpi=500}
+```{r res_bimodal2, fig.cap = "Initial ecosystem states are distributed normally (mean = 0.5; S.D. = 0.2; truncated at [0,1]).  Agents follow decision strategy $\\pi$ as shown in Fig \\ref{fig:res_strategy} until $t = 20$.  (A) Ecosystem state of each agent over time (500 simulations).  (B) Initial ES distribution (dark blue) and final bimodal distribution at $t = 20$ (light blue).", fig.width = 8, fig.height=3, dpi=500}
 
 ggarrange(
   soln_plot(base_soln_df %>% filter(state <= state99th), tpt = tpt),
-
-  sim_plot_ts(sims_baseline, title = ggtitle("B. Timeseries"), rmarmod = -5), 
-  sim_plot_dens(sims_baseline, title = ggtitle("C. Initial and final state"), 
+  sim_plot_ts(sims_baseline, title = ggtitle("C. Timeseries"), rmarmod = -5), 
+  sim_plot_dens(sims_baseline, title = ggtitle("D. Initial and final state"), 
                 tpos = "panel", lab_lo_peak = TRUE, lab_hi_peak = TRUE, lmarmod = -5), 
-  widths = c(3,2.75,2.2), nrow = 1, ncol = 3
+  widths = c(1.75,3.75,2.25), nrow = 1, ncol = 3
 )
 
 # p_up_dn(sims_baseline)

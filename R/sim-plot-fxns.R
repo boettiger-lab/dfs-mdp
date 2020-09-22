@@ -1,12 +1,12 @@
 # solution point plot with threshold annotated
 soln_plot <- function(soln_df, tpt) {
   ggplot(soln_df, aes(state,action)) +
-    geom_point(size = 1) +
+    geom_point(shape = 18, size = 1.5) +
     geom_vline(xintercept = tpt, linetype="dashed", color = "red3", size=.7) +
-    annotate('label', x = tpt + .15, y = .375, label = "Tipping point", hjust = 0, vjust = .5,
+    annotate('label', x = tpt + .175, y = .375, label = "Tipping\npoint", hjust = 0, vjust = .5,
              family = "Roboto", size = 3.25, label.padding = unit(.15, "lines"), label.size = 0, alpha = .65) +
-    annotate("segment", x = tpt + .15, xend = tpt + .025, y = .375, yend = .375, size=.5, arrow=arrow(length = unit(0.22, "cm"))) +
-    labs(x="Ecosystem service state", y="Optimal action", title = "A. Decision strategy") +
+    annotate("segment", x = tpt + .185, xend = tpt + .05, y = .425, yend = .425, size=.5, arrow=arrow(length = unit(0.17, "cm"))) +
+    labs(x="Ecosystem service state", y="Optimal action", title = "B. Decision strategy") +
     scale_x_continuous(limits = c(0,NA), expand = c(.01,.01), breaks=c(0, 0.5,1)) +
     scale_y_continuous(limits = c(0,1), expand = c(.01,.01), labels = scales::percent_format(accuracy = 1)) +
     theme(axis.text.x=element_text(size=10),
@@ -119,7 +119,7 @@ sim_plot_dens <- function(sims, title = ggtitle(NULL), tpos = "plot", endcol = p
                  family = "Roboto Condensed", size = 3, label.padding = unit(.15, "lines"), label.size = 0, alpha = .8)
     } else {
       p <- p +
-        annotate('label', x = peak_lo$x, y = peak_lo$y + .26 * ymax, label = sprintf('%.2f', peak_lo$x), hjust = .5, vjust = .5,
+        annotate('label', x = peak_lo$x, y = peak_lo$y + .22 * ymax, label = sprintf('%.2f', peak_lo$x), hjust = .5, vjust = .5,
                  family = "Roboto Condensed", size = 3, label.padding = unit(.15, "lines"), label.size = 0, alpha = .8)
     }
   }
@@ -144,7 +144,7 @@ sim_plot_dens <- function(sims, title = ggtitle(NULL), tpos = "plot", endcol = p
                  family = "Roboto Condensed", size = 3, label.padding = unit(.15, "lines"), label.size = 0, alpha = .8)
     } else {
       p <- p +
-        annotate('label', x = peak_hi$x, y = peak_hi$y + .26 * ymax, label = sprintf('%.2f', peak_hi$x), hjust = .5, vjust = .5,
+        annotate('label', x = peak_hi$x, y = peak_hi$y + .22 * ymax, label = sprintf('%.2f', peak_hi$x), hjust = .5, vjust = .5,
                  family = "Roboto Condensed", size = 3, label.padding = unit(.15, "lines"), label.size = 0, alpha = .8)
     }
   }
