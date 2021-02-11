@@ -3,7 +3,7 @@ soln_plot <- function(soln_df, tpt) {
   ggplot(soln_df, aes(state,action)) +
     geom_point(size = 1) +
     geom_vline(xintercept = tpt, linetype="dashed", color = "red3", size=.7) +
-    annotate('label', x = tpt + .15, y = .375, label = "Tipping point", hjust = 0, vjust = .5,
+    annotate('label', x = tpt + .15, y = .375, label = "Tipping \n point", hjust = 0, vjust = .5,
              family = "Roboto", size = 3.25, label.padding = unit(.15, "lines"), label.size = 0, alpha = .65) +
     annotate("segment", x = tpt + .15, xend = tpt + .025, y = .375, yend = .375, size=.5, arrow=arrow(length = unit(0.22, "cm"))) +
     labs(x="Ecosystem service state", y="Optimal action", title = "A. Decision strategy") +
