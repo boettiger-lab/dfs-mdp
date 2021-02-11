@@ -154,9 +154,6 @@ knitr::include_graphics("external-figs/assumptions.png")
 ```
 
 ```{r}
-library(pander)
-library(kableExtra)
-
 assumptions <- data.frame(`Model assumptions`= 
                      c("A1: Larger actions are more costly. We approximate that with a linear term (Equation 1)",
                        "A2: Higher ecosystem service states provide more benefit to agents. We approximate that with a linear term (Equation 2)",
@@ -431,6 +428,26 @@ ggarrange(
 
 ```{r predictions, echo = FALSE, message=FALSE, fig.align='left', fig.cap='Some cool caption', out.width='1\\linewidth', fig.pos='H'}
 knitr::include_graphics("external-figs/predictions.png")
+```
+
+
+```{r}
+predictions <- data.frame(`Predictions`= 
+                     c("P1: Bistability in ecosystem states (ecosystem services) can emerge without complex structural assumptions about nonmonotonic cost structures or ecological dynamics (Fig 2)",
+                       "P2: As ecological processes become infinitely “fast” (in their response to management actions) bistability under simple assumptions no longer emerges.",
+                       "P3: Decision making over short time horizons decreases investment in ecosystem service promoting activities (Fig 4) and  removes bistability as decision horizons become short (Fig 5B)",
+                       "P4: Longer, more sustained incentive programs tend to be more effective at encouraging adoption of processes with benefits that accrue slowly",
+                       "P5: Short term incentive programs have lower capacity to sustain impact on ecosystem services"),
+                   `Evidence`=c("Syndromes of production, or bistable trajectories in adoption of agricultural practices, have been both empirically and theoretically documented (Vandermeer 2012, 1997)", 
+                                "No ecological systems are truly infinitely fast. However, given a favorable cost benefit ratio, fast practices will largely be adopted rather than displaying bimodal distributions, for example…",
+                                "U.S. corn farmers who rent land are less likely than landowners to implement grassed waterways, strip cropping, contour farming, and conservation tillage (CITE)",
+                                "policy example",
+                                "policy example"))
+
+kable(predictions, "latex") %>%
+  column_spec(c(1,2), width = "20em") %>%
+  kable_styling(font_size = 10) %>%
+  kable_styling(latex_options = "striped")
 ```
 
 Our analysis suggests a mechanism for bistability in social-ecological systems that is the result of temporal interactions between forward-looking decisions and ecological processes rather than complex structural assumptions about either system alone. While alternate stable states within coupled human and natural systems, and farming systems in particular, have been previously explored and observed (Horan et al. 2011; Vandermeer 1997; Vandermeer and Perfecto 2012), our results shed light specifically on temporal feedbacks that likely contribute to this pattern. We show how this mechanism provides novel insights not only for social-ecological research (Fig 5), but also for agricultural policy (Fig 3 and Fig 4).
