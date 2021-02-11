@@ -1,5 +1,5 @@
 ---
-title: "Tipping points in diversified farming systems" # changed from "diversifying" to "diversified".  if we're not going to use "agroecological" in the title, we should at least be consistent with the DFS language. if the aim was to convey the process of diversifying, maybe we could go for "Tipping points in diversified farming system adoption" - s.w. 6/2/20
+title: "Tipping points in diversified farming systems" 
 author:
   - name: Melissa Chapman
     affiliation: espm
@@ -56,7 +56,7 @@ address:
   - code: tnc
     address: "The Nature Conservancy, Arlington, VA, USA" # added location of TNC HQ to match other entries
     
-abstract: The emergence and impact of tipping points are of immense interest in both social and ecological research. Despite widespread recognition of the importance of feedbacks between human and natural systems, it is often assumed that the observed nonlinear dynamics in these coupled systems rest within either underlying human or natural processes. Using adoption of agricultural diversification practices as a case study, we show how bistability can emerge purely from temporal feedbacks between human decisions and ecological responses.  We propose that the mechanisms behind these dynamics have important implications for agricultural policy design. 
+abstract: The emergence and impact of tipping points are of great interest in both social and ecological research. Despite widespread recognition of the importance of feedbacks between human and environmental systems, it is often assumed that the observed nonlinear dynamics in these coupled systems rest within either underlying human or environmental processes. Using adoption of agroecological practices as a case study, we show how bistability in ecosystem states and services can emerge purely from the temporal feedbacks between human decisions and ecological responses. We propose that the mechanisms behind these dynamics have important implications for sustainability policy. Our results indicate how policies which increase the duration of land tenure and provide long-term incentives are particularly effective at enhancing the adoption of agricultural diversification practices.
 
 keywords:
   - agriculture,
@@ -64,7 +64,7 @@ keywords:
   - tipping points,
   - diversification practices,
   - decision-making
-bibliography: alt_stable_states.bib
+bibliography: references.bib
 date: "`r Sys.Date()`"
 output: rticles::elsevier_article
 layout: 3p # review # review = doublespace, 3p = singlespace, 5p = two-column
@@ -73,13 +73,13 @@ header-includes:
   - \graphicspath{{ext-figs/}}
   - \usepackage{float}
   - \linenumbers
+  - \usepackage{setspace}\doublespacing
 
 ---
 
 ```{r render_to_word_doc, include = FALSE, eval = FALSE}
-
 # run this to generate a word doc
-# not perfect, will have to format word doc after, but best I could come up with
+# not perfect, will have to format word doc after
 library(rmarkdown)
 render("dfs-mdp-manuscript.Rmd", word_document())
 
@@ -132,7 +132,6 @@ base_soln_df <- tibble(state = states,
 reps <- 500
 init <- truncnorm::rtruncnorm(reps, 0, 1, 0.5, 0.2) %>% 
   map_int(function(x) which.min(abs(x - states)))
-
 ```
 
 
@@ -154,18 +153,15 @@ We explore the transition to and from diversified farming systems using a Markov
 
 Each season the farmer takes an "action" of 0\% to 100\% investment in adopting or maintaining diversification practices.  The "system state" coresponds to the level of benefit derived from the ecosystem services that result from those adoption decisions, and can include financial, social, ideological, and aesthetic considerations.  Higher actions correspond to a greater probability of transitioning to a higher (more beneficial) ecological state the next year.  While higher ecological states are beneficial, higher actions also come with a greater associated cost.  By defining parameter values for cost, benefit, transition stochastiticity, ecological change rate, and future discounting (values given in Methods, Tab \ref{tab:baseline_params}), we can calculate the optimal action strategy to be used by the agent based on expected rewards over either a definite or infinite time horizon.  
 
-\begin{figure}
-\centering 
-\includegraphics[width=.75\textwidth]{external-figs/dfs_mdp_conceptual_fig.png}
-\caption{Conceptual diagram of the Markov Decision Process model.  The farmer's choice of how much to invest (time and/or money) into diversification practices (DP) adoption is shown in blue, and the resulting ecosystem services (ES) state in green, with a more diversified state at the top, and a more simplified state at bottom.  Each year, the farmer chooses the optimal action for their current ES state based on the perceived utility function $(u)$ and the state transition probability function $(p)$.  $(p)$ describes how, for a given ES state and action at year $t$, the ecosystem responds stochastically at $t+1$.  The updated ES state then feeds back to influence the farmer's future choices, leading to complex tradeoffs arising from the coupling of ecological processes with consecutive DP adoption decisions over time.}
-\label{fig:res_conceptual}
-\end{figure}
+```{r assumption, echo = FALSE, message=FALSE, fig.align='center', fig.cap='Some cool caption', out.width='1.1\\linewidth', fig.pos='H'}
+knitr::include_graphics("external-figs/assumptions.png")
+```
+
 
 
 # Results
 
 Using the described model, we observe the behavior of agents' sequential choices and resultant environmental outcomes over time.  Agents' initial ecosystem states were distributed normally around a mean of $\bar{s} = 0.5$.  Fig \ref{fig:res_bimodal} shows that, after following the optimal decision strategy for 20 years, agents have largely settled into two groups, with some farms transitioning to more simplfied (conventional) farming systems, and others to more diversified (agroecological) systems.  Further, we find strong path dependency, with only 17\% of agents who started in a simplified ($s < 0.5$) state concluding in a diversified ($s > 0.5$) state, and only 7\% initially in the diversified state transitioning to simplified.
-
 
 ```{r base_case_sim, include = FALSE}
 sim <- function(soln, 
@@ -176,13 +172,11 @@ sim <- function(soln,
           .id = "reps")
 }
 sims_baseline <- sim(base_soln)
-
 # p_up_dn(sims_baseline)
 ```
 
 
-
-```{r res_strategy, fig.cap = "Optimal decision strategy $\\pi$ as a function of ES state, showing a tipping point at $s \\approx 0.52$.  The upper $x$ axis limit is the 99th percentile of observed states in our simulation results ($s \\approx 1.3$).", fig.width = 3, fig.asp = 1}
+```{r res_strategy, fig.cap = "Optimal decision strategy $\\pi$ as a function of ES state, showing a tipping point at $s \\approx 0.52$.  The upper $x$ axis limit is the 99th percentile of observed states in our simulation results ($s \\approx 1.3$).", fig.width = 3, fig.asp = 1, include=FALSE}
 
 state99th <- sims_baseline %>% 
   mutate(state = states[state]) %>% 
@@ -201,9 +195,7 @@ soln_plot(base_soln_df %>% filter(state <= state99th), tpt = tpt)
 ```
 
 
-
-
-```{r res_bimodal, fig.cap = "Initial ecosystem states are distributed normally (mean = 0.5; S.D. = 0.2; truncated at [0,1]).  Agents follow decision strategy $\\pi$ as shown in Fig \\ref{fig:res_strategy} until $t = 20$.  (A) Ecosystem state of each agent over time (500 simulations).  (B) Initial ES distribution (dark blue) and final bimodal distribution at $t = 20$ (light blue).", fig.width = 8, fig.asp = .5, dpi=500}
+```{r res_bimodal, fig.cap = "Initial ecosystem states are distributed normally (mean = 0.5; S.D. = 0.2; truncated at [0,1]).  Agents follow decision strategy $\\pi$ as shown in Fig \\ref{fig:res_strategy} until $t = 20$.  (A) Ecosystem state of each agent over time (500 simulations).  (B) Initial ES distribution (dark blue) and final bimodal distribution at $t = 20$ (light blue).", fig.width = 6.5, fig.asp = .5, dpi=500}
 
 ggarrange(
   soln_plot(base_soln_df %>% filter(state <= state99th), tpt = tpt),
@@ -232,25 +224,24 @@ Using the same parameters as above, we solve the MDP on a finite 20-year time ho
 ```{r short_tenure_sim, include = FALSE}
 short_tenure_soln <- MDPtoolbox::mdp_finite_horizon(model$P, model$U, params$discount, N = 20) 
 sims_short_tenure <- sim(short_tenure_soln)
-
 ```
 
-```{r res_tenure, fig.cap = "The simulation is identical to that in Fig \\ref{fig:res_bimodal}, but the MDP is solved under a finite, 20-year time horizon. (A) Result of short land tenure on ES state over time.  (B) Comparison between final state distribution of short- vs. long-tenure model runs.", fig.width = 5.5, fig.asp = .5,dpi=500}
-
+```{r res_tenure, fig.cap = "The simulation is identical to that in Fig \\ref{fig:res_bimodal}, but the MDP is solved under a finite, 20-year time horizon. (A) Result of short land tenure on ES state over time.  (B) Comparison between final state distribution of short- vs. long-tenure model runs.", fig.width = 6.5, fig.asp = .5,dpi=500}
 ggarrange(
-  sim_plot_ts(sims_short_tenure, title = ggtitle("A. Short-tenure state timeseries"), 
-              endcol = pal[3], rmarmod = -5),
+  sim_plot_ts(sims_baseline, title = ggtitle("A. Long-tenure"),
+            annotate = TRUE, 
+              rmarmod = -10),
+  sim_plot_ts(sims_short_tenure, 
+              title = ggtitle("B. Short-tenure"), 
+              endcol = pal[3], 
+              tpos = "panel", ytxtoff = T,rmarmod = -5, lmarmod = -5),
   sim_plot_dens_comp(sims_baseline, sims_short_tenure, 
                      label1 = "Long\ntenure\nfinal", 
                      label2 = "Short\ntenure\nfinal", 
-                     title = ggtitle("B. State distributions"), 
+                     title = ggtitle("C. State distribution"), 
                      tpos = "panel", lmarmod = -5),
-  widths = c(3, 2), nrow = 1, ncol = 2
-)
-
-# p_up_dn(sims_short_tenure)
+ nrow = 1, ncol = 3, widths = c(1,1,1))
 ```
-
 
 ## Agroecological incentives
 
@@ -298,7 +289,7 @@ sims_incent_sust <- incent_sim(list(benefit = params$benefit,
 ```
 
 
-```{r res_incentive, fig.cap = "Starting from the same initial states as Fig \\ref{fig:res_bimodal}, ES state timeseries are shown for (A) a large, abrupt incentive (100\\% of adoption expenses are covered for two years) vs. (B) a smaller, more sustained incentive (adoption cost is 80\\% of baseline for 10 years).  Ignoring discounting, both packages have the same total cost to the funder (the equivalent of 2 years' worth of full adoption cost offsets).  After the incentive period, agents adjust their decision rules to that of the base case (i.e. no incentive) until $t = 20$.  (C) Shows that the sustained incentive ultimately drove more DP adoption.", fig.width = 8, fig.asp = .5, dpi=500}
+```{r res_incentive, fig.cap = "Starting from the same initial states as Fig \\ref{fig:res_bimodal}, ES state timeseries are shown for (A) a large, abrupt incentive (100\\% of adoption expenses are covered for two years) vs. (B) a smaller, more sustained incentive (adoption cost is 80\\% of baseline for 10 years).  Ignoring discounting, both packages have the same total cost to the funder (the equivalent of 2 years' worth of full adoption cost offsets).  After the incentive period, agents adjust their decision rules to that of the base case (i.e. no incentive) until $t = 20$.  (C) Shows that the sustained incentive ultimately drove more DP adoption.", fig.width = 6.5, fig.asp= 0.5, dpi=500}
 
 ggarrange(
   sim_plot_ts(sims_incent_abrupt, title = ggtitle("A. Concentrated incentive"), 
@@ -350,7 +341,7 @@ sim_b_sweep <- function(scenarios, inf_fin, t_horiz = 2) {
 
 ```
 
-```{r run_b_sweep_sims, include = FALSE}
+```{r run_b_sweep_sims, cache = TRUE, include = FALSE}
 # baselines: benefit = 1.57, cost = 1, sigma = 0.1, r = 0.1, discount = 0.97
 chans_scenarios <- 
   tidyr::crossing(cbr = seq(.575, .725, length.out = 40),
@@ -388,11 +379,11 @@ myopic_d_sims <- sim_b_sweep(myopic_d_scenarios, "finite", t_horiz = 2)
 ```
 
 
-```{r res_b_sweep, fig.cap = "For three scenarios (coupled human/natural system, overly-myopic decision maker, and overly-fast ecological change), cost/benefit ratio was varied incrementally over 40 values, indicated by color shade, across a $c:b$ range of width 0.15, encompassing the transition between a ``never invest'' to an ``always invest'' policy.  For each $c:b$, 500 replicate simulations were conducted as in Fig \\ref{fig:res_bimodal}.  Upper plots show distribution of ES state at $t=20$ for each $c:b$.  Lower plots show density curve peak(s).  (A) By coupling a forward-looking decision-maker and a slowly-adapting environment, complex dynamics like alternate stable states can emerge.  However, with (B) a short-term decision strategy (solving the MDP over a 2-year time horizon), or (C) a fast ecological change rate ($r = 0.95$), no bimodality is observed.", fig.width = 8, fig.asp = .6}
+```{r res_b_sweep, fig.cap = "For three scenarios (coupled human/natural system, overly-myopic decision maker, and overly-fast ecological change), cost/benefit ratio was varied incrementally over 40 values, indicated by color shade, across a $c:b$ range of width 0.15, encompassing the transition between a ``never invest'' to an ``always invest'' policy.  For each $c:b$, 500 replicate simulations were conducted as in Fig \\ref{fig:res_bimodal}.  Upper plots show distribution of ES state at $t=20$ for each $c:b$.  Lower plots show density curve peak(s).  (A) By coupling a forward-looking decision-maker and a slowly-adapting environment, complex dynamics like alternate stable states can emerge.  However, with (B) a short-term decision strategy (solving the MDP over a 2-year time horizon), or (C) a fast ecological change rate ($r = 0.95$), no bimodality is observed.", fig.width = 6.5, fig.asp = .55, dpi= 500}
 
 ggarrange(
   ggarrange(
-    plt_sim_b_sweep(chans_sims, title = ggtitle("A. Forward-looking decision-maker\n     and adaptive ecological system"), 
+    plt_sim_b_sweep(chans_sims, title = ggtitle("A. Forward-looking decision \n     & slow ecological dynamics"), 
                     ylab = "Density", col = pal[1], rmarmod = -7, dnmarmod = -2.75) + 
       theme(legend.position="none"),
     plt_b_sweep_peaks(b_sweep_peaks(chans_sims), bizone = b_sweep_peaks(chans_sims, output_bizone = TRUE),
@@ -420,8 +411,11 @@ ggarrange(
 
 ```
 
-
 # Discussion
+
+```{r predictions, echo = FALSE, message=FALSE, fig.align='left', fig.cap='Some cool caption', out.width='1\\linewidth', fig.pos='H'}
+knitr::include_graphics("external-figs/predictions.png")
+```
 
 Our analysis suggests a mechanism for bistability in coupled human and natural systems that is not the result of complex structural assumptions about either system alone, but rather the temporal interactions between forward-looking decisions and ecological processes. While the concepts of regime shifts and tipping points within coupled human and natural systems [@lade2013regime] have been previously explored, our results cast light on temporal mechanisms that might help to explain this phenomenon. We suggest this knowledge provides novel considerations not only for coupled human and natural systems research but also agricultural policy. 
 
