@@ -56,7 +56,7 @@ address:
   - code: tnc
     address: "The Nature Conservancy, Arlington, VA, USA" # added location of TNC HQ to match other entries
     
-abstract: The emergence and impact of tipping points have garnered significant interest in both the social and natural sciences. Despite widespread recognition of the importance of feedbacks between human and environmental systems, it is often assumed that tipping points in coupled social-ecological systems are the result of dynamics in either the underlying human or environmental processes, rather than their interactions. Using the adoption of diversified farming practices (which promote biodiversity and corresponding ecosystem services) as a case study, we show how multiple stable ecosystem service states can emerge purely from the temporal feedbacks between human decisions and ecological responses. Our approach to coupling ecological and human dynamics captures two obvious but often overlooked assumptions about their interactions.  First, farmers’ actions reflect an ability to plan for the future and not only react to current circumstances. Second, many diversified practices provide ecological benefits that only accumulate gradually or after some delay. Previous research tends to ignore either planning ahead (e.g. agent-based models) or the slow timescale of ecological benefits (e.g. macro-economic models). Together, these two features create two stable states, one dominated by conventional, homogeneous practices, the other by diversified practices. Including these temporal dynamics provides an explanation of existing patterns of agricultural bifurcation or “bistability”, in which there is a sharp divide between highly-biodiverse farms and ecologically simplified farms. We show how this allows for the exploration of barriers for farm transitions toward highly biodiverse states. Characterizing the temporal mechanisms of tipping points in social-environmental systems is critical to designing effective interventions that can promote farmers’ transition towards sustainable agriculture.
+abstract: The emergence and impact of tipping points have garnered significant interest in both the social and natural sciences. Despite widespread recognition of the importance of feedbacks between human and environmental systems, it is often assumed that tipping points in coupled social-ecological systems are the result of dynamics in either the underlying human or environmental processes, rather than their interactions. Using the adoption of diversified farming practices (which promote biodiversity and corresponding ecosystem services) as a case study, we show how multiple stable ecosystem service states can emerge purely from the temporal feedbacks between human decisions and ecological responses. Our approach to coupling ecological and human dynamics captures two often overlooked assumptions about their interactions.  First, farmers’ actions reflect an ability to plan and not only react to current circumstances. Second, many diversified practices provide ecological benefits that only accumulate gradually or after some delay. Previous research tends to ignore either planning ahead (e.g. agent-based models) or the slow timescale of ecological benefits (e.g. macro-economic models). Together, these two features create two stable social-ecological states, one dominated by conventional, homogeneous practices, the other by diversified practices. Including these temporal dynamics provides an explanation of existing patterns of agricultural bifurcation or “bistability”, in which there is a sharp divide between highly-biodiverse farms and ecologically simplified farms. We show how this allows for the exploration of barriers for farm transitions toward highly biodiverse states. Characterizing the temporal mechanisms of tipping points in social-environmental systems is critical to designing effective interventions that can promote farmers’ transition towards sustainable agriculture.
 keywords:
   - ecosystem services,
   - tipping points,
@@ -65,8 +65,7 @@ keywords:
   - decision-making
 bibliography: references.bib
 date: "`r Sys.Date()`"
-output: rticles::elsevier_article
-#word_document 
+output: rticles::elsevier_article  #word_document #
 csl: nature.csl
 layout: 3p # review # review = doublespace, 3p = singlespace, 5p = two-column
 header-includes: 
@@ -135,30 +134,32 @@ init <- truncnorm::rtruncnorm(reps, 0, 1, 0.5, 0.2) %>%
   map_int(function(x) which.min(abs(x - states)))
 ```
 
+# Science for Society
+
+
 
 # Introduction
 
 Both ecosystems and social systems can change states abruptly as the result of crossing critical thresholds. These critical thresholds (“tipping points”; states of a system where small perturbations can trigger large responses) have garnered extensive academic and public attention  (@gladwell2006tipping; @rockstrom2009safe). 
-However, mechanisms of tipping points in social-ecological systems remain largely explained by complex assumptions about either the ecological or social system dynamics (@Dai2012b; @Mumby2007; @Scheffer2010a; @Horan7333), rather than the rates at which these ecological and social systems interact.
+However, mechanisms of tipping points in social-ecological systems remain largely explained by complex assumptions about either the ecological or social system dynamics (@Dai2012b; @Mumby2007; @Scheffer2010a; @Horan7333), rather than the rates at which these systems interact.
 
 In social-ecological systems (SES), human actions impact ecological processes, and the resultant ecological changes create feedbacks that alter future management actions  (@liu2007complexity; @Ostrom2009; @Walker2004). 
-When the temporal dynamics of ecological processes and their feedbacks to human systems (i.e. benefits from ecosystems services) do not align with the temporal scale of human decision-making these systems become complex to model (@Cumming2006a). 
+These systems become complex to model when the temporal dynamics of ecological processes and their feedbacks to human systems (i.e. benefits from ecosystems services) do not align with the temporal scale of human decision-making (@Cumming2006a). 
 Techniques previously used to investigate both dynamic ecological processes and decision-making in SES have mostly overlooked the temporal complexity of decision-making (@Lippe2019). 
 For instance, agent-based models are commonly used to explore complex emergent phenomena in SES. 
 However, these models often use single time-step, or user-defined, decision rules rather than allowing for emergent decision strategies that maximize expected rewards over longer time horizons  (@Lippe2019). 
 Similarly, economic models, which often explicitly consider the time horizons of decisions, often overlook ecological lags (@Vandermeer2012).
 
 
-Agriculture is a fundamental driver of anthropogenic ecological change (@foley2005global; @foley2011solutions; @stoate2009ecological). However, different types of agriculture have radically different effects on ecosystems. While some forms of agriculture rely on promoting ecological processes  regenerating ecosystem services for their productivity, others rely primarily on external inputs, such as chemical fertilizers and pesticides for enhancing productivity.  
-Agriculture is a particularly interesting case for exploring time lags  in social-ecological systems because ecological responses to management actions (such as planting hedgerows) happen slowly, often taking years to return ecological benefits that exceed the timeframe of investments. 
+Agriculture is a particularly interesting case for exploring time lags in social-ecological systems because ecological responses to management actions (such as planting hedgerows) happen slowly, often taking years to return ecological benefits that exceed the timeframe of investments. While agriculture is a key driver of anthropogenic ecological change (@foley2005global; @foley2011solutions; @stoate2009ecological), different types of agriculture have radically different effects on ecosystems. Some forms of agriculture rely on promoting ecological processes that regenerate ecosystem services for their productivity, while others rely primarily on external inputs, such as chemical fertilizers and pesticides for enhancing productivity. 
 
 While adoption of sustainable farm management practices  encompasses a continuum of actions and outcomes, suites of practices are often used together in a package, coalescing around distinct stable states or “syndromes” (@Andow1989; @Ong2020a; @Vandermeer1997). 
 The mechanisms used to mathematically explain and explore these patterns in agricultural systems to-date have relied on the assumption that both ecological (or production) and decision (or economic) dynamics are non-monotonic (@Vandermeer1997; @vandermeer2012syndromes).
 In coupled dynamic equations, if either of these systems is approximated as monotonic the larger social-ecological system is characterized by a single stable point (or no stable point), making multiple syndromes of production impossible to explain with dynamic equations  (@Vandermeer1997; @vandermeer2012syndromes).
 In other words, the existence of two distinct stable states in agriculture -- defined by high levels of biodiversity and associated ecosystem services on one hand and low-levels of biodiversity and comparatively high synthetic inputs on the other -- cannot be explained in conventional models without assuming complex structural dynamics.
- While non-monotonic assumptions are often reasonable, these equilibrium explanations overlook the temporal component of both the ecological and decision processes central to agricultural SES.  
+ While non-monotonic assumptions are often reasonable in some scenarios, these equilibrium explanations overlook the temporal component of both the ecological and decision processes central to agricultural SES.  
 
-Markov Decision Processes (MDP) provide a convenient mathematical framework for modeling decision making in situations where outcomes are stochastic but partly under the control of a decision maker  (@bellman1957markovian). 
+Markov Decision Processes (MDP) provide a convenient mathematical framework for modeling decision making (@bellman1957markovian). 
 Importantly, MDPs allow for easy formulation of situations in which environments (in this case, agroecosystems) change slowly and land management decisions are forward looking (based on predictions about how those decisions will impact their farm productivity and vitality in the future). 
 While MDPs have been widely used in a variety of environmental control problems (@Marescot2013b), they are rarely applied to modeling and exploring the dynamics of social-ecological systems. 
 
@@ -170,7 +171,7 @@ Finally, we show that our findings have important implications for agricultural 
 # Methods
 
 We explore the transition to and from diversified farming systems (low and high ecosystem service provisioning states) using a Markov Decision Process (MDP) in which a farmer makes a series of decisions about whether or not to employ agricultural diversification  practices over time (Figure 1). 
-In the context of diversified farming systems, diversification practices, such as hedgerows, crop rotation, intercrops, the use of compost, growing multiple crop types, reduced tillage, and cover crops, are distinct from the concept of operational diversification (i.e., simply increasing the range of agricultural goods produced on a given farm). 
+In the context of diversified farming systems, diversification practices, such as hedgerows, crop rotation, intercrops, the use of compost, growing multiple crop types, reduced tillage, and cover crops, which are distinct from the concept of operational diversification (i.e., simply increasing the range of agricultural goods produced on a given farm). 
 The model was developed through an iterative, collaborative process with an interdisciplinary team comprising plant and soil scientists, agricultural economists, ecologists, agricultural sociologists, modelers, policy analysts, and farmers with the goal of capturing patterns stemming from the coupled human and natural dynamics of the modeled system.
 
 
@@ -187,11 +188,12 @@ We performed coding for key themes and keyword searches of the transcripts to in
 
 ## Conceptual model description
 
+We developed a model .....
 In our model at each time step the farmer takes an “action” of 0\% to 100\% percent investment in adopting or maintaining diversification practices. 
 The “system state” corresponds to the level of benefit derived from the ecosystem services that result from those adoption decisions. While higher ecological states are beneficial, investments in diversification practices also come with higher associated costs (Figure 1 A1). 
 Costs and benefits may be financial, social, ideological, and/or aesthetic and we approximate that relationship as linear (Figure 1 A2). 
 A greater percent investment in diversification practices corresponds to a greater probability of transitioning to a higher (more beneficial)  ecological state in the next decision cycle (Figure 1 A3). 
-The rate at which that ecological response response occures depends on parameter, r, but importantly is not instaneous  (Figure 1 A4). By defining parameter values for cost, benefit, transition stochasticity, ecological change rate, and future discounting (Supporting information), we can allow the optimal action strategy for the agent (farmer) to emerge based on expected rewards over either a finite (to represent short-tenure leased farms) or infinite (to represent longer-term leases and land ownership) time horizon (Figure 1 A5). 
+The rate at which that ecological response occurrs depends on parameter, r, but importantly is not instaneous  (Figure 1 A4). By defining parameter values for cost, benefit, transition stochasticity, ecological change rate, and future discounting (Supporting information), we can allow the optimal action strategy for the agent (farmer) to emerge based on expected rewards over either a finite (to represent short-tenure leased farms) or infinite (to represent longer-term leases and land ownership) time horizon (Figure 1 A5). 
 
 ```{r assumption, echo = FALSE, message=FALSE, fig.align='center', fig.cap='Conceptual diagram and model assumptions. The farmer’s choice of how much to invest (time and money) into the adoption of diversification practices (blue), and the resulting ecosystem services state (green), with a more diversified ecosystem state at the top, and a more simplified ecosystem state at bottom. Each time step, the farmer chooses the optimal action for their current ecosystem service state based on the perceived utility function, u, and state transition probability function, p.  For a given ecosystem service state and action at time t, p describes how the ecosystem responds stochastically to result in an updated state at t + 1. The updated ecosystem service state then feeds back to influence the farmer’s future choices, leading to tradeoffs arising from the coupling of ecological processes with consecutive diversification practice adoption decisions over time. Main model assumptions (A1-A5) are outlined along with a brief rational for each approximation.', out.width='1\\linewidth', fig.pos='H'}
 knitr::include_graphics("external-figs/assumptions.png")
@@ -238,7 +240,7 @@ sims_baseline <- sim(base_soln)
 ```
 
 
-```{r res_strategy, fig.cap = "Optimal decision strategy $\\pi$ as a function of ES state, showing a tipping point at $s \\approx 0.52$.  The upper $x$ axis limit is the 99th percentile of observed states in our simulation results ($s \\approx 1.3$).", fig.width = 3, fig.asp = 1, include=FALSE}
+```{r res_strategy, fig.cap = "Optimal decision strategy $\\pi$ as a function of ecosystem state, showing a tipping point at $s \\approx 0.52$.  The upper $x$ axis limit is the 99th percentile of observed states in our simulation results ($s \\approx 1.3$).", fig.width = 3, fig.asp = 1, include=FALSE}
 
 state99th <- sims_baseline %>% 
   mutate(state = states[state]) %>% 
@@ -257,7 +259,7 @@ soln_plot(base_soln_df %>% filter(state <= state99th), tpt = tpt)
 ```
 
 
-```{r res_bimodal, fig.cap = "Initial ecosystem states are distributed normally (mean = 0.5; S.D. = 0.2; truncated at [0,1]).  (A) Agents follow decision strategy $\\pi$ until $t = 20$.  (B) Ecosystem state of each agent over time (500 simulations).  (C) Initial ES distribution (dark blue) and final bimodal distribution at $t = 20$ (light blue).", fig.width = 6.5, fig.asp = .5, dpi=500}
+```{r res_bimodal, fig.cap = "Initial ecosystem states are distributed normally (mean = 0.5; S.D. = 0.2; truncated at [0,1]).  (A) Agents follow decision strategy $\\pi$ until $t = 20$.  (B) Ecosystem state of each agent over time (500 simulations).  (C) Initial ecosystem state distribution (dark blue) and final bimodal ecosystem state distribution at $t = 20$ (light blue).", fig.width = 6.5, fig.asp = .5, dpi=500}
 
 ggarrange(
   soln_plot(base_soln_df %>% filter(state <= state99th), tpt = tpt),
@@ -378,13 +380,13 @@ ggarrange(
 
 ## Influence of land tenure policy on ecosystem service states 
  
-Given that temporal factors emerged as central themes from our interview data on  adoption patterns (Figure 4), and that U.S. corn farmers who rent land are less likely than landowners to implement grassed waterways, strip cropping, contour farming, and conservation tillage  (@soule2000land), we investigated the impact of land tenure policy on farmer decision making. 
+Given that temporal factors emerged as central themes from our interview data on diversified farming adoption patterns (Figure 4), and are more broadly relevant to understanding decision making patterns on rented land (@soule2000land), we investigated the impact of land tenure policy on farmer decision making. 
 
 ```{r echo = F, warning = F, message = F, fig.width=6, fig.height = 8, out.width = ".9\\textwidth", fig.cap = "Key quotes from farmers suggest that the temporal horizons of decision making and the rate at which farmers recieve ecosystem benefits as a results of those decisions are important factors in the adoption of diversification practices"}
 knitr::include_graphics("external-figs/quotes.png")
 ```
 
-We solved the MDP on a constrained time horizon (20-decision cycles, in comparison to an infinite time horizon in Fig 2), representing the shorter horizon on which tenant farmers might make decisions (Fig 4B). 
+We solved the MDP from Figure 2 on a constrained time horizon (20-decision cycles, in comparison to an infinite time horizon in Fig 2), representing the shorter horizon on which tenant farmers might make decisions (Fig 4B). 
 Comparing the final state distribution of the long-tenure (baseline) versus the short-tenure model shows that, as a farmer’s expected land tenure duration decreases, it becomes optimal to reduce diversification adoption across a wider range of ecosystem states.
 This results in ecosystem state degradation even among farm sites with an initially high ecosystem service value, with 94\% of farmers ending up in the simplified state at $t=20$. 
 However, the duration of land tenure does not necessarily define decision horizons. 
@@ -480,16 +482,16 @@ Our coupled human-natural system model allows exploration of  how incentives tha
 We explore the impact of incentive duration on the efficacy of policies to promote adoption of diversification practices by comparing between two different publicly funded incentive scheme designs: a short-term (two-time step) incentive which fully covers the cost of adoption, versus a longer-term (ten-time step) incentive that only partially offsets the adoption cost. 
 Both schemes offer the same amount. Within the model, agents adapt their optimal decision strategy for the given cost-benefit ratio during the incentive period, and at its conclusion they revert to the baseline strategy (i.e. without payments).
 
-We find longer, more sustained incentive programs to be more effective at pushing the farmer over the critical threshold toward diversified farming (Fig 6). 
+We find longer, more sustained incentive programs to be more effective at pushing the farmer over the critical threshold toward diversified farming (Figure 6). 
 Once a farmer has crossed the viable ecosystem state threshold, it becomes less likely that they will return to simplified systems, even after incentives are removed.
 Because it takes a series of investment actions for the ecosystem service state to cross the investment threshold, longer-term incentives ultimately result in more adoption of diversification practices.
 
 
 # Discussion
 
-Our analysis suggests a mechanism for multiple ecosystem states in a social-ecological systems that does not rely on complex assumption about the structure of either the social or ecological systems alone, but instead on the temporal interactions between forward-looking decisions (i.e. a farmer who takes into account potential benefits over the long term) and slow ecological processes. 
-While alternate stable states within social ecological systems, and farming systems in particular, have been previously explored and observed (@Horan2011a; @vandermeer1997syndromes; @Vandermeer2012), our results shed light specifically on temporal feedbacks that might contribute to this pattern (Figure 6). 
-We also show how path dependence can result in self perpetuating low ecosystem states and low adoption of diversification practives (Figure 2) and why this provides novel insights not only for social-ecological research (Figure 3), but also for agricultural policy (Fig 4 and Fig 5). 
+Our analysis suggests a mechanism for multiple ecosystem states in a social-ecological systems that does not rely on complex assumption about the structure of the social or ecological systems alone, but instead on the temporal interactions between forward-looking decisions (i.e. a farmer who takes into account potential benefits over the long term) and slow ecological processes. 
+While alternate stable states within social ecological systems, and farming systems in particular, have been previously explored and observed (@Horan2011a; @vandermeer1997syndromes; @Vandermeer2012), our results shed light specifically on temporal feedbacks that might contribute to this pattern (Figure 3). 
+We also show how path dependence can result in self perpetuating low ecosystem states and low adoption of diversification practives (Figure 2) and why this provides novel insights not only for social-ecological research (Figure 3), but also for agricultural policy (Figure 4 and Figure 5). 
 
 In contrast to equilibrium models (@Vandermeer2012), our model assumes (Figure 1) that ecological and environmental processes take time to respond to the adoption of a diversified practice. 
 For example, soil organic matter and its benefits (such as improved water retention and storage of essential nutrients) take years to build after starting practices like cover cropping and compost additions (@poeplau2015carbon). This reality is suggested by our interviews with farmers. 
@@ -497,7 +499,7 @@ One farmer explains:
 
 > “I'll use five years, which seems like a long time, but I mean, that's only potentially 5 or 10 crop cycles depending how heavy you crop...There's probably some very good soils that can be turned around relatively quickly if everything works right. Somebody might see some pretty dramatic benefits in a year or two, depending how bold they wanted to do things. But I think the changes in soil in my mind, they're not immediate. You don't make grand changes right away. So I mean, if you get started doing some reduced tillage using more cover crops, if you have a good source of compost and start incorporating those practices, I would hope that you would see something in five years." 
 
-We show how time delays in ecosystem responses to management decisions, such as described above, can explain patterns of multiple stable ecosystem service states (Table 1 P1). While existing explanations of multiple stable states in SES provided by equilibrium models (@Vandermeer2012) are not necessarily wrong, temporal explanations for this pattern reflect key system attributes described by farmers (Figure 4).
+We show how time delays in ecosystem responses to management decisions, as exemplified above, can explain patterns of multiple stable ecosystem service states (Table 1 P1). While existing explanations of multiple stable states in SES provided by equilibrium models (@Vandermeer2012) are not necessarily wrong, temporal explanations for this pattern reflect key system attributes described by farmers (Figure 4) and allow for the exploration of intervention strategies that are temporally constrained (e.g. land tenure, incentives, etc.).
 
 
 ```{r predictions, echo = FALSE, message=FALSE, out.width = "1\\textwidth", fig.cap='Table 1: Table of the main model predictions, evidence in support of the pattern, value added of the temporal mechanism and minimal assumptions.'}
@@ -516,16 +518,19 @@ Such policies have become an integral part of farming over the past half-century
 They are particularly interesting to explore with a Markov Decision Process due to their often sequential, but time limited, nature. 
 Incentive policies rolled out over a given time frame are difficult to study with equilibrium analyses or with simple decision rules. 
 
-Our results suggest that long-term, sustained incentives, even when only partially covering the cost of adoption, may be more effective in shifting farmers from simplified ecological states to diversified states than more concentrated short-term incentives. 
+Our results suggest that long-term sustained incentives, even when only partially covering the cost of adoption, may be more effective in shifting farmers from simplified ecological states to diversified states than more concentrated short-term incentives. 
 We show that the cost of interventions and the social-environmental benefit of those interventions are not necessarily equivalent. 
 Rather, the perceived stability of incentive programs over time may be an important driver of adoption. This dynamic can be overlooked when the temporal rates of coupled dynamics in social-environmental systems are not considered. If farmers expect a stable source of support over a significant time period, they may decide it is worthwhile to experiment and persist with a new practice that may not provide observable benefits for many years (@claassen2014additionality). 
 Unstable support, by contrast, may lead to farmers abandoning practices after a short time, or even not trying those out (@dayer2018private). 
 Moreover, the reduced transaction costs that come with farmers making a longer-term commitment, while not captured in our model, would only further  suggest the higher efficacy of sustained incentives as compared to concentrated incentives. 
 
+cost-sharing is a significant barrier for many farmers, especially those who are not very financially stable or prosperous. In theory, asking farmers to share the costs can create more of a pressure to commit to the practice -- it screens out farmers who aren't prepared to do this. But It also creates an exclusionary obstacle if the cost-sharing is unequal (with the grower bearing most of the costs) or even the shared cost is significant. So, initial conditions really do matter -- we need to look at the farmer's starting position and the first several years of a cycle.
+
 This finding is particularly relevant to the design of government payment programs and suggests that smaller payments can be highly effective in encouraging adoption of diversification practices (or other ecosystem service promoting practices) when distributed over long time horizons. 
 Small payments over a longer time-frame also constitute a lower total cost to the government when considering even modest discount rates. Surprisingly little research has focused on the role of time in incentive programs and on whether changes in farmer behavior persists once conservation or ecosystem services payments end. 
 One study found that when landowners were unable to re-enroll in a waterbird habitat program in northern California due to 3 year period limits, participant numbers declined and farmers persisted less with their practices (@dayer2018private). 
-Other studies have found that growers can readily switch back land that is left unused in return for payments via the federal Conservation Reserve Program to ‘more valuable’ productive uses (e.g. corn ethanol (@roberts2007enduring)). 
+Other studies have found that growers can readily switch back land that is left unused in return for payments via the federal Conservation Reserve Program to ‘more valuable’ productive uses (e.g. corn ethanol (@roberts2007enduring)). In the later example, growers abandon their conservation practices as the payment loses its perceived value relative to growing corn for ethanol. 
+If growers knew that the incentives varied over time in response to competing market values they might be more likely to maintain practices.
  
 A number of federal government programs provide incentives to farmers over long time periods. 
 For example, the US Department of Agriculture (USDA) manages a Conservation Stewardship Program (CSP) that helps growers build on their existing conservation practices by developing a plan to implement practices that improve a wide range of on-farm conditions, from soils to biodiversity. 
