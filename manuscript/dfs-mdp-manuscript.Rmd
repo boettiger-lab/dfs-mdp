@@ -148,7 +148,7 @@ For instance, agent-based models are commonly used to explore complex emergent p
 However, these models often use single time-step, or user-defined, decision rules rather than allowing for emergent decision strategies that maximize expected rewards over longer time horizons  (@Lippe2019). 
 Similarly, economic models, which often explicitly consider the time horizons of decisions, often overlook ecological lags (@Vandermeer2012).
 
-something aout QUAL DATA!!!
+While the temporal attributes are not always central drivers of emergent dynamics in SES, social scientists have regularly pointed to their importance for decision making processes (e.g. the impact of land tenure; (@fraser2004land; @long2017hedgerow; @richardson2015land; @soule2000land)). Leveraging social science data, such as semi-structured interviews or surveys, can help inform critical features, and emergent patterns, to explore with modeling approaches. 
 
 Agriculture is a particularly interesting case for exploring time lags in social-ecological systems because many ecological responses to management actions in these systems (such as planting hedgerows) happen slowly, often taking years to return ecological benefits that exceed the timeframe of investments. While agriculture is a key driver of anthropogenic ecological change (@foley2005global; @foley2011solutions; @stoate2009ecological), different types of agriculture have radically different effects on ecosystems. Some forms of agriculture rely on promoting ecological processes that regenerate ecosystem services for their productivity, while others rely primarily on external inputs, such as chemical fertilizers and pesticides that degrade the surrounding water, soil, and air quality. 
 
@@ -160,7 +160,7 @@ In other words, the existence of distinct stable states in agriculture -- define
 
 Markov Decision Processes (MDP) provide a convenient mathematical framework for modeling decision making as part of a stochastic environment (@bellman1957markovian). 
 Importantly, MDPs allow for easy formulation of situations in which environments (in this case, agroecosystems) change slowly and land management decisions are forward looking (based on predictions about how those decisions will impact their farm productivity and vitality in the future). 
-While MDPs have been widely used in a variety of environmental control problems (@Marescot2013b), they are rarely applied to modeling and exploring the dynamics of social-ecological systems. 
+While MDPs have been widely used in a variety of environmental control problems (@Marescot2013b), they are rarely applied to modeling and exploring the dynamics of social-ecological systems. Like other modeling approaches, these methods are scarcely informed by, or ground truthed with, social science data.
 
 This paper presents a stylized Markov Decision Process model of the adoption of agricultural diversification practices to explore the ecosystem service patterns that result specifically from interactions between adaptive decision-making and an ever-changing environment. 
 Using this model, we explore a mechanism for two prevailing environmental (ecosystem service) states that is the result not of complex structural assumptions within either the human or ecological system, but rather the rates at which the two systems interact. While our model necessarily simplifies both decision-making and environmental processes, it provides a useful framework to explore emergent properties in social-ecological systems.
@@ -170,7 +170,7 @@ Finally, we show that our findings have important implications for agricultural 
 # Methods
 
 We explore the transition to and from diversified farming systems (low and high ecosystem service provisioning states) using a Markov Decision Process (MDP) in which a farmer makes a series of decisions about whether or not to employ agricultural diversification  practices over time (Figure 1). 
-In the context of diversified farming systems, diversification practices include hedgerows, crop rotation, intercrops, the use of compost, growing multiple crop types, reduced tillage, and cover crops. This type of diversification is distinct from the concept of operational diversification (i.e., simply increasing the range of agricultural goods produced on a given farm). 
+In the context of diversified farming systems, diversification practices include hedgerows, crop rotation, intercrops, the use of compost, growing multiple crop types, reduced tillage, and cover crops. This type of diversification is distinct from the concept of operational diversification (i.e., increasing the range of revenue streams produced on a given farm, such as tourism or value-added products). 
 The model was developed through an iterative, collaborative process with an interdisciplinary team comprising plant and soil scientists, agricultural economists, ecologists, agricultural sociologists, modelers, policy analysts, and farmers with the goal of capturing patterns stemming from the coupled human and natural dynamics of the modeled system.
 
 ## Interview data 
