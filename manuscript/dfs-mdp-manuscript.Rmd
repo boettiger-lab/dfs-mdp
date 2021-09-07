@@ -535,9 +535,7 @@ CSP offers a 5-year contract -- potentially renewed for 5 more years -- that pay
 Payment rates are reviewed and changed annually; certain practices may receive sizable assistance but rates can be unstable over time (@USDApayments). 
 While both CSP and EQIP are heavily in demand by farmers in many states, including California (@wyant_2020), researchers have not yet examined whether the differing longevity of the incentives provided via these programs could impact the durability of implementing diversification practices.  It is worth considering that cost-sharing can act as a significant barrier for many farmers, especially those who are not financially stable. As our model captures, cost sharing can create an exclusionary obstacle if the cost-sharing is unequal (with the grower bearing most of the costs) or too significant relative to benefits (Figure 3A bottom panel). 
 
-[loop back to SES dynamics here]
-
-In conclusion, by centering temporal dynamics in a stylized social ecological system model, we offer insights into important agricultural management patterns and their implications for ecological outcomes and public policy. Further, we present a flexible model framework that can be built on to address numerous questions in social-ecological systems research and policy design.
+In conclusion, by combining semi-structured interview data with modeling approaches that allow exploration of complex temporal dynamics in a stylized social ecological system model, we offer insights into important agricultural management patterns and their implications for ecological outcomes and public policy. While tipping points  have been extensively studied throughout the social ecological systems literature, and within agriculture, we suggest a novel mechanism for these tipping points that makes minimal assumptions about system specific behavior. Further, we present a flexible model framework that can be built on to address numerous questions in social-ecological systems research and policy design.
 
 # Model implementation
 
