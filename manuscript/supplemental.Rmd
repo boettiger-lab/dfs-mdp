@@ -1,6 +1,6 @@
 ---
 title: "Supplementary materials: Full code base for simulations and figures"
-abstract: This document gives the full codebase used to define and parameterize the DFS-MDP model, run all simulations, and produce the final plots that appear in the accompanying manuscript.
+abstract: This document gives the full codebase used to define and parameterize the MDP model, run all simulations, and produce the final plots that appear in the accompanying manuscript.
 author:
   - name: Melissa Chapman
     affiliation: espm
@@ -65,7 +65,7 @@ header-includes:
 
 ---
 
-```{r knitr_options, echo = F}
+```{r knitr_options, echo = F, include = FALSE}
 knitr::opts_chunk$set(cache = FALSE,
                       message = FALSE,
                       warning = FALSE,
@@ -75,7 +75,9 @@ knitr::opts_chunk$set(cache = FALSE,
 ```
 
 # Initializations
-## Load libraries
+
+We use the following packages for our the MDP simulation: 
+
 ```{r load_libraries}
 rm(list = ls(all.names = TRUE)) # clean environment
 # data / MDP libraries
@@ -99,17 +101,22 @@ library(patchwork) # devtools::install_github("thomasp85/patchwork")
 library(ggtext) # install cli, gh, devtools::install_github("clauswilke/ggtext")
 ```
 
-## Global settings
-```{r global_settings}
+```{r global_settings, include = FALSE}
 pal <- solarized_pal()(7) # global color pallette
 set.seed(4) # random seed
 ```
 
 ## Set MDP parameters
+
+We define the action and state space 
 ```{r mdp_params}
 # define action and state space
 actions <- seq(0, 1, length = 100) # vector of possible action values
 states <- seq(0, 1.5, length = 100) # vector of possible state values
+```
+
+Set parameters for study
+```{r}
 # set global mdp parameters
 params <- list(
   benefit = 1.57, # benefit param for MDP
