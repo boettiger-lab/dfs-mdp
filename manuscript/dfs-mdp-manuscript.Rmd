@@ -218,12 +218,12 @@ While we have assumed very basic transition and utility functions for this styli
 
 We can solve for the optimal action strategy, $\pi^*$,  using the a recursive Bellman equation. The expected value $V$ for being in a particular state $s$ and following some fixed action strategy $\pi$ has the Bellman equation:
 
-$V^{\pi}(s)=R(s,\pi (s))+\gamma \sum _{s'}P(s'|s,\pi (s))V^{\pi }(s')}$
+$$V^{\pi}(s) = R(s,\pi (s)) + \gamma \left[ \sum_{s'}P(s'|s,\pi (s))V^{\pi }(s') \right]$$
+
 
 The equation for the optimal action strategy is referred to as the Bellman optimality equation:
 
-$V^{\pi^*}(s)=\max _{a}\left\{{R(s,a)+\gamma \sum _{s'}P(s'|s,a)V^{\pi^*}(s')}}$
-
+$$V^{\pi^*}(s) = \max_a R(s,\pi (s)) + \gamma \left[ \sum_{s'}P(s'|s,\pi (s))V^{\pi^* }(s') \right]$$
 where $\pi^*$  is the optimal policy and $V^{\pi^*}$ refers to the value function of the optimal policy. The equation above describes the reward for taking the action at a given state to get the highest expected return over either an infinite decision horizon or a given finite decision horizon. 
 
 # Results
@@ -231,7 +231,7 @@ where $\pi^*$  is the optimal policy and $V^{\pi^*}$ refers to the value functio
 ## Bistability in ecosystem services
 
 Using the described model, we observe the behavior of agents’ sequential choices and the resultant environmental outcomes through time. 
-The decision strategy,  $\pi$, describes the emergent optimal course of action for a given state and is the stationary optimal state-dependent decision strategy. Figure 2A shows this optimal strategy when the model is run over an infinite time horizon.
+The decision strategy,  $\pi^*$, describes the emergent optimal course of action for a given state and is the stationary optimal state-dependent decision strategy. Figure 2A shows this optimal strategy when the model is run over an infinite time horizon.
 
 We find that after following the optimal decision strategy (assuming an infinite decision horizon) for 20 decision cycles, agents have largely settled into two stable ecosystem states, with some farms transitioning to more simplified (lower levels of ecosystem services) farming systems, and others to more diversified (higher levels of ecosystem services) systems (Figures 2B and 2C). 
 
