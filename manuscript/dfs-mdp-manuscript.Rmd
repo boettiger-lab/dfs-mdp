@@ -84,6 +84,7 @@ header-includes:
 
 
 ```{r setup, include = FALSE}
+
 rm(list = ls(all.names = TRUE)) # clean environment
 
 # load external scripts
@@ -192,6 +193,8 @@ The rate at which that ecological response occurs depends on parameter *r*, but 
 knitr::include_graphics("external-figs/assumptions.png")
 ```
 
+We assume linear ...
+
 ## Mathematical description
 
 The farmer's decision model can be expressed as
@@ -210,6 +213,18 @@ $$s_{t+1} = p(s_t, a_t) := s_t + r \left(a_t - s_t \right) + \epsilon$$
 
 where $\epsilon \sim N(0, \sigma)$. This provides a minimal state transition model in which the parameter $r$ sets the natural timescale at which the ecosystem can respond to changes in land management decisions, and $\sigma$ defines the width of the state transition probability distribution, capturing the noise inherent to ecological system change.  
 While we have assumed very basic transition and utility functions for this stylized model, in general more complicated nonlinear functions for both the ecosystem state transition and perceived utility could be substituted into this framework.
+
+## Solving for optimal action strategy
+
+We can solve for the optimal action strategy, $\pi^*$,  using the a recursive Bellman equation. The expected value $V$ for being in a particular state $s$ and following some fixed action strategy $\pi$ has the Bellman equation:
+
+$V^{\pi}(s)=R(s,\pi (s))+\gamma \sum _{s'}P(s'|s,\pi (s))V^{\pi }(s')}$
+
+The equation for the optimal action strategy is referred to as the Bellman optimality equation:
+
+$V^{\pi^*}(s)=\max _{a}\left\{{R(s,a)+\gamma \sum _{s'}P(s'|s,a)V^{\pi^*}(s')}}$
+
+where $\pi^*$  is the optimal policy and $V^{\pi^*}$ refers to the value function of the optimal policy. The equation above describes the reward for taking the action at a given state to get the highest expected return over either an infinite decision horizon or a given finite decision horizon. 
 
 # Results
 
