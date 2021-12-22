@@ -214,11 +214,17 @@ $$s_{t+1} = p(s_t, a_t) := s_t + r \left(a_t - s_t \right) + \epsilon$$
 where $\epsilon \sim N(0, \sigma)$. This provides a minimal state transition model in which the parameter $r$ sets the natural timescale at which the ecosystem can respond to changes in land management decisions, and $\sigma$ defines the width of the state transition probability distribution, capturing the noise inherent to ecological system change.  
 While we have assumed very basic transition and utility functions for this stylized model, in general more complicated nonlinear functions for both the ecosystem state transition and perceived utility could be substituted into this framework.
 
-## Solving for optimal action strategy
+### Solving for optimal action strategy
 
-We can solve for the optimal action strategy, $\pi^*$,  using the a recursive Bellman equation. The expected value $V$ for being in a particular state $s$ and following some fixed action strategy $\pi$ has the Bellman equation:
+We can solve for the optimal action strategy, $\pi^*$, which maps a give state, $s$ to an optimal action $a$, using the a recursive Bellman equation. The expected value $V$ for being in a particular state $s$ and following some fixed action strategy $\pi$ has the Bellman equation:
 
-$$V^{\pi}(s) = R(s,\pi (s)) + \gamma \left[ \sum_{s'}P(s'|s,\pi (s))V^{\pi }(s') \right]$$
+The Bellman equation can be rewrit-
+ten as the sum of the utility value at the current state (which
+holds in the deterministic version) and the sum of the expected
+future rewards that are the products of transition probabilities
+and values of all possible next states
+
+$$V_t^{\pi}(s_t) = \left[ u(s_t,\pi (s_t)) + \gamma \sum_{s_{t+1}}p(s_{t+1}|s_t,\pi (s_t))V^{\pi }(s_{t+1}) \right]$$
 
 
 The equation for the optimal action strategy is referred to as the Bellman optimality equation:
@@ -354,7 +360,7 @@ myopic_d_sims <- sim_b_sweep(myopic_d_scenarios, "finite", t_horiz = 2)
 
 
 
-```{r res_b_sweep, fig.cap = "For three scenarios (coupled human/natural system, overly-myopic decision maker, and overly-fast ecological change), cost/benefit ratio was varied incrementally over 40 values, indicated by color shade, across a $c:b$ range of width 0.15, encompassing the transition between a 'never invest' to an 'always invest' policy.  For each $c:b$, 500 replicate simulations were conducted as in Fig 2.  Upper plots show distribution of final ecosystem service  state for each $c:b$.  Lower plots show density curve peak(s). Where overlap is observed in the lower graphs shows the c:b ratios associated with bistability.  (A) By coupling a forward-looking decision-maker (i.e. a farmer who takes into account potential benefits over the long term) and a slowly-adapting environment, complex dynamics like alternate stable states can emerge.  However, with (B) a short-term decision strategy (solving the MDP over a 2-year time horizon), or (C) a fast ecological change rate ($r = 0.95$), no bimodality is observed.", fig.width = 6.5, fig.asp = .55, dpi= 500}
+```{r res_b_sweep, fig.cap = "For three scenarios (coupled human/natural system, overly-myopic decision maker, and overly-fast ecological change), cost/benefit ratio was varied incrementally over 40 values, indicated by color shade, across a $c:b$ range of width 0.15, encompassing the transition between a 'never invest' to an 'always invest' policy.  For each $c:b$, 500 replicate simulations were conducted as in Fig 2.  Upper plots show distribution of final ecosystem service  state for each $c:b$.  Lower plots show density curve peak(s). Where overlap is observed in the lower graphs indicates the c:b ratios associated with bistability.  (A) By coupling a forward-looking decision-maker (e.g., a farmer who takes into account potential benefits over the long term) and a slowly-adapting environment, complex dynamics like alternate stable states can emerge (seen in cost benefit ratios between the red dotted lines). Bistable states do not exist at all cost-benefit ratios in this case (i.e., at a high enough cost to benefit ratio no adoption will occur, leading to a single low adoption state). However, with (B) a short-term decision strategy (solving the MDP over a 2-year time horizon), or (C) a fast ecological change rate ($r = 0.95$), no bimodality is observed. In the cases of (B) and (C), the shift from no adoption to all-in adoption exists at some cost benefit ratio, removing the possibility of bistability in (A)", fig.width = 6.5, fig.asp = .55, dpi= 500}
 
 ggarrange(
   ggarrange(
@@ -463,20 +469,23 @@ sims_incent_sust <- incent_sim(list(benefit = params$benefit,
 ```
 
 
-```{r res_incentive, fig.cap = "Starting from the same initial states as Fig 2, ecosystem service state time series are shown for (A) a large, abrupt incentive (100\\% of adoption expenses are covered for two years) vs. (B) a smaller, more sustained incentive (i.e. adoption cost is 80\\% of baseline for 10 years).  Before discounting, both packages have the same total cost to the funder (the equivalent of 2 years' worth of full adoption cost offsets). With discounting, (B) scenario is cheaper. After the incentive period, agents adjust their decision rules to that of the base case (i.e. no incentive) until $t = 20$.  (C) Shows that the sustained incentive ultimately drove more DP adoption.", fig.width = 6.5, fig.asp= 0.5, dpi=500}
+```{r res_incentive, fig.cap = "Starting from the same initial states as Fig 2, ecosystem service state time series are shown for (A) a large, abrupt incentive (100\\% of adoption expenses are covered for two years) vs. (B) a smaller, more sustained incentive (i.e. adoption cost is 80\\% of baseline for 10 years).  Before discounting, both packages have the same total cost to the funder (the equivalent of 2 years' worth of full adoption cost offsets). With discounting, (B) scenario is cheaper. After the incentive period, agents adjust their decision rules to that of the base case (i.e. no incentive) until $t = 20$.  (C) Shows that the sustained incentive ultimately drove more DP adoption.", fig.width = 7.5, fig.asp= 0.5, dpi=500}
 
 ggarrange(
-  sim_plot_ts(sims_incent_abrupt, title = ggtitle("A. Concentrated incentive"), 
+  sim_plot_ts(sims_baseline, title = ggtitle("A. No incentive (baseline)"),
+            annotate = TRUE, endcol = pal[2],
+              rmarmod = -10, lmarmod = -5),
+  sim_plot_ts(sims_incent_abrupt, title = ggtitle("B. Concentrated incentive"), 
               annotate = TRUE, an_x = T_incent_1, an_lab = sprintf("%i cycles\n%i%% off", T_incent_1, round((1-C_incent_1)*100)), 
-              rmarmod = -10, endcol = pal[5]),
-  sim_plot_ts(sims_incent_sust, title = ggtitle("B. Sustained incentive"), 
+              tpos = "panel", ytxtoff = T, endcol = pal[5], rmarmod = -10, lmarmod = -5),
+  sim_plot_ts(sims_incent_sust, title = ggtitle("C. Sustained incentive"), 
               annotate = TRUE, an_x = T_incent_2, an_lab = sprintf("%i cycles\n%i%% off", T_incent_2, round((1-C_incent_2)*100)), 
               tpos = "panel", ytxtoff = T, endcol = pal[6], rmarmod = -5, lmarmod = -5),
   sim_plot_dens_comp(sims_incent_abrupt, sims_incent_sust, sims_base = sims_baseline, 
                      label1 = "Concentrated\nincentive", label2 = "Sustained\nincentive", label_base = "No\nincentive", 
-                     title = ggtitle("C. Final distributions"), tpos = "panel", 
+                     title = ggtitle("D. Final distributions"), tpos = "panel", 
                      cvec = c(pal[2], pal[5], pal[6]), lmarmod = -5, rmarmod = -5),
-  nrow = 1, ncol = 3, widths = c(1,1,1.2)
+  nrow = 1, ncol = 4, widths = c(1,1,1,1.2)
 )
 
 # print("abrupt: ")

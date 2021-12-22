@@ -108,14 +108,24 @@ set.seed(4) # random seed
 
 ## Set MDP parameters
 
-We define the action and state space 
+We first define the action space, $A$, and state space, $S$ 
+
+$$A \in [0,1)$$
+$$S \in [0,1.5) $$
 ```{r mdp_params}
 # define action and state space
 actions <- seq(0, 1, length = 100) # vector of possible action values
 states <- seq(0, 1.5, length = 100) # vector of possible state values
 ```
 
-Set parameters for study
+And define the set parameters for study
+
+$b$ = benefit parameter
+$c$ = cost parameter
+$\sigma$ = ecological stochasticity
+$r$ = ecological change rate
+$\gamma$ = discount factor
+
 ```{r}
 # set global mdp parameters
 params <- list(
@@ -129,6 +139,8 @@ params <- list(
 ```
 
 ## Define state transition probability and utility functions
+
+
 ```{r mdp_trans_and_util_fxns}
 #' Calculate transition probability based on current state and action.
 #' 
