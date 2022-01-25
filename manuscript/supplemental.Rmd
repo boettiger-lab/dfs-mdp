@@ -6,22 +6,30 @@ author:
     affiliation: espm
   - name: Serge Wiltshire
     affiliation: espm
+  - name: Patrick Baur
+    affiliation: URI
   - name: Timothy Bowles
     affiliation: espm
   - name: Liz Carlisle
     affiliation: ucsb
-  - name: Fredrico Castillo
+  - name: Federico Castillo
     affiliation: espm
+  - name: Kenzo Esquivel
+    affiliation: espm
+  - name: Sasha Gennet
+    affiliation: tnc
   - name: Alastair Iles
     affiliation: espm
   - name: Daniel Karp
     affiliation: davis
   - name: Claire Kremen
     affiliation: espm, ucb
-  - name: Jeff Liebert
+  - name: Jeffrey Liebert
     affiliation: cornell
-  - name: Elissa Olimpi
-    affiliation: davis
+  - name: Elissa M. Olimpi
+    affiliation: uva
+  - name: Joanna Ory
+    affiliation: espm
   - name: Matthew Ryan
     affiliation: cornell
   - name: Amber Sciligo
@@ -30,22 +38,22 @@ author:
     affiliation: espm
   - name: Hannah Waterhouse
     affiliation: espm
-  - name: Kenzo Eszquivel
-    affiliation: espm
-  - name: Sasha Gennet
-    affiliation: tnc
   - name: Carl Boettiger
     affiliation: espm
     footnote: Corresponding Author
 address:
   - code: espm
     address: "Dept. of Environmental Science, Policy, and Management, University of California Berkeley, Berkeley, CA, USA"
+  - code: URI
+    address: "Department of Fisheries, Animal and Veterinary Sciences, University of Rhode Island, Kingston, RI, USA" 
   - code: ubc
     address: "Institute of Resources, Environment and Sustainability, University of British Columbia, Vancouver, BC, Canada"
   - code: ucsb
     address: "Environmental Studies, University of California Santa Barbara, Santa Barbara, CA, USA"
   - code: davis
     address: "Wildlife, Fish, and Conservation Biology, University of California Davis, Davis, CA, USA"
+  - code: uva
+    address: "Fish and Wildlife Conservation, Virginia Tech, Blacksburg, VA, USA"
   - code: ky
     address: "Dept. of Entomology, University of Kentucky, Lexington, KY, USA"
   - code: cornell
@@ -53,7 +61,7 @@ address:
   - code: organic
     address: "The Organic Center, Washington, DC, USA"
   - code: tnc
-    address: "The Nature Conservancy, Arlington, VA, USA" # added location of TNC HQ to match other entries
+    address: "The Nature Conservancy, Arlington, VA, USA" 
 date: "`r Sys.Date()`"
 output: rticles::elsevier_article
 layout: 3p # review = doublespace, 3p = singlespace, 5p = two-column
@@ -94,21 +102,22 @@ set.seed(4) # random seed
 
 We first define a vector of possible actions, $A$, and states, $S$ 
 
-$$A \in [0,1)$$
-$$S \in [0,1.5) $$
+$$A \in [0,1]$$
+$$S \in [0,1.5] $$
 ```{r mdp_params}
 # define action and state space
 actions <- seq(0, 1, length = 100) # vector of possible action values
 states <- seq(0, 1.5, length = 100) # vector of possible state values
 ```
+\pagebreak 
 
 And define the set parameters for the MDP model:
 
-$b$ = benefit parameter
-$c$ = cost parameter
-$\sigma$ = ecological stochasticity
-$r$ = ecological change rate
-$\gamma$ = discount factor
+  + $b$ = benefit parameter  
+  + $c$ = cost parameter  
+  + $\sigma$ = ecological stochasticity  
+  + $r$ = ecological change rate  
+  + $\gamma$ = discount factor  
 
 ```{r}
 # set global mdp parameters
@@ -203,21 +212,21 @@ continuous_model <- function(states, actions, params, transition_fn, utility_fn)
 }
 ```
 
-## Define and solve MDP for an infinite time horizon case
+# Define and solve MDP for an infinite time horizon case
 
-We can solve for the optimal action strategy, $\pi^*$, which maps a give state, $s$ to an optimal action $a$, using the a recursive Bellman equation (see Marescot et al, 2013 [@Marescot2013b] for a thorough introduction to these methods). 
+We can solve for the optimal action strategy, $\pi^*$, which maps a give state, $s$ to an optimal action $a$, using the a recursive Bellman equation (value iteration; see Marescot et al, 2013 for a thorough introduction to these methods). 
 
-The Bellman equation can be rewritten as the sum of the utility value at the current state and the sum of the expected future rewards that are the products of transition probabilities and values of all possible next states
+<!-- The Bellman equation can be rewritten as the sum of the utility value at the current state and the sum of the expected future rewards that are the products of transition probabilities and values of all possible next states -->
 
-$$V_t^{\pi}(s_t) = \left[ u(s_t,\pi (s_t)) + \gamma \sum_{s_{t+1}}p(s_{t+1}|s_t,\pi (s_t))V^{\pi }(s_{t+1}) \right]$$
+<!-- $$V_t^{\pi}(s_t) = \left[ u(s_t,\pi (s_t)) + \gamma \sum_{s_{t+1}}p(s_{t+1}|s_t,\pi (s_t))V^{\pi }(s_{t+1}) \right]$$ -->
 
-The equation for the optimal action strategy is thus
+<!-- The equation for the optimal action strategy is thus -->
 
-$$V^{\pi^*}(s) = \max_a u(s,\pi (s)) + \gamma \left[ \sum_{s'}P(s'|s,\pi (s))V^{\pi^* }(s') \right]$$
+<!-- $$V^{\pi^*}(s) = \max_a u(s,\pi (s)) + \gamma \left[ \sum_{s'}P(s'|s,\pi (s))V^{\pi^* }(s') \right]$$ -->
 
-where $\pi^*$  is the optimal policy and $V^{\pi^*}$ refers to the value function of the optimal policy. The equation above describes the reward for taking the action at a given state to get the highest expected return over either an infinite decision horizon or a given finite decision horizon. 
+<!-- where $\pi^*$  is the optimal policy and $V^{\pi^*}$ refers to the value function of the optimal policy. The equation above describes the reward for taking the action at a given state to get the highest expected return over either an infinite decision horizon or a given finite decision horizon.  -->
 
-More information on solving Markov Decision Process models can be found in Marescot et al, 2013.
+<!-- More information on solving Markov Decision Process models can be found in Marescot et al, 2013. -->
 
 ```{r define_solve_mdp}
 # compute P and U matrices for the MDP
@@ -235,7 +244,11 @@ While the above solves for the optimal action strategy using a discounted infini
 short_tenure_soln <- MDPtoolbox::mdp_finite_horizon(model$P, model$U, params$discount, N = 10) 
 ```
 
-## Define main simulation function
+# Code for simulations
+
+Below we provide a full code base for the simulations and corresponding main text figures. We rely on the above methods of infinite and finite MDPs.
+
+# Define main simulation function
 
 ```{r main_sim_fxn}
 #' Run DFS-MDP simulation for a single agent based on MDP simulation parameters.
@@ -264,7 +277,7 @@ sim_mdp <- function(P, U, policy, discount, x0, Tmax){
 }
 ```
 
-## Set global simulation parameters
+# Set global simulation parameters
 
 ```{r global_sim_params}
 reps <- 500 # number of replicate simulations to run
@@ -272,7 +285,7 @@ init <- truncnorm::rtruncnorm(reps, 0, 1, 0.5, 0.2) %>% # sample init s from nor
   map_int(function(x) which.min(abs(x - states))) # map to values in states vector
 ```
 
-## Run base-case simulation
+# Run base-case simulation
 
 ```{r base_case_sim, include = FALSE}
 sim <- function(soln, 
@@ -286,7 +299,8 @@ sim <- function(soln,
 sims_baseline <- sim(base_soln)
 ```
 
-## Define timeseries and density plotting functions
+# Define timeseries and density plotting functions
+
 ```{r ts_dens_plot_fxns}
 # timeseries plot of multiple repetitions
 sim_plot_ts <- function(sims, title = ggtitle(NULL), tpos = "plot", ytxtoff = FALSE, 
@@ -423,7 +437,8 @@ sim_plot_dens <- function(sims, title = ggtitle(NULL), tpos = "plot", endcol = p
 ```
 
 
-## Define base-base optimal decision strategy plotting function
+# Define base-base optimal decision strategy plotting function
+
 ```{r policy_plot_fxn}
 # solution point plot with threshold annotated
 soln_plot <- function(soln_df, tpt) {
@@ -448,7 +463,8 @@ soln_plot <- function(soln_df, tpt) {
 }
 ```
 
-## Generate optimal policy plot
+# Generate optimal policy plot
+
 ```{r res_strategy, fig.cap = "Optimal decision strategy $\\pi$ as a function of ES state, showing a tipping point at $s \\approx 0.48$.  The upper $x$ axis limit is the 99th percentile of observed states in our simulation results ($s \\approx 1.3$).", fig.width = 3, fig.asp = 1}
 state99th <- sims_baseline %>% 
   mutate(state = states[state]) %>% 
@@ -464,8 +480,9 @@ for(si in 1:length(states)-1) {
 soln_plot(base_soln_df %>% filter(state <= state99th), tpt = tpt)
 ```
 
-## Generate base-case simulation figure
-```{r res_bimodal, fig.cap = "Initial ecosystem states are distributed normally (mean = 0.5; S.D. = 0.2; truncated at [0,1]).  Agents follow decision strategy $\\pi$ as shown in Fig \\ref{fig:res_strategy} until $t = 20$.  (A) Ecosystem state of each agent over time (500 simulations).  (B) Initial ES distribution (dark blue) and final bimodal distribution at $t = 20$ (light blue).", fig.width = 8, fig.asp = .5, dpi=500}
+# Generate base-case simulation figure
+
+```{r res_bimodal, fig.cap = "Initial ecosystem states are distributed normally (mean = 0.5; S.D. = 0.2; truncated at [0,1]).  Agents follow decision strategy $\\pi$ as shown in Fig \\ref{fig:res_strategy} until $t = 20$.  (A) Ecosystem state of each agent over time (500 simulations).  (B) Initial ES distribution (dark blue) and final bimodal distribution at $t = 20$ (light blue).", fig.width = 6.5, fig.asp = .5, dpi=500}
 ggarrange(
   soln_plot(base_soln_df %>% filter(state <= state99th), tpt = tpt),
   sim_plot_ts(sims_baseline, title = ggtitle("B. Timeseries"), rmarmod = -5), 
@@ -477,13 +494,14 @@ ggarrange(
 ```
 
 
-## Simulate short time horizon case 
+# Simulate short time horizon case 
 
 ```{r}
 sims_short_tenure <- sim(short_tenure_soln)
 ```
 
-## Define density curve comparison plotting function
+# Define density curve comparison plotting function
+
 ```{r density_comparison_fxn}
 # plot formatting helper functions
 # increase vertical spacing between legend keys
@@ -561,8 +579,9 @@ sim_plot_dens_comp <- function(sims1, sims2, sims_base = "init",
 }
 ```
 
-## Generate land tenure experiment plot
-```{r res_tenure, fig.cap = "The simulation is identical to that in Fig \\ref{fig:res_bimodal}, but the MDP is solved under a finite, 20-year time horizon. (A) Result of short land tenure on ES state over time.  (B) Comparison between final state distribution of short- vs. long-tenure model runs.", fig.width = 8, fig.asp = .5,dpi=500}
+# Generate land tenure experiment plot
+
+```{r res_tenure, fig.cap = "The simulation is identical to that in Fig \\ref{fig:res_bimodal}, but the MDP is solved under a finite, 20-year time horizon. (A) Result of short land tenure on ES state over time.  (B) Comparison between final state distribution of short- vs. long-tenure model runs.", fig.width = 6.5, fig.asp = .5,dpi=500}
 ggarrange(
   sim_plot_ts(sims_baseline, title = ggtitle("A. Long-tenure"),
             annotate = TRUE, 
@@ -581,7 +600,9 @@ ggarrange(
 
 
 # Incentive duration experiment
-## Incentive simulation parameters and setup 
+
+# Incentive simulation parameters and setup 
+
 ```{r setup_incentives_sim}
 # set incentive simulation parameters
 T_incent_1 <- 2
@@ -605,7 +626,8 @@ incent_sim <- function(params) {
 }
 ```
 
-## Run incentives simulation 
+# Run incentives simulation 
+
 ```{r run_incentives_sim}
 # run incentive simulation
 sims_incent_abrupt <- incent_sim(list(benefit = params$benefit, 
@@ -622,8 +644,9 @@ sims_incent_sust <- incent_sim(list(benefit = params$benefit,
                                     T_incent = T_incent_2, Tmax = params$Tmax))
 ```
 
-## Plot incentive simulation 
-```{r res_incentive, fig.cap = "Starting from the same initial states as Fig \\ref{fig:res_bimodal}, ES state timeseries are shown for (A) a large, abrupt incentive (100\\% of adoption expenses are covered for two years) vs. (B) a smaller, more sustained incentive (adoption cost is 80\\% of baseline for 10 years).  Ignoring discounting, both packages have the same total cost to the funder (the equivalent of 2 years' worth of full adoption cost offsets).  After the incentive period, agents adjust their decision rules to that of the base case (i.e. no incentive) until $t = 20$.  (C) Shows that the sustained incentive ultimately drove more DP adoption.", fig.width = 8, fig.asp = .5, dpi=500}
+# Plot incentive simulation 
+
+```{r res_incentive, fig.cap = "Starting from the same initial states as Fig \\ref{fig:res_bimodal}, ES state timeseries are shown for (A) a large, abrupt incentive (100\\% of adoption expenses are covered for two years) vs. (B) a smaller, more sustained incentive (adoption cost is 80\\% of baseline for 10 years).  Ignoring discounting, both packages have the same total cost to the funder (the equivalent of 2 years' worth of full adoption cost offsets).  After the incentive period, agents adjust their decision rules to that of the base case (i.e. no incentive) until $t = 20$.  (C) Shows that the sustained incentive ultimately drove more DP adoption.", fig.width = 6.5, fig.asp = .50, dpi=500}
 ggarrange(
   sim_plot_ts(sims_incent_abrupt, title = ggtitle("A. Concentrated incentive"), 
               annotate = TRUE, an_x = T_incent_1, 
@@ -647,7 +670,8 @@ ggarrange(
 
 
 # Temporal dynamics experiment
-## Define "benefit sweep" simulation function
+
+Define "benefit sweep" simulation function
 ```{r sim_b_sweep_fxn}
 sim_b_sweep <- function(scenarios, inf_fin, t_horiz = 2) {
   sim_b_sweep_scenario <- function(params) {
@@ -671,7 +695,8 @@ sim_b_sweep <- function(scenarios, inf_fin, t_horiz = 2) {
 ```
 
 
-## Parameterize and run "benefit-sweep" simulation scenarios
+# Parameterize and run "benefit-sweep" simulation scenarios
+
 ```{r run_b_sweep_sims, cache= TRUE}
 chans_scenarios <- 
   tidyr::crossing(cbr = seq(.55, .7, length.out = 40),
@@ -731,7 +756,8 @@ sim_b_sweep_t <- function(scenarios, inf_fin) {
 ```
 
 
-## Define "benefit sweep" simulation helper and plotting functions
+# Define "benefit sweep" simulation helper and plotting functions
+
 ```{r b_sweep_plt_fxns1}
 # find peaks fxn for benefit sweep experiment
 b_sweep_peaks <- function(sims, smoothing = 1.5, 
@@ -830,8 +856,9 @@ plt_b_sweep_peaks <- function(peaks, bizone = NULL, title = ggtitle(NULL), ylab 
 }
 ```
 
-## Generate "benefit sweep" simulation plot
-```{r res_b_sweep1, fig.cap = "For three scenarios (coupled human/natural system, overly-myopic decision maker, and overly-fast ecological change), cost/benefit ratio was varied incrementally over 40 values, indicated by color shade, across a $c:b$ range of width 0.15, encompassing the transition between a ``never invest'' to an ``always invest'' policy.  For each $c:b$, 500 replicate simulations were conducted as in Fig \\ref{fig:res_bimodal}.  Upper plots show distribution of ES state at $t=20$ for each $c:b$.  Lower plots show density curve peak(s).  (A) By coupling a forward-looking decision-maker and a slowly-adapting environment, complex dynamics like alternate stable states can emerge.  However, with (B) a short-term decision strategy (solving the MDP over a 2-year time horizon), or (C) a fast ecological change rate ($r = 0.95$), no bimodality is observed.", fig.width = 8, fig.asp = 0.5, dpi=500}
+# Generate "benefit sweep" simulation plot
+
+```{r res_b_sweep1, fig.cap = "For three scenarios (coupled human/natural system, overly-myopic decision maker, and overly-fast ecological change), cost/benefit ratio was varied incrementally over 40 values, indicated by color shade, across a $c:b$ range of width 0.15, encompassing the transition between a ``never invest'' to an ``always invest'' policy.  For each $c:b$, 500 replicate simulations were conducted as in Fig \\ref{fig:res_bimodal}.  Upper plots show distribution of ES state at $t=20$ for each $c:b$.  Lower plots show density curve peak(s).  (A) By coupling a forward-looking decision-maker and a slowly-adapting environment, complex dynamics like alternate stable states can emerge.  However, with (B) a short-term decision strategy (solving the MDP over a 2-year time horizon), or (C) a fast ecological change rate ($r = 0.95$), no bimodality is observed.", fig.width = 6.5, fig.asp = .55, dpi=500}
 ggarrange(
   ggarrange(
     plt_sim_b_sweep(chans_sims, 
@@ -871,38 +898,9 @@ ggarrange(
 ```
 
 
-```{r, cache=TRUE}
-grid_scenarios <- 
-  tidyr::crossing(benefit = params$benefit,
-                  cost = params$cost,
-                  sigma = params$sigma,
-                  r = seq(0.1,0.50, length.out = 41),
-                  discount = params$discount,
-                  Tmax = params$Tmax,
-                  t_horiz = seq(2,42, length.out = 41)) %>% 
-  tibble::rownames_to_column("id")
 
-if (!file.exists("../manuscript/grid_sims.rds")) {
-  grid_sims <- sim_b_sweep_t(grid_scenarios, inf_fin = "finite")
-  write_rds(grid_sims, "../manuscript/grid_sims.rds")
-}
 
-grid_sims<- readRDS("../manuscript/grid_sims.rds")
-```
 
-```{r}
-grid_sims %>%
-  group_by(r, t_horiz) %>%
-  summarise(mean_action = mean(action, na.rm = TRUE),
-            mean_state = mean(state, na.rm = TRUE),
-            min_action = min(action, na.rm = TRUE),
-            max_action = max(action, na.rm = TRUE)) %>%
-  mutate(action_var = max_action - min_action) %>%
-  mutate(bistability = ifelse(action_var > 20, "Bistability", 
-                              ifelse(min_action < 10, "Low state", "High state"))) %>%
-  ggplot(aes(x= r, y = t_horiz, fill = bistability)) + geom_tile() +
-  scale_fill_manual(values=c("grey", "lightblue", "darkblue"))
-```
 
 
 
