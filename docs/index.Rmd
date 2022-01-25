@@ -2,7 +2,11 @@
 title: "Supplementary materials: Full code base for simulations and figures"
 abstract: This page gives the full codebase used to define and parameterize the Markov Decision Process (MDP) model used in our paper "Tipping points in diversified farming systems" (in review), run all simulations, and produce the final plots that appear in the accompanying manuscript. We also provide key equations for the formulation of the MDP model.
 date: "`r Sys.Date()`"
-output: html_document
+output: 
+  prettydoc::html_pretty:
+    theme: cayman
+    highlight: github
+    math: katex
 layout: 3p # review = doublespace, 3p = singlespace, 5p = two-column
 header-includes:
   - \usepackage{float}
