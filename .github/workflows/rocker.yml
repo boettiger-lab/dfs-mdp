@@ -1,28 +1,20 @@
 name: Knit mansucript
-on:
-  push:
-    paths:
-      - manuscript/*.Rmd
-  pull_request:
-    paths:
-      - manuscript/*.Rmd
-
+on: push
 jobs:
   manuscript:
+    name: Render assignment
     runs-on: ubuntu-latest
-    container: rocker/verse
     env:
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
     steps:
-      - uses: actions/checkout@v1
-      - name: Install dependencies
+      - uses: actions/checkout@v2
+      - uses: r-lib/actions/setup-r@v1
+      - uses: r-lib/actions/setup-pandoc@v1
+      - uses: r-lib/actions/setup-tinytex@master
+      - name: Install Package Dependencies
         run: |-
-          installGithub.r --update FALSE clauswilke/ggtext
-          Rscript -e "remotes::install_deps(dependencies = TRUE)"
-      - name: Render mansucript
+          Rscript -e "install.packages('remotes', repos = 'https://packagemanager.rstudio.com/all/__linux__/focal/latest')"
+          Rscript -e "remotes::install_deps(dependencies = TRUE, repos = 'https://packagemanager.rstudio.com/all/__linux__/focal/latest')"
+      - name: Render manuscript
         run: |-
-          Rscript -e "rmarkdown::render('manuscript/dfs-mdp-manuscript.Rmd', envir = globalenv())"
-
-## remarkably(?), we can use the standard checkout action, actions/checkout@v1
-## even inside this Docker container.
-
+          Rscript -e "lapply(fs::dir_ls('manuscript', glob='*.Rmd', recurse=TRUE), rmarkdown::render, envir = globalenv())"
