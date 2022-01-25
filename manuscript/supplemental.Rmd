@@ -1,6 +1,6 @@
 ---
 title: "Supplementary materials: Full code base for simulations and figures"
-abstract: This document gives the full codebase used to define and parameterize the MDP model, run all simulations, and produce the final plots that appear in the accompanying manuscript.
+abstract: This document gives the full codebase used to define and parameterize the Markov Decision Process (MDP) model, run all simulations, and produce the final plots that appear in the accompanying manuscript. We also provide key equations for the formulation of the MDP model.
 author:
   - name: Melissa Chapman
     affiliation: espm
@@ -12,8 +12,6 @@ author:
     affiliation: ucsb
   - name: Fredrico Castillo
     affiliation: espm
-  - name: David Gonthier
-    affiliation: ky
   - name: Alastair Iles
     affiliation: espm
   - name: Daniel Karp
@@ -76,29 +74,14 @@ knitr::opts_chunk$set(cache = FALSE,
 
 # Initializations
 
-We use the following packages for our the MDP simulation: 
+We rely primarily on the `tidyverse` and `MDPtoolbox` packages for our simulation. We use a a set of additional packages for plotting which can be found in `../R/load-libraries.R`. 
 
 ```{r load_libraries}
 rm(list = ls(all.names = TRUE)) # clean environment
 # data / MDP libraries
 library(tidyverse)
-library(Hmisc)
-library(dplyr)
-library(quantmod) # for findPeaks fxn
 library(MDPtoolbox)
-# plotting libraries
-library(corrplot)
-library(RColorBrewer)
-library(ggthemes)
-library(ggpubr)
-library(ggplot2)
-library(hrbrthemes)
-library(Cairo)
-library(extrafont)
-extrafont::loadfonts()
-ggplot2::theme_set(hrbrthemes::theme_ipsum_rc())
-library(patchwork) # devtools::install_github("thomasp85/patchwork")
-library(ggtext) # install cli, gh, devtools::install_github("clauswilke/ggtext")
+source("../R/load-libraries.R")
 ```
 
 ```{r global_settings, include = FALSE}
@@ -106,9 +89,10 @@ pal <- solarized_pal()(7) # global color pallette
 set.seed(4) # random seed
 ```
 
-## Set MDP parameters
 
-We first define the action space, $A$, and state space, $S$ 
+# Set MDP parameters
+
+We first define a vector of possible actions, $A$, and states, $S$ 
 
 $$A \in [0,1)$$
 $$S \in [0,1.5) $$
@@ -118,7 +102,7 @@ actions <- seq(0, 1, length = 100) # vector of possible action values
 states <- seq(0, 1.5, length = 100) # vector of possible state values
 ```
 
-And define the set parameters for study
+And define the set parameters for the MDP model:
 
 $b$ = benefit parameter
 $c$ = cost parameter
@@ -138,9 +122,16 @@ params <- list(
   )
 ```
 
-## Define state transition probability and utility functions
+# Define state transition probability and utility functions
 
+We assume a simple model of the farmer's perceived utility $u(s_t, a_t)$ as a function of the difference between the cost $c_a$ associated with diversification practice action $a_t$, versus expected benefits $b_s$ derived from ecosystem state $s_t$, at time $t$, such that
 
+$$u(s_t, a_t) = b_s s_t  - c_a a_t$$
+
+Agents’ initial ecosystem states were distributed normally around a mean of $s =0.5$. The ecosystem state is also dynamic, evolving according to the transition probability function $p(s_t, a_t)$, such that
+
+$$P(s_{t+1}| s_t, a_t) = s_t + r \left(a_t - s_t \right) + \epsilon$$
+where $\epsilon  \sim N(0, \sigma)$
 ```{r mdp_trans_and_util_fxns}
 #' Calculate transition probability based on current state and action.
 #' 
@@ -158,7 +149,10 @@ transition_fn <- function(s, a, params) s + params$r * (a - s)
 utility_fn <- function(s, a, params) params$benefit * s - params$cost * a
 ```
 
-## Define MDP model function to calculate P and U matrices
+# Calculate transition and utility matrices
+
+We can use the above equation to create both a transition and utility matrices.
+
 ```{r mdp_matrices}
 #' Calculate transition probability matrix and utility matrix based on MDP parameters.
 #' 
@@ -209,7 +203,40 @@ continuous_model <- function(states, actions, params, transition_fn, utility_fn)
 }
 ```
 
+## Define and solve MDP for an infinite time horizon case
+
+We can solve for the optimal action strategy, $\pi^*$, which maps a give state, $s$ to an optimal action $a$, using the a recursive Bellman equation (see Marescot et al, 2013 [@Marescot2013b] for a thorough introduction to these methods). 
+
+The Bellman equation can be rewritten as the sum of the utility value at the current state and the sum of the expected future rewards that are the products of transition probabilities and values of all possible next states
+
+$$V_t^{\pi}(s_t) = \left[ u(s_t,\pi (s_t)) + \gamma \sum_{s_{t+1}}p(s_{t+1}|s_t,\pi (s_t))V^{\pi }(s_{t+1}) \right]$$
+
+The equation for the optimal action strategy is thus
+
+$$V^{\pi^*}(s) = \max_a u(s,\pi (s)) + \gamma \left[ \sum_{s'}P(s'|s,\pi (s))V^{\pi^* }(s') \right]$$
+
+where $\pi^*$  is the optimal policy and $V^{\pi^*}$ refers to the value function of the optimal policy. The equation above describes the reward for taking the action at a given state to get the highest expected return over either an infinite decision horizon or a given finite decision horizon. 
+
+More information on solving Markov Decision Process models can be found in Marescot et al, 2013.
+
+```{r define_solve_mdp}
+# compute P and U matrices for the MDP
+model <- continuous_model(states, actions, params, transition_fn, utility_fn)
+# solve the MDP to find the optimal decision policy
+base_soln <- MDPtoolbox::mdp_value_iteration(model$P, model$U, params$discount)
+base_soln_df <- tibble(state = states, action = actions[base_soln$policy])
+```
+
+# Land tenure experiment: Calculating finite time horizon MDP solution 
+
+While the above solves for the optimal action strategy using a discounted infinite decision horizon, we can also find optimal action strategy for a discounted finite time horizon. In our main text, we set this time horizon to 10 time steps for this analysis (Figure 5). 
+
+```{r short_tenure_sim, include = FALSE}
+short_tenure_soln <- MDPtoolbox::mdp_finite_horizon(model$P, model$U, params$discount, N = 10) 
+```
+
 ## Define main simulation function
+
 ```{r main_sim_fxn}
 #' Run DFS-MDP simulation for a single agent based on MDP simulation parameters.
 #' 
@@ -238,23 +265,15 @@ sim_mdp <- function(P, U, policy, discount, x0, Tmax){
 ```
 
 ## Set global simulation parameters
+
 ```{r global_sim_params}
 reps <- 500 # number of replicate simulations to run
 init <- truncnorm::rtruncnorm(reps, 0, 1, 0.5, 0.2) %>% # sample init s from norm dist
   map_int(function(x) which.min(abs(x - states))) # map to values in states vector
 ```
 
-# "Base-case" simulation
-## Define and solve MDP for base-case
-```{r define_solve_mdp}
-# compute P and U matrices for the MDP
-model <- continuous_model(states, actions, params, transition_fn, utility_fn)
-# solve the MDP to find the optimal decision policy
-base_soln <- MDPtoolbox::mdp_value_iteration(model$P, model$U, params$discount)
-base_soln_df <- tibble(state = states, action = actions[base_soln$policy])
-```
-
 ## Run base-case simulation
+
 ```{r base_case_sim, include = FALSE}
 sim <- function(soln, 
                 Tmax = params$Tmax,
@@ -458,11 +477,9 @@ ggarrange(
 ```
 
 
+## Simulate short time horizon case 
 
-# Land tenure experiment
-## Calculate short-tenure MDP solution 
-```{r short_tenure_sim, include = FALSE}
-short_tenure_soln <- MDPtoolbox::mdp_finite_horizon(model$P, model$U, params$discount, N = 20) 
+```{r}
 sims_short_tenure <- sim(short_tenure_soln)
 ```
 
