@@ -2,7 +2,7 @@ Package: compendium
 Project: 
 Version: 0.1.0
 Depends: tidyverse, mdplearning, truncnorm, MDPtoolbox, Hmisc, quantmod
-Suggests: rmarkdown, hrbrthemes, Cairo, rticles, patchwork, ggthemes, ggtext, corrplot,
+Imports: rmarkdown, hrbrthemes, Cairo, rticles, patchwork, ggthemes, ggtext, corrplot,
           RColorBrewer, ggpubr, extrafont, furrr, pander, kableExtra
 License: CC0
 Title: Compendium Package
